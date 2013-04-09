@@ -5,11 +5,9 @@
   <NuGetReference>Roslyn.Compilers.CSharp</NuGetReference>
   <NuGetReference>Roslyn.Services.Common</NuGetReference>
   <NuGetReference>Roslyn.Services.CSharp</NuGetReference>
-  <NuGetReference>ValueInjecter</NuGetReference>
   <Namespace>Microsoft.CSharp.RuntimeHelpers</Namespace>
   <Namespace>Microsoft.Runtime.Hosting</Namespace>
   <Namespace>Microsoft.Runtime.Hosting.Interop</Namespace>
-  <Namespace>Omu.ValueInjecter</Namespace>
   <Namespace>Roslyn.Compilers</Namespace>
   <Namespace>Roslyn.Compilers.Common</Namespace>
   <Namespace>Roslyn.Compilers.Compilation</Namespace>
@@ -70,8 +68,9 @@ void Main()
         typeof(Model.ProcessingModel).Namespace
     } .ToList().ForEach(@namespace => engine.ImportNamespace(@namespace));    
 
-    // no dynamic allowed
-    // no async/await allowed
+    // limitations of script:
+    // * no dynamic allowed
+    // * no async/await allowed
     var script =
         @"
         Result = InputA + InputB * Factor;
@@ -88,7 +87,6 @@ void Main()
                     models
                         .Select(model =>
                                     {
-                                        //submissionModel.InjectFrom(model);
                                         submissionModel.InputA = model.InputA;
                                         submissionModel.InputB = model.InputB;
                                         submissionModel.Factor = model.Factor;
