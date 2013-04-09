@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--
+	Metaprogramming via scripting 
+	from book 'Metaprogramming in .NET'
+	by Kevin Hazzard and Jason Bock
+	http://www.manning.com/hazzard/
+-->
+<html>
+<head>
+  <script type="text/javascript">
+  function convert() {
+    var fromValue = eval(fromVal.value);
+    toVal.innerHTML = eval(formula.value).toString();
+  }
+  </script>
+</head>
+<body>
+	<span>fromValue:</span>&nbsp;
+  	<input id="fromVal" type="text"/><br/>
+    <span>formula:</span>&nbsp;
+  	<input id="formula" type="text"/><br/>
+    <input type="button" onclick="javascript:convert();" 
+    		value="Convert" /><br/>
+    <span>toValue:</span>&nbsp;<span id="toVal"></span>
+</body>
+</html>
