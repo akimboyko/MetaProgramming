@@ -2,7 +2,7 @@
 
 import math
 import clr
-clr.AddReference("query_qdytfn") # linq snippet assembly name
+clr.AddReference("LinqPadAssemblyName") # linq snippet assembly name
 
 from Model import *
 

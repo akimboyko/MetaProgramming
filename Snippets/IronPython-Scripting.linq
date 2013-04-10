@@ -8,7 +8,7 @@
 
 async void Main()
 {   
-    GetType().Assembly.FullName.Dump();
+    var linqPadAssemblyName = GetType().Assembly.FullName.Split(new [] { ',' })[0];
 
     IEnumerable<Model.ProcessingModel> models = 
                         Enumerable.Range(0, 1000000)
@@ -17,7 +17,8 @@ async void Main()
     var sw = Stopwatch.StartNew();
     
     var pyCodeReadingTask = Task.FromResult(
-                                File.ReadAllText(@"D:\work\Courses\CaaS\Snippets\sample.py"));
+                File.ReadAllText(@"D:\work\Courses\MetaProgramming\Snippets\sample.py")
+                    .Replace("LinqPadAssemblyName", linqPadAssemblyName));
 
     var pyEngine = Python.CreateEngine();         
     var pyScope = pyEngine.CreateScope();
