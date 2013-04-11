@@ -9,7 +9,7 @@ MetaProgramming .Net samples
  * [.py code](sample.py)
 
 #Dynamicly generating .Net assembly at runtime
-* [Build and load assembly in memory](Snippets/Roslyn-BuildAtRuntime.linq)
+* [RoslynCTP: Build and load assembly in memory](Snippets/Roslyn-BuildAtRuntime.linq)
 
 #Metaprogramming via runtime code generation
 * [Hardcoded C# rule: ~900ms to run 1000 iterations](Snippets/C#-HardCodedRule.linq)
@@ -17,5 +17,5 @@ MetaProgramming .Net samples
 * [DLR i.e. Dynamic Language Runtime with ExpressionTrees: ~1200ms to run 1000 iterations](Snippets/DLR-ExpressionTrees.linq)
 
 #Introspection
-* [Calculate code complexity asynchronously](Snippets/Roslyn-CyclomaticComplexity.linq)
-* [Calculate code complexity using Rx](Snippets/Roslyn-CyclomaticComplexityRx.linq)
+* [RoslynCTP: Calculate code complexity asynchronously](Snippets/Roslyn-CyclomaticComplexity.linq)
+* [RoslynCTP: Calculate code complexity using Rx](Snippets/Roslyn-CyclomaticComplexityRx.linq)
