@@ -9,7 +9,8 @@ MetaProgramming .Net samples
  * [.py code](sample.py)
 
 #Dynamicly generating .Net assembly at runtime
-* [RoslynCTP: Build and load assembly in memory](Snippets/Roslyn-BuildAtRuntime.linq)
+* [RoslynCTP: build and load assembly in memory](Snippets/Roslyn-BuildAtRuntime.linq)
+* [CodeDOM: build and load assembly in memory](Snippets/CodeDOM-BuildAtRuntime.linq)
 
 #Metaprogramming via runtime code generation
 * [Hardcoded C# rule: ~900ms to run 1000 iterations](Snippets/C#-HardCodedRule.linq)
