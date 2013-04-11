@@ -7,6 +7,8 @@
 
 void Main()
 {
+    var sw = Stopwatch.StartNew();
+
     var sourceCode = GenerateSourceCode(BuildCodeNamespace());
     
     sourceCode.Dump();
@@ -17,11 +19,35 @@ void Main()
     
     var generatedType = generatedAssembly.ExportedTypes.Single();
     
-    var model = new Model.ProcessingModel { InputA = 10M, InputB = 5M, Factor = 0.050M };
+    var processingMethodInfo = generatedType.GetMethods()
+                    .Single(methodInfo => methodInfo.Name == "Test");
     
-    generatedType.GetMethods()
-                    .Single(methodInfo => methodInfo.Name == "Test")
-                    .Invoke(null, new object[]{ model }).Dump();
+    Func<Model.ProcessingModel, Model.ReportModel> processingFunc = 
+        model => (Model.ReportModel)processingMethodInfo.Invoke(null, new object[]{ model });
+        
+    IEnumerable<Model.ProcessingModel> models = 
+                        Enumerable.Range(0, 1000000)
+                            .Select(n => new Model.ProcessingModel { InputA = n, InputB = n * 0.5M, Factor = 0.050M });
+    
+    IEnumerable<Model.ReportModel> results =
+                    models
+                        .Select(processingFunc)
+                        .ToList();
+    
+    sw.Stop();
+
+    string.Format("Time taken: {0}ms", sw.Elapsed.TotalMilliseconds).Dump();
+    
+    results
+        .Zip(models, (result, model) => new { result, model })
+        .Select(@group => 
+                    new
+                    {
+                        @return = @group.result,
+                        ResultModel = @group.model
+                    })
+        .Take(10)
+        .Dump();
 }
 
 static CodeNamespace BuildCodeNamespace()
@@ -85,9 +111,34 @@ static CodeNamespace BuildCodeNamespace()
             new CodePropertyReferenceExpression(modelArgument, "Description"),
             new CodePrimitiveExpression(@"Some description")));
     
+    // return new Model.ReportModel { Σ = model.Result, Δ = model.Delta, λ = model.Description };
+    methodTest.Statements.Add(
+        new CodeVariableDeclarationStatement(
+            typeof(Model.ReportModel),
+            "reportModel",
+            new CodeObjectCreateExpression(typeof(Model.ReportModel))));
+    
+    methodTest.Statements.Add(
+        new CodeAssignStatement(
+            new CodePropertyReferenceExpression(
+                new CodeVariableReferenceExpression("reportModel"), "Σ"),
+            new CodePropertyReferenceExpression(modelArgument, "Result")));
+    
+    methodTest.Statements.Add(
+        new CodeAssignStatement(
+            new CodePropertyReferenceExpression(
+                new CodeVariableReferenceExpression("reportModel"), "Δ"),
+            new CodePropertyReferenceExpression(modelArgument, "Delta")));
+    
+    methodTest.Statements.Add(
+        new CodeAssignStatement(
+            new CodePropertyReferenceExpression(
+                new CodeVariableReferenceExpression("reportModel"), "λ"),
+            new CodePropertyReferenceExpression(modelArgument, "Description")));
+    
     methodTest.Statements.Add(
         new CodeMethodReturnStatement(
-            new CodeObjectCreateExpression(typeof(Model.ReportModel))));
+            new CodeVariableReferenceExpression("reportModel")));
     
     programClass.Members.Add(methodTest);
     
