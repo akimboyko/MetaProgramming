@@ -84,8 +84,12 @@ var compilation = Compilation.Create(
 
 if(compilation.GetDiagnostics().Any())
 {
-    compilation.GetDiagnostics().Select(diagnostic => diagnostic/*.Info.ToString()*/).Dump();
-    throw new Exception("Compilation failed");
+    var exceptionMessage = new StringBuilder("Compilation failed: ")
+                                .Append(string.Join(", ",
+                                        compilation.GetDiagnostics()
+                                                    .Select(diagnostic => diagnostic.Info.ToString())))
+                                .ToString();
+    throw new Exception(exceptionMessage);
 }
 
 Assembly compiledAssembly;
