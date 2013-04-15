@@ -51,15 +51,11 @@ void Main()
             {
                 public static async void Answer() 
                 {
-                    int answer = 42;
+                    dynamic answer = 42;
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
-                    await Task.Run(() => System.Console.WriteLine(string.Format(""Universal [async] answer is '{0}'"", answer)));
+                    var output = await Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer));
+                    System.Console.WriteLine(output);
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
-                }
-                
-                public static IEnumerable TestEnumerable()
-                {
-                    yield return string.Empty;
                 }
             }
          }";
@@ -89,6 +85,13 @@ static Assembly CompileAssembly(string sourceCode)
     {
         GenerateInMemory = true
     };
+    
+    parameters.ReferencedAssemblies.AddRange(
+        new[]
+        {
+            @"System.Core.dll",
+            @"Microsoft.CSharp.dll"
+        });
     
     var results = codeProvider.CompileAssemblyFromSource(parameters, sourceCode);
     

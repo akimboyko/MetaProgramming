@@ -48,15 +48,13 @@ const string codeSnippet = @"namespace DemoNamespace
         {
             public void Answer() 
             {
-                dynamic answer = 42;
+                dynamic answer = 42; // not working with RoslynCTP Set'12
+                //int answer = 42;
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
-                var task = Task.Run(() => System.Console.WriteLine(string.Format(""Universal [async] answer is '{0}'"", answer)));
+                var output = await Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer)); // not working with RoslynCTP Set'12
+                //var output = Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer)).Result;
+                System.Console.WriteLine(output);
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
-            }
-            
-            public IEnumerable Test()
-            {
-                yield return string.Empty;
             }
         }
      }";
