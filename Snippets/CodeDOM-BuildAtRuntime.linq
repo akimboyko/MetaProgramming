@@ -9,11 +9,13 @@ void Main()
 {
     var sw = Stopwatch.StartNew();
 
-    var sourceCode = GenerateSourceCode(BuildCodeNamespace());
+    const string programmingLanguage = "C#"; // or "VB" for Visual Basic.net
+
+    var sourceCode = GenerateSourceCode(BuildCodeNamespace(), programmingLanguage);
     
     sourceCode.Dump();
     
-    var generatedAssembly = CompileAssembly(sourceCode);
+    var generatedAssembly = CompileAssembly(sourceCode, programmingLanguage);
     
     Assembly.Load(generatedAssembly.GetName());
     
@@ -145,7 +147,7 @@ static CodeNamespace BuildCodeNamespace()
     return ns;
 }
 
-static string GenerateSourceCode(CodeNamespace prgNamespace)
+static string GenerateSourceCode(CodeNamespace prgNamespace, string programmingLanguage)
 {
     var compilerOptions = new CodeGeneratorOptions()
     {
@@ -157,7 +159,7 @@ static string GenerateSourceCode(CodeNamespace prgNamespace)
     
     using (var codeWriter = new StringWriter(codeText))
     {
-      CodeDomProvider.CreateProvider("CSharp")
+      CodeDomProvider.CreateProvider(programmingLanguage)
         .GenerateCodeFromNamespace(
           prgNamespace, codeWriter, compilerOptions);
     }
@@ -165,9 +167,9 @@ static string GenerateSourceCode(CodeNamespace prgNamespace)
     return codeText.ToString();
 }
 
-static Assembly CompileAssembly(string sourceCode)
+static Assembly CompileAssembly(string sourceCode, string programmingLanguage)
 {
-    var codeProvider = CodeDomProvider.CreateProvider("CSharp");
+    var codeProvider = CodeDomProvider.CreateProvider(programmingLanguage);
     
     var parameters = new CompilerParameters
     {

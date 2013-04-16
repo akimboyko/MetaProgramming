@@ -40,6 +40,8 @@
 
 void Main()
 {
+    const string programmingLanguage = "C#";
+
     const string sourceCode = @"namespace DemoNamespace
         {
             using System;
@@ -62,7 +64,7 @@ void Main()
     
     var sw = Stopwatch.StartNew();
 
-    var generatedAssembly = CompileAssembly(sourceCode);
+    var generatedAssembly = CompileAssembly(sourceCode, programmingLanguage);
     
     Assembly.Load(generatedAssembly.GetName());
     
@@ -77,9 +79,9 @@ void Main()
     string.Format("Time taken: {0}ms", sw.Elapsed.TotalMilliseconds).Dump();
 }
 
-static Assembly CompileAssembly(string sourceCode)
+static Assembly CompileAssembly(string sourceCode, string programmingLanguage)
 {
-    var codeProvider = CodeDomProvider.CreateProvider("CSharp");
+    var codeProvider = CodeDomProvider.CreateProvider(programmingLanguage);
     
     var parameters = new CompilerParameters
     {
