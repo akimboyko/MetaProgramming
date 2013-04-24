@@ -169,7 +169,9 @@ static string GenerateSourceCode(CodeNamespace prgNamespace, string programmingL
 
 static Assembly CompileAssembly(string sourceCode, string programmingLanguage)
 {
-    var codeProvider = CodeDomProvider.CreateProvider(programmingLanguage);
+    var providerOptions = new Dictionary<string, string> { { "CompilerVersion", "v4.0" } };
+
+    var codeProvider = CodeDomProvider.CreateProvider(programmingLanguage, providerOptions);
     
     var parameters = new CompilerParameters
     {
