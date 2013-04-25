@@ -40,28 +40,24 @@
 
 void Main()
 {
-//    IEnumerable<Model.ProcessingModel> models = new[]
-//    {
-//        new Model.ProcessingModel { InputA = 10M, InputB = 5M, Factor = 0.050M },
-//        new Model.ProcessingModel { InputA = 20M, InputB = 2M, Factor = 0.020M },
-//        new Model.ProcessingModel { InputA = 12M, InputB = 3M, Factor = 0.075M },
-//        new Model.ProcessingModel { InputA =  0M, InputB = 9M, Factor = 0.800M },
-//    };
-
+    // generate input data
     IEnumerable<Model.ProcessingModel> models = 
                         Enumerable.Range(0, 1000000)
                             .Select(n => new Model.ProcessingModel { InputA = n, InputB = n * 0.5M, Factor = 0.050M });
     
     var sw = Stopwatch.StartNew();
     
+    // create scriot engine
     var engine = new ScriptEngine();
     
+    // add references
     new[]
     {
         typeof (Math).Assembly,
         this.GetType().Assembly
     }.ToList().ForEach(assembly => engine.AddReference(assembly));
     
+    // import assemblies 
     new[]
     {
         "System", "System.Math", 
@@ -79,10 +75,12 @@ void Main()
         new Model.ReportModel { Σ = Result, Δ = Delta, λ = Description }
         ";
     
+    // create submission
     var submissionModel = new Model.ProcessingModel();
     var session = engine.CreateSession(submissionModel);
     var submission = session.CompileSubmission<Model.ReportModel>(script);
     
+    // process input data
     IEnumerable<Model.ReportModel> results =
                     models
                         .Select(model =>
@@ -99,6 +97,7 @@ void Main()
 
     string.Format("Time taken: {0}ms", sw.Elapsed.TotalMilliseconds).Dump();
     
+    // merge results
     results
         .Zip(models, (result, model) => new { result, model })
         .Select(@group => 

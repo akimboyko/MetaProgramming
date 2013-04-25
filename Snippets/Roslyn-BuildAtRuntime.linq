@@ -37,6 +37,9 @@
   <IncludePredicateBuilder>true</IncludePredicateBuilder>
 </Query>
 
+// code snippet with following errors
+// * 'dynamic' not supporter
+// * 'async'/'await' not supported
 const string codeSnippet = @"namespace DemoNamespace
     {
         using System;
@@ -48,38 +51,47 @@ const string codeSnippet = @"namespace DemoNamespace
         {
             public void Answer() 
             {
-                dynamic answer = 42; // not working with RoslynCTP Set'12
+                // not working with RoslynCTP Set'12
+                dynamic answer = 42;
                 //int answer = 42;
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                
+                // not working with RoslynCTP Set'12
                 var output = await Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer)); // not working with RoslynCTP Set'12
                 //var output = Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer)).Result;
+                
                 System.Console.WriteLine(output);
                 Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
             }
         }
      }";
 
+// parse source code and create syntax tree
 var syntaxTree = SyntaxTree.ParseText(codeSnippet,
      options: new ParseOptions(languageVersion: LanguageVersion.CSharp5));
 
+// check errors
 if(syntaxTree.GetDiagnostics().Any())
 {
     syntaxTree.GetDiagnostics().Select(diagnostic => diagnostic.Info.ToString()).Dump();
     throw new Exception("Parsing failed");
 }
 
+// add references
 var references = new []
 {
 	MetadataReference.CreateAssemblyReference(typeof(Console).Assembly.FullName),
 	MetadataReference.CreateAssemblyReference(typeof(System.Threading.Tasks.Task).Assembly.FullName),
 };
 
+// create compilation
 var compilation = Compilation.Create(
                         outputName: "Demo", 
                         options: new CompilationOptions(OutputKind.DynamicallyLinkedLibrary),
                         syntaxTrees: new[] { syntaxTree },
                         references: references);
 
+// check errors
 if(compilation.GetDiagnostics().Any())
 {
     var exceptionMessage = new StringBuilder("Compilation failed: ")
@@ -90,6 +102,7 @@ if(compilation.GetDiagnostics().Any())
     throw new Exception(exceptionMessage);
 }
 
+// create assembly
 Assembly compiledAssembly;
 using (var stream = new MemoryStream())
 {
@@ -97,15 +110,13 @@ using (var stream = new MemoryStream())
     compiledAssembly = Assembly.Load(stream.GetBuffer());
 }
 
+// call method from new class
 dynamic instance = Activator.CreateInstance(compiledAssembly.GetTypes().First());
 instance.Answer();
 
-//compilation.GetTypeByMetadataName("System.String").Interfaces.Select(@interface => @interface.Name).Dump();
-
+// check semantic model
 SemanticModel semanticModel =  compilation.GetSemanticModel(syntaxTree);
 
 var methodDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().First();
-var expression = syntaxTree.GetRoot().DescendantNodes().OfType<ExpressionSyntax>().First();
 
-//semanticModel.GetDeclaredSymbol(methodDeclaration).Dump();
-//semanticModel.GetTypeInfo(expression).Type.Dump();
+semanticModel.GetDeclaredSymbol(methodDeclaration).Dump();

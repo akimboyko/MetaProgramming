@@ -15,20 +15,25 @@ var scripts = new []
         System.Console.ReadLine() //formula:
     };
 
+// create script engine
 var engine = new ScriptEngine();
 
+// add references to assembiles
 Array.ForEach(
     new[] { typeof(object).Assembly },
     @assembly => engine.AddReference(@assembly));
 
+// import namespaces
 Array.ForEach(
     new[] { "System" },
     @namespace => engine.ImportNamespace(@namespace));    
 
+// create session
 var session = engine.CreateSession();
 
 object resultModel = null;
 
+// process scripts
 foreach(var script in scripts)
 {
     resultModel = session

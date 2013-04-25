@@ -15,14 +15,17 @@ async void Main()
                             .Select(n => new Model.ProcessingModel { InputA = n, InputB = n * 0.5M, Factor = 0.050M });
     
     var sw = Stopwatch.StartNew();
-    
+
     var pyCodeReadingTask = Task.FromResult(
                 File.ReadAllText(@"D:\work\Courses\MetaProgramming\Snippets\sample.py")
                     .Replace("LinqPadAssemblyName", linqPadAssemblyName));
 
+    // create IronPython engine
     var pyEngine = Python.CreateEngine();         
     var pyScope = pyEngine.CreateScope();
     var source = pyEngine.CreateScriptSourceFromString(await pyCodeReadingTask, SourceCodeKind.File);
+    
+    // execute script
     source.Execute(pyScope);
     
     dynamic businessRule = pyEngine.Operations.Invoke(pyScope.GetVariable("BusinessRule"));

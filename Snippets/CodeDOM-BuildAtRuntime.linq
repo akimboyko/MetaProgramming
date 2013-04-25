@@ -9,16 +9,20 @@ void Main()
 {
     var sw = Stopwatch.StartNew();
 
+    // set target language
     const string programmingLanguage = "C#"; // or "VB" for Visual Basic.net
 
+    // generate source code
     var sourceCode = GenerateSourceCode(BuildCodeNamespace(), programmingLanguage);
     
     sourceCode.Dump();
     
+    // compile to assembly
     var generatedAssembly = CompileAssembly(sourceCode, programmingLanguage);
     
     Assembly.Load(generatedAssembly.GetName());
     
+    // get first type
     var generatedType = generatedAssembly.ExportedTypes.Single();
     
     var processingMethodInfo = generatedType.GetMethods()
@@ -52,6 +56,7 @@ void Main()
         .Dump();
 }
 
+// CodeDOM: Code-as-Data
 static CodeNamespace BuildCodeNamespace()
 {
     var ns = new CodeNamespace("Generated");
@@ -169,6 +174,7 @@ static string GenerateSourceCode(CodeNamespace prgNamespace, string programmingL
 
 static Assembly CompileAssembly(string sourceCode, string programmingLanguage)
 {
+    // dependency: "csc.exe"  
     var providerOptions = new Dictionary<string, string> { { "CompilerVersion", "v4.0" } };
 
     var codeProvider = CodeDomProvider.CreateProvider(programmingLanguage, providerOptions);
@@ -200,6 +206,7 @@ static Assembly CompileAssembly(string sourceCode, string programmingLanguage)
 }
 }
 
+// model
 namespace Model
 {
     public class ProcessingModel

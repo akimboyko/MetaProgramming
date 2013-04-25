@@ -5,20 +5,14 @@
 
 void Main()
 {
-//    IEnumerable<Model.ProcessingModel> models = new[]
-//    {
-//        new Model.ProcessingModel { InputA = 10M, InputB = 5M, Factor = 0.050M },
-//        new Model.ProcessingModel { InputA = 20M, InputB = 2M, Factor = 0.020M },
-//        new Model.ProcessingModel { InputA = 12M, InputB = 3M, Factor = 0.075M },
-//        new Model.ProcessingModel { InputA =  0M, InputB = 9M, Factor = 0.800M },
-//    };
-
+    // generate data
     IEnumerable<Model.ProcessingModel> models = 
                         Enumerable.Range(0, 1000000)
                             .Select(n => new Model.ProcessingModel { InputA = n, InputB = n * 0.5M, Factor = 0.050M });
     
     var sw = Stopwatch.StartNew();
     
+    // INFO: λ-expression has mathematical origin, while Rolsyn CodeDOM/Roslyn trees represent abstraction over code    
     var modelParameter = Expression.Parameter(typeof(Model.ProcessingModel));
     
     var resultExpression = Expression.Parameter(typeof(Model.ReportModel));

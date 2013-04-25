@@ -42,6 +42,7 @@ void Main()
 {
     const string programmingLanguage = "C#";
 
+    // CodeDOM with missing features C# 4 and 5 from RoslynCTP
     const string sourceCode = @"namespace DemoNamespace
         {
             using System;
@@ -51,10 +52,13 @@ void Main()
         
             public static class Printer
             {
+                // C# 5 'async' keyword
                 public static async void Answer() 
                 {
+                    // Dynamic
                     dynamic answer = 42;
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                    // C# 5 'await' keyword
                     var output = await Task.Run(() => string.Format(""Universal [async] answer is '{0}'"", answer));
                     System.Console.WriteLine(output);
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
