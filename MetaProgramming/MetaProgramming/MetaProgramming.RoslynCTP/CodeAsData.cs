@@ -28,11 +28,8 @@ namespace MetaProgramming.RoslynCTP
             return models
                     .Select(model =>
                         {
-                            foreach (var property in modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                            {
-                                property.SetValue(submissionModel, property.GetValue(model));
-                            }
-                            
+                            CopyPropertiesToSubmissionModel(modelType, submissionModel, model);
+
                             return submission.Execute();
                         })
                     .ToList();
@@ -138,6 +135,14 @@ namespace MetaProgramming.RoslynCTP
                 .ToString();
 
             throw new Exception(exceptionMessage);
+        }
+
+        private static void CopyPropertiesToSubmissionModel(Type modelType, object submissionModel, object model)
+        {
+            foreach (var property in modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                property.SetValue(submissionModel, property.GetValue(model));
+            }
         }
     }
 }
