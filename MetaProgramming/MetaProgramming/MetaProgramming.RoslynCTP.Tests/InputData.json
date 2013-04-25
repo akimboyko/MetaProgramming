@@ -1,0 +1,41 @@
+[
+	{
+		"InputA"		: 10.0,
+		"InputB"		: 5.0,
+		"Factor"		: 0.050,
+		"Result"		: null,
+		"Delta"			: null,
+		"Description"	: null,
+		"Addition"		: null
+	},
+
+	{
+		"InputA"		: 20.0,
+		"InputB"		: 2.0,
+		"Factor"		: 0.020,
+		"Result"		: null,
+		"Delta"			: null,
+		"Description"	: null,
+		"Addition"		: null
+	},
+	
+	{
+		"InputA"		: 12.0,
+		"InputB"		: 3.0,
+		"Factor"		: 0.075,
+		"Result"		: null,
+		"Delta"			: null,
+		"Description"	: null,
+		"Addition"		: null
+	},
+
+	{
+		"InputA"		: 0.0,
+		"InputB"		: 9.0,
+		"Factor"		: 0.800,
+		"Result"		: null,
+		"Delta"			: null,
+		"Description"	: null,
+		"Addition"		: null
+	}
+]
