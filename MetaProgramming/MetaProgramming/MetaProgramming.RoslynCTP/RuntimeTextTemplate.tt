@@ -13,22 +13,30 @@ namespace <#= this.namespaceName #>
     <#
         foreach(var @class in this.classes)
         {
-            #>
-            <#= @class.IsPublic ? "public" : "private" #> class <#= @class.Name #>
+            ClearIndent();
+            PushIndent("    ");
+            #><#= @class.IsPublic ? "public" : "private" #> class <#= @class.Name #><#
+            
+            Write(Environment.NewLine);
+            Write("{");
+            Write(Environment.NewLine);
+            
+            PushIndent("    ");
+            foreach(var key in @class.Properties.Keys)
             {
-                <# foreach(var key in @class.Properties.Keys)
-                {
-                    #>
-                    public <#= ExpandedTypeName(@class.Properties[key]) #> <#= key #> { get; set; }
-                    <#
-                }
-                #>
+                #>public <#= ExpandedTypeName(@class.Properties[key]) #> <#= key #> { get; set; }<#
+                Write(Environment.NewLine);
             }
-
-            <#
+            PopIndent();
+            
+            Write("}");
+            Write(Environment.NewLine);
+            Write(Environment.NewLine);
         }
-    #>   
-}
+
+        ClearIndent();
+    #>
+}   
 <#+
     private string ExpandedTypeName(Type t)
     {

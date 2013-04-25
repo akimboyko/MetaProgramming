@@ -42,70 +42,77 @@ namespace MetaProgramming.RoslynCTP
 
         foreach(var @class in this.classes)
         {
+            ClearIndent();
+            PushIndent("    ");
             
             
             #line default
             #line hidden
-            this.Write("            ");
             
-            #line 17 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+            #line 18 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@class.IsPublic ? "public" : "private"));
             
             #line default
             #line hidden
             this.Write(" class ");
             
-            #line 17 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+            #line 18 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(@class.Name));
             
             #line default
             #line hidden
-            this.Write("\r\n            {\r\n                ");
             
-            #line 19 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
- foreach(var key in @class.Properties.Keys)
-                {
-                    
+            #line 18 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+
+            
+            Write(Environment.NewLine);
+            Write("{");
+            Write(Environment.NewLine);
+            
+            PushIndent("    ");
+            foreach(var key in @class.Properties.Keys)
+            {
+                
             
             #line default
             #line hidden
-            this.Write("                    public ");
+            this.Write("public ");
             
-            #line 22 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+            #line 27 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ExpandedTypeName(@class.Properties[key])));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 22 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+            #line 27 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(key));
             
             #line default
             #line hidden
-            this.Write(" { get; set; }\r\n                    ");
+            this.Write(" { get; set; }");
             
-            #line 23 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+            #line 27 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
 
-                }
-                
+                Write(Environment.NewLine);
+            }
+            PopIndent();
             
-            #line default
-            #line hidden
-            this.Write("            }\r\n\r\n            ");
-            
-            #line 28 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
-
+            Write("}");
+            Write(Environment.NewLine);
+            Write(Environment.NewLine);
         }
+
+        ClearIndent();
     
             
             #line default
             #line hidden
-            this.Write("   \r\n}\r\n");
+            this.Write("}   \r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 32 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
+        #line 40 "D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP\RuntimeTextTemplate.tt"
 
     private string ExpandedTypeName(Type t)
     {
