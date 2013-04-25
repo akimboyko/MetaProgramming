@@ -1,0 +1,24 @@
+﻿using System;
+
+namespace Model
+{
+                public class ProcessingModel
+            {
+                                    public Decimal InputA { get; set; }
+                                        public Decimal InputB { get; set; }
+                                        public Decimal Factor { get; set; }
+                                        public Nullable<Decimal> Result { get; set; }
+                                        public Nullable<Decimal> Delta { get; set; }
+                                        public String Description { get; set; }
+                                        public Nullable<Decimal> Addition { get; set; }
+                                }
+
+                        public class ReportModel
+            {
+                                    public Nullable<Decimal> Σ { get; set; }
+                                        public Nullable<Decimal> Δ { get; set; }
+                                        public String λ { get; set; }
+                                }
+
+               
+}
