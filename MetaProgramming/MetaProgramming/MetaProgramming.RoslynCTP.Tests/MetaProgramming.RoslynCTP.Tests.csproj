@@ -76,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CodeAsDataTests.ScriptAsData_ConvertJsonToScript_ScriptSubmission.approved.txt" />
     <Content Include="RuntimeTextTemplateTests.RuntimeTextTemplate_TransformText_ExpectedOutput.approved.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

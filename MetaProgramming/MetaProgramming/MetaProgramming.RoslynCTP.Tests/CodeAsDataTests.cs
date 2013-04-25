@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace MetaProgramming.RoslynCTP.Tests
 {
     [TestFixture]
+    [UseReporter(typeof(DiffReporter))]
     public class CodeAsDataTests
     {
         [Test]
@@ -13,11 +17,12 @@ namespace MetaProgramming.RoslynCTP.Tests
         {
             var scriptInfo = JsonConvert.DeserializeObject<ScriptInfo>(File.ReadAllText(@"./ScriptInfo.json"));
             var dataClassesInfo = JsonConvert.DeserializeObject<ClassTemplateInfo[]>(File.ReadAllText(@"./ClassTemplateInfos.json"));
+
             Func<Type, object> deserializeToType = type => JsonConvert.DeserializeObject(File.ReadAllText(@"./InputData.json"), type.MakeArrayType());
 
-            new CodeAsData().ProcessScript(scriptInfo, dataClassesInfo, deserializeToType);
+            IEnumerable<dynamic> results = new CodeAsData().ProcessScript(scriptInfo, dataClassesInfo, deserializeToType);
 
-            Assert.That(true);
+            Approvals.Verify(JsonConvert.SerializeObject(results, Formatting.Indented));
         }
     }
 }

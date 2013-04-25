@@ -12,13 +12,31 @@ namespace MetaProgramming.RoslynCTP
 {
     public class CodeAsData
     {
-        public void ProcessScript(ScriptInfo scriptInfo, IEnumerable<ClassTemplateInfo> dataClassesInfo, Func<Type, object> deserializeToType)
+        public IEnumerable<dynamic> ProcessScript(ScriptInfo scriptInfo, IEnumerable<ClassTemplateInfo> dataClassesInfo, Func<Type, object> deserializeToType)
         {
-            ConfigureScriptEngine(scriptInfo);
-
             var modelType = LoadModelIntoAppDomain(dataClassesInfo);
 
-            var input = deserializeToType(modelType);
+            var scriptEngine = ConfigureScriptEngine(scriptInfo);
+
+            IEnumerable<dynamic> models = deserializeToType(modelType) as IEnumerable<dynamic>;
+
+            var submissionModel = Activator.CreateInstance(modelType);
+            var session = scriptEngine.CreateSession(submissionModel);
+
+            session.AddReference(modelType.Assembly);
+
+            var submission = session.CompileSubmission<dynamic>(scriptInfo.Script);
+
+            return models
+                    .Select(model =>
+                    {
+                        //submissionModel.InputA = model.InputA;
+                        //submissionModel.InputB = model.InputB;
+                        //submissionModel.Factor = model.Factor;
+
+                        return submission.Execute();
+                    })
+                    .ToList();
         }
 
         private static ScriptEngine ConfigureScriptEngine(ScriptInfo scriptInfo)
@@ -36,7 +54,7 @@ namespace MetaProgramming.RoslynCTP
             var modelSourceCode = TranslateToModelSourceCode(dataClassesInfo);
 
             var syntaxTree = SyntaxTree.ParseText(modelSourceCode,
-                                                    options: 
+                                                    options:
                                                         new ParseOptions(languageVersion: LanguageVersion.CSharp5));
 
             if (syntaxTree.GetDiagnostics().Any())
@@ -51,8 +69,10 @@ namespace MetaProgramming.RoslynCTP
                 MetadataReference.CreateAssemblyReference(typeof(System.Threading.Tasks.Task).Assembly.FullName),
             };
 
+            var modelDllName = string.Format("Model.{0}.dll", Guid.NewGuid());
+
             var compilation = Compilation.Create(
-                                    outputName: "Demo",
+                                    outputName: modelDllName,
                                     options: new CompilationOptions(OutputKind.DynamicallyLinkedLibrary),
                                     syntaxTrees: new[] { syntaxTree },
                                     references: references);
@@ -67,12 +87,17 @@ namespace MetaProgramming.RoslynCTP
                 throw new Exception(exceptionMessage);
             }
 
-            Assembly compiledAssembly;
-            using (var stream = new MemoryStream())
+            using (var stream = new FileStream(modelDllName, FileMode.OpenOrCreate))
             {
-                EmitResult compileResult = compilation.Emit(stream);
-                compiledAssembly = Assembly.Load(stream.GetBuffer());
+                var compileResult = compilation.Emit(stream);
+
+                if (!compileResult.Success)
+                {
+                    throw new Exception(string.Format("Compilation failure: {0}", string.Join(", ", compileResult.Diagnostics)));
+                }
             }
+
+            var compiledAssembly = Assembly.LoadFile(Path.GetFullPath(modelDllName));
 
             return compiledAssembly.GetTypes().Single(type => type.Name == "ProcessingModel");
         }
@@ -83,8 +108,8 @@ namespace MetaProgramming.RoslynCTP
                 {
                     Session = new Dictionary<string, object>
                         {
-                            {"namespaceName", "Model"},
-                            {"classes", dataClassesInfo}
+                            { "namespaceName", "Model" },
+                            { "classes", dataClassesInfo }
                         }
                 };
 
