@@ -14,6 +14,7 @@ namespace MetaProgramming.RoslynCTP.Tests
         [Test]
         public void RuntimeTextTemplate_TransformText_ExpectedOutput()
         {
+            // Act
             var runtimeTextTemplate = new RuntimeTextTemplate
                 {
                     Session = new Dictionary<string, object>
@@ -25,6 +26,7 @@ namespace MetaProgramming.RoslynCTP.Tests
 
             runtimeTextTemplate.Initialize();
 
+            // Assert
             Approvals.Verify(runtimeTextTemplate.TransformText());
         }
     }

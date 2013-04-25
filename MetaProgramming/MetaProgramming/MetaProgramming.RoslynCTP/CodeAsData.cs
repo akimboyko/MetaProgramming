@@ -6,50 +6,50 @@ using System.Reflection;
 using System.Text;
 using Roslyn.Compilers;
 using Roslyn.Compilers.CSharp;
+using Roslyn.Scripting;
 using Roslyn.Scripting.CSharp;
 
 namespace MetaProgramming.RoslynCTP
 {
-    public class CodeAsData
+    public static class CodeAsData
     {
-        public IEnumerable<dynamic> ProcessScript(ScriptInfo scriptInfo, IEnumerable<ClassTemplateInfo> dataClassesInfo, Func<Type, object> deserializeToType)
+        public static IEnumerable<dynamic> ProcessScript(ScriptInfo scriptInfo, IEnumerable<ClassTemplateInfo> dataClassesInfo, Func<Type, object> deserializeToType)
         {
-            var modelType = LoadModelIntoAppDomain(dataClassesInfo);
+            var modelType = LoadModelTypesAppDomain(dataClassesInfo);
 
-            var scriptEngine = ConfigureScriptEngine(scriptInfo);
+            var scriptEngine = ConfigureScriptEngine(scriptInfo, modelType.Assembly);
 
-            IEnumerable<dynamic> models = deserializeToType(modelType) as IEnumerable<dynamic>;
+            var models = LoadModelData(deserializeToType, modelType);
 
-            var submissionModel = Activator.CreateInstance(modelType);
-            var session = scriptEngine.CreateSession(submissionModel);
+            Submission<object> submission;
 
-            session.AddReference(modelType.Assembly);
-
-            var submission = session.CompileSubmission<dynamic>(scriptInfo.Script);
+            var submissionModel = CreateSubmission(scriptInfo, modelType, scriptEngine, out submission);
 
             return models
                     .Select(model =>
-                    {
-                        //submissionModel.InputA = model.InputA;
-                        //submissionModel.InputB = model.InputB;
-                        //submissionModel.Factor = model.Factor;
-
-                        return submission.Execute();
-                    })
+                        {
+                            foreach (var property in modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                            {
+                                property.SetValue(submissionModel, property.GetValue(model));
+                            }
+                            
+                            return submission.Execute();
+                        })
                     .ToList();
         }
 
-        private static ScriptEngine ConfigureScriptEngine(ScriptInfo scriptInfo)
+        private static ScriptEngine ConfigureScriptEngine(ScriptInfo scriptInfo, Assembly modelAssembly)
         {
             var scriptEngine = new ScriptEngine();
 
+            scriptEngine.AddReference(modelAssembly);
             scriptInfo.Assemblies.ToList().ForEach(scriptEngine.AddReference);
             scriptInfo.Namespaces.ToList().ForEach(scriptEngine.ImportNamespace);
 
             return scriptEngine;
         }
 
-        private static Type LoadModelIntoAppDomain(IEnumerable<ClassTemplateInfo> dataClassesInfo)
+        private static Type LoadModelTypesAppDomain(IEnumerable<ClassTemplateInfo> dataClassesInfo)
         {
             var modelSourceCode = TranslateToModelSourceCode(dataClassesInfo);
 
@@ -65,8 +65,7 @@ namespace MetaProgramming.RoslynCTP
 
             var references = new[]
             {
-                MetadataReference.CreateAssemblyReference(typeof(Console).Assembly.FullName),
-                MetadataReference.CreateAssemblyReference(typeof(System.Threading.Tasks.Task).Assembly.FullName),
+                MetadataReference.CreateAssemblyReference(typeof(object).Assembly.FullName)
             };
 
             var modelDllName = string.Format("Model.{0}.dll", Guid.NewGuid());
@@ -79,12 +78,7 @@ namespace MetaProgramming.RoslynCTP
 
             if (compilation.GetDiagnostics().Any())
             {
-                var exceptionMessage = new StringBuilder("Compilation failed: ")
-                                            .Append(string.Join(", ",
-                                                    compilation.GetDiagnostics()
-                                                                .Select(diagnostic => diagnostic.Info.ToString())))
-                                            .ToString();
-                throw new Exception(exceptionMessage);
+                ThrowCompilationError("Compilation failed", compilation.GetDiagnostics());
             }
 
             using (var stream = new FileStream(modelDllName, FileMode.OpenOrCreate))
@@ -93,11 +87,11 @@ namespace MetaProgramming.RoslynCTP
 
                 if (!compileResult.Success)
                 {
-                    throw new Exception(string.Format("Compilation failure: {0}", string.Join(", ", compileResult.Diagnostics)));
+                    ThrowCompilationError("Compilation emit failed", compileResult.Diagnostics);
                 }
             }
 
-            var compiledAssembly = Assembly.LoadFile(Path.GetFullPath(modelDllName));
+            var compiledAssembly = Assembly.LoadFrom(Path.GetFullPath(modelDllName));
 
             return compiledAssembly.GetTypes().Single(type => type.Name == "ProcessingModel");
         }
@@ -115,8 +109,35 @@ namespace MetaProgramming.RoslynCTP
 
             runtimeTextTemplate.Initialize();
 
-            var modelSourceCode = runtimeTextTemplate.TransformText();
-            return modelSourceCode;
+            return runtimeTextTemplate.TransformText();
+        }
+
+        private static IEnumerable<object> LoadModelData(Func<Type, object> deserializeToType, Type modelType)
+        {
+            var models = deserializeToType(modelType) as IEnumerable<object>;
+            return models;
+        }
+
+        private static object CreateSubmission(ScriptInfo scriptInfo, Type modelType, ScriptEngine scriptEngine,
+                                               out Submission<object> submission)
+        {
+            var submissionModel = Activator.CreateInstance(modelType);
+            var session = scriptEngine.CreateSession(submissionModel, modelType);
+
+            submission = session.CompileSubmission<object>(scriptInfo.Script);
+            return submissionModel;
+        }
+
+        private static void ThrowCompilationError(string message, IEnumerable<Diagnostic> diagnostics)
+        {
+            var exceptionMessage = new StringBuilder()
+                .AppendFormat("{0}: ", message)
+                .Append(string.Join(", ",
+                                    diagnostics
+                                        .Select(diagnostic => diagnostic.Info.ToString())))
+                .ToString();
+
+            throw new Exception(exceptionMessage);
         }
     }
 }
