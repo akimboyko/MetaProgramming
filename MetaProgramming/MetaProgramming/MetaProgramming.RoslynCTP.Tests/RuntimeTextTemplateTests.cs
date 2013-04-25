@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace MetaProgramming.RoslynCTP.Tests
@@ -18,36 +19,7 @@ namespace MetaProgramming.RoslynCTP.Tests
                     Session = new Dictionary<string, object>
                         {
                             { "namespaceName", "Model" },
-                            { "classes", new[]
-                                {
-                                    new ClassTemplateInfo
-                                        {
-                                            Name = "ProcessingModel",
-                                            IsPublic = true,
-                                            Properties = new Dictionary<string, Type>
-                                                {
-                                                    { "InputA", typeof(decimal) },
-                                                    { "InputB", typeof(decimal) },
-                                                    { "Factor", typeof(decimal) },
-                                                    { "Result", typeof(decimal?) },
-                                                    { "Delta",  typeof(decimal?) },
-                                                    { "Description",  typeof(string) },
-                                                    { "Addition",  typeof(decimal?) },
-                                                }
-                                        },
-                                    new ClassTemplateInfo
-                                        {
-                                            Name = "ReportModel",
-                                            IsPublic = true,
-                                            Properties = new Dictionary<string, Type>
-                                                {
-                                                    { "Σ", typeof(decimal?) },
-                                                    { "Δ", typeof(decimal?) },
-                                                    { "λ",  typeof(string) },
-                                                }
-                                        }
-                                }
-                            }
+                            { "classes", JsonConvert.DeserializeObject<ClassTemplateInfo[]>(File.ReadAllText(@"ClassTemplateInfos.json")) }
                         }
                 };
 
