@@ -1,0 +1,16 @@
+﻿Namespace Generated
+
+    Public Class GeneartedClass
+
+        Public Shared Function Test(model As Model.ProcessingModel) As Model.ReportModel
+            model.Result =(model.InputA + (model.InputB * model.Factor))
+            model.Delta =(System.Math.Abs(model.Result.GetValueOrDefault(0m)) - model.InputA)
+            model.Description = "Some description"
+            Dim reportModel As Model.ReportModel = New Model.ReportModel()
+            reportModel.Σ = model.Result
+            reportModel.Δ = model.Delta
+            reportModel.λ = model.Description
+            Return reportModel
+        End Function
+    End Class
+End Namespace
