@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>#MSSWIT'13: Metaprogramming in .NET: Roslyn CTP by @AkimBoyko</title>
+    
+    <meta name="description" content="#MSSWIT'13: Metaprogramming in .NET: Roslyn CTP presentation" />
+    <meta name="author" content="Akim Boyko" />
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+
+    <link href="css/metaprogramming.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+
+    <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+        <h1>Metaprogramming in .NET</h1>
+        <h2>Roslyn CTP</h2>
+        <p align='right'>by @AkimBoyko</p>
+    </div>
+
+    <div id="WordsDefinitions" class="step" data-x="+2000" data-y="0" data-scale="1">
+        <p><strong>μετά</strong>: after, beyond, self, adjacent</p>
+        <p><strong>metaprogramming</strong>: The classic definition for a metaprogram is “a computer program that writes new computer programs” <em>by @KevinHazzard<em></p>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample" class="step" data-x="+3000" data-y="0" data-scale="1">
+        <p>JavaScript eval() as metaprogramming <a href='..\Snippets\JsEvalSample.html'>example</a></p>
+        <p>from Metaprogramming in .Net<em>by by @KevinHazzard and @JasonBock<em></p>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample01" class="step" data-x="+3000" data-y="0" data-z="-1000" data-scale="1">
+        <p>Initial state</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_00_Begin.png' />
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample02" class="step" data-x="+3000" data-y="0"  data-z="-2000" data-scale="1">
+        <p>Simple multiplication</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_02_UseFunctionDynamicly.png' />
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample03" class="step" data-x="+3000" data-y="0"  data-z="-3000" data-scale="1">
+        <p>Injection values into local execution scope</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_03_InjectionValuesIntoLocalExecutionScope.png' />
+    </div>
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+if ("ontouchstart" in document.documentElement) { 
+    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+}
+</script>
+
+<script src="js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
