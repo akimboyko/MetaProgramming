@@ -1,0 +1,66 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="MetaProgramming.RoslynCTP" #>
+<#@ parameter name="namespaceName" type="System.String" #>
+<#@ parameter name="classes" type="System.Collections.Generic.IEnumerable<ClassTemplateInfo>" #>
+using System;
+
+namespace <#= this.namespaceName #>
+{
+    <#
+        foreach(var @class in this.classes)
+        {
+            ClearIndent();
+            PushIndent("    ");
+            #><#= @class.IsPublic ? "public" : "private" #> class <#= @class.Name #><#
+            
+            Write(Environment.NewLine);
+            Write("{");
+            Write(Environment.NewLine);
+            
+            PushIndent("    ");
+            foreach(var key in @class.Properties.Keys)
+            {
+                #>public <#= ExpandedTypeName(@class.Properties[key]) #> <#= key #> { get; set; }<#
+                Write(Environment.NewLine);
+            }
+            PopIndent();
+            
+            Write("}");
+            Write(Environment.NewLine);
+            Write(Environment.NewLine);
+        }
+
+        ClearIndent();
+    #>
+}   
+<#+
+    private string ExpandedTypeName(Type t)
+    {
+        var result = new StringBuilder();
+        
+        if (!t.IsGenericType)
+        {
+            result.Append(t.Name);
+        }
+        else
+        {
+            result.Append(t.Name.Substring(0, t.Name.IndexOf('`')));
+            result.Append("<");
+
+            int ndx = 0;
+
+            foreach (var tp in t.GetGenericArguments())
+            {
+                result.AppendFormat((ndx++ > 0) ? ", {0}" : "{0}", tp.Name);
+            }
+
+            result.Append(">");
+        }
+
+        return result.ToString();
+    }
+#>
