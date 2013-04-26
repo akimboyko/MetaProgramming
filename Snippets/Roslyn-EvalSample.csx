@@ -1,7 +1,3 @@
-// Steps:
-// * Get NuGet packages: `scriptcs -install`
-// * Run scriptcs: `scriptcs .\Roslyn-EvalSample.csx`
-
 using System;
 using System.Dynamic;
 using Roslyn.Services.Interactive;
@@ -15,10 +11,8 @@ using Roslyn.Scripting.CSharp;
 // System.Math.Sqrt(x * 7)
 var scripts = new []
     {
-        //fromValue:
-        System.Console.ReadLine(),
-        //formula:
-        System.Console.ReadLine()
+        System.Console.ReadLine(), //fromValue:
+        System.Console.ReadLine() //formula:
     };
 
 // create script engine
@@ -40,7 +34,6 @@ var session = engine.CreateSession();
 object resultModel = null;
 
 // process scripts
-// INFO: scripts are using same session
 foreach(var script in scripts)
 {
     resultModel = session
