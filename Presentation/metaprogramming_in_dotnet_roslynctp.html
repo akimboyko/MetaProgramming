@@ -45,17 +45,17 @@
 
     <div id="JavaScriptEvalAsMetaprogrammingExample01" class="step" data-x="+3000" data-y="0" data-z="-1000" data-scale="1">
         <p>Initial state</p>
-        <img src='images/JavaScriptMetaprogrammingViaScripting_00_Begin.png' />
+        <img src='images/JavaScriptMetaprogrammingViaScripting_00_Begin.png' alt="JavaScript Metaprogramming via Scripting" />
     </div>
 
     <div id="JavaScriptEvalAsMetaprogrammingExample02" class="step" data-x="+3000" data-y="0"  data-z="-2000" data-scale="1">
         <p>Simple multiplication</p>
-        <img src='images/JavaScriptMetaprogrammingViaScripting_02_UseFunctionDynamicly.png' />
+        <img src='images/JavaScriptMetaprogrammingViaScripting_02_UseFunctionDynamicly.png' alt="Use Function Dynamicly" />
     </div>
 
     <div id="JavaScriptEvalAsMetaprogrammingExample03" class="step" data-x="+3000" data-y="0"  data-z="-3000" data-scale="1">
         <p>Injection values into local execution scope</p>
-        <img src='images/JavaScriptMetaprogrammingViaScripting_03_InjectionValuesIntoLocalExecutionScope.png' />
+        <img src='images/JavaScriptMetaprogrammingViaScripting_03_InjectionValuesIntoLocalExecutionScope.png' alt="Injection Values into Local Execution Scope" />
     </div>
 
     <div id="MultiparadigmLanguage" class="step" data-x="+5500" data-y="-50"  data-rotate="-90" data-scale="1">
@@ -93,6 +93,80 @@
         <p><strong>The core mission of the Roslyn project</strong>: opening up the black boxes and allowing tools and end users to share in the wealth of information compilers have about our code.</p>
     </div>
 
+    <div id="BootstrappingForCompilers" class="step" data-x="+13500" data-y="-100"  data-rotate="-90" data-scale="1">
+        <h1><strong>Bootstrapping</strong> for compilers</h1>
+    </div>
+
+    <div id="BootstrappingForCompilers01" class="step" data-x="+14000" data-y="0" data-scale="1">
+        <p><strong>Bootstrapping</strong> is the process of writing a compiler in the target programming language which it is intended to compile.</p>
+        <p>Applying this technique leads to a self-hosting compiler.</p>
+    </div>
+
+    <div id="CompilerAsService" class="step" data-x="+15500" data-y="-100"  data-rotate="-90" data-scale="1">
+        <h1><strong>Compiler as a Service</strong></h1>
+    </div>
+
+    <div id="Demo01InternalsSyntaxTreesAndHostEnvironment" class="step" data-x="+16000" data-y="0" data-scale="1">
+        <p><strong>Demo #01</strong></p>
+        <ul>
+            <li>Syntax trees</li>
+            <li>Host environment</li>
+        </ul>
+    </div>
+
+    <div id="RoslynVsCodeDom" class="step" data-x="+17000" data-y="0" data-scale="1">
+        <p><a href='http://stackoverflow.com/a/7854697/443366'>Microsoft Roslyn vs. CodeDom</a></p>
+        <p><small>CodeDom is a precursor to Roslyn, but is only marginally related.</small></p>
+        <ul>
+            <li><small><strong>CodeDom</strong> is a simple and (somewhat) langage agnostic way to generate code</small></li>
+            <li><small><strong>Roslyn</strong> has an advantage of building them in managed code is that users can reference the real compilers as libraries from .NET applications</small></li>
+        </ul>
+    </div>
+
+    <div id="RoslynUseCasesList" class="step" data-x="+19000" data-y="0" data-scale="1">
+        <h1><strong>Metoprogramming by …</strong></h1>
+        <ul>
+            <li>Scripting</li>
+            <li>Code generation</li>
+            <li>Dynamic objects and λ-expression</li>
+            <li>Reflection</li>
+        </ul>
+    </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslyn" class="step" data-x="+20000" data-y="0" data-scale="1">
+        <p><strong>Demo #02</strong></p>
+        <p>Scripting: `eval()` for C# using Roslyn</p>
+    </div>
+
+    <div id="DemoScript03RoslynScriptVsIronPython" class="step" data-x="+21000" data-y="0" data-scale="1">
+        <p><strong>Demo #03</strong></p>
+        <p>Scripting: Roslyn Script vs. IronPython</p>
+    </div>
+
+    <div id="DemoScript04RoslynVsT4" class="step" data-x="+22000" data-y="0" data-scale="1">
+        <p><strong>Demo #04</strong></p>
+        <p>Code-as-Data: Roslyn vs. T4</p>
+    </div>
+
+    <div id="DemoScript05ConvertCodeWrittenOnOneLanguageToAnother" class="step" data-x="+23000" data-y="0" data-scale="1">
+        <p><strong>Demo #05</strong></p>
+        <p>Code-as-Data: Convert code written on one language to another</p>
+    </div>
+
+    <div id="Note01MefAndDsl" class="step" data-x="+24000" data-y="0" data-scale="1">
+        <p><strong>Note about "Code-as-Data" approach</strong></p>
+        <ul>
+            <li>Roslyn vs. MEF</li>
+            <li>Roslyn vs. DSL</li>
+        </ul>
+    </div>
+
+    <div id="Note02Lambda" class="step" data-x="+25000" data-y="0" data-scale="1">
+        <p><strong>Note about "Dynamic programming" approach</strong></p>
+        <ul>
+            <li>Roslyn vs. λ-expression</li>
+        </ul>
+    </div>
 
 </div>
 
