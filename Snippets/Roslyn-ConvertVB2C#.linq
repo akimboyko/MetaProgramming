@@ -4,28 +4,6 @@
   <IncludePredicateBuilder>true</IncludePredicateBuilder>
 </Query>
 
-const string CSharpCode = @"
-            namespace Generated
-            {
-                using System;
-    
-                public class GeneartedClass
-                {
-                    public static Model.ReportModel Test(Model.ProcessingModel model)
-                    {
-                        model.Result = (model.InputA 
-                                    + (model.InputB * model.Factor));
-                        model.Delta = (System.Math.Abs(model.Result.GetValueOrDefault(0m)) - model.InputA);
-                        model.Description = ""Some description"";
-                        Model.ReportModel reportModel = new Model.ReportModel();
-                        reportModel.Σ = model.Result;
-                        reportModel.Δ = model.Delta;
-                        reportModel.λ = model.Description;
-                        return reportModel;
-                    }
-                }
-            }";
-
 const string VbCode = @"
     Imports System
 
@@ -45,5 +23,4 @@ const string VbCode = @"
         End Class
     End Namespace";
 
-// ConvertTo.VisualBasic(CSharpCode).Dump("C# → VB");
-// ConvertTo.CSharp(VbCode).Dump("VB → C#: right way to convert code");
+ConvertTo.CSharp(VbCode).Dump("VB → C#: right way to convert code");
