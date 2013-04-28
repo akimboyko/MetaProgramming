@@ -1,8 +1,8 @@
 #Presentation Metaprogramming in .NET
-Microsoft® “Roslyn” CTP 
-[online](http://akimboyko.github.io/presentations/metaprogramming_in_dotnet_roslynctp.html#/title)
+##Microsoft® “Roslyn” CTP 
+[Version online](http://akimboyko.github.io/presentations/metaprogramming_in_dotnet_roslynctp.html#/title)
 
-##Content:
+###Content
 * Definition of Metaprogramming
 * C# is multiparadigm language
 * About Roslyn
