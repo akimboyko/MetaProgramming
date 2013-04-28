@@ -4,6 +4,7 @@
   <IncludePredicateBuilder>true</IncludePredicateBuilder>
 </Query>
 
+// Code-as-Data
 const string VbCode = @"
     Imports System
 

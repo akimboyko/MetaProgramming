@@ -65,11 +65,8 @@ void Main()
 //Language                     files          blank        comment           code
 //-------------------------------------------------------------------------------
 //C#                            4007          61226          44433         341068
-//XML                           1222          11306           1185         238449
-//XSLT                           118           6950           3103          46141
 //MSBuild scripts                  6              0             42           5899
-const string solutionPath = 
-    @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
+const string solutionPath = @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
 
 // statements for independent paths through a program's source code
 private static readonly Func<StatementSyntax, bool> cyclomaticComplexityStatements =
