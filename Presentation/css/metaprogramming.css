@@ -58,7 +58,7 @@ body {
     line-height: 1;
 }
 ol, ul {
-    list-style: none;
+    list-style: disc;
 }
 blockquote, q {
     quotes: none;
@@ -287,8 +287,8 @@ a:focus {
     transform:         translateZ(50px);
 }
 
-#title .footnote {
-    align='right';
+.right {
+    text-align: right;
 }
 
 /*
