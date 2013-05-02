@@ -86,9 +86,11 @@ private class Complexity
     public string TypeIdentifier { get; set; }
     public string MethodIdentifier { get; set; }
     public int nStatementSyntax { get; set; }
+	public string FilePath { get; set; }
+	public int SourceLine { get; set; }
 }
 
-// process descendant nodes asynchronously for syntaxRoot
+// process descendant nodes of syntaxRoot
 private static async void CalculateComplexity(
                             Task<CommonSyntaxNode> syntaxRootAsync,
                             ConcurrentBag<Complexity> complexityBag,
@@ -106,7 +108,9 @@ private static async void CalculateComplexity(
                             nStatementSyntax = methodDeclaration.DescendantNodes()
                                                     .OfType<StatementSyntax>()
                                                     .Where(cyclomaticComplexityStatements)
-                                                    .Count() + 1
+                                                    .Count() + 1,
+							FilePath = methodDeclaration.GetLocation().SourceTree.FilePath,
+							SourceLine = methodDeclaration.GetLocation().SourceTree.GetLineSpan(methodDeclaration.Span, true, cancellationToken).StartLinePosition.Line
                         })
             .Where(complexity => complexity.nStatementSyntax > 10)
             .ToArray(),

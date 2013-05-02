@@ -12,4 +12,12 @@ public class Examples
     {
         yield return "Foo"; 
     }
+
+    public object FactoryMethod()
+    {
+        if (true)
+            return new object();
+
+        return null;
+    }
 }

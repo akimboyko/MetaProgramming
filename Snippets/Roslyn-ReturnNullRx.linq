@@ -44,24 +44,22 @@ void Main()
                 .Select(document => document.GetSyntaxRootAsync(cancellationToken))
                     .ToObservable();
     
-    var complexityBag = new ConcurrentBag<Complexity>();
+    var returnNullBag = new ConcurrentBag<ReturnNull>();
     
-    // calculate complexity for all methods using Rx Observables
+    // search for `return null;` for all methods using Rx Observables
     syntaxRootObservable
         .Subscribe(
             syntaxRootAsync =>
-                CalculateComplexity(syntaxRootAsync, complexityBag, cancellationToken),
+                FindReturnNull(syntaxRootAsync, returnNullBag, cancellationToken),
             cancellationToken);
     
     // throw an exception if more then 1 minute passed since start
     cancellationToken.ThrowIfCancellationRequested();
     
     // show results
-    complexityBag
-        .GroupBy(complexity => complexity.FilePath)
-        .OrderByDescending(@group => @group.Sum(complexity => complexity.nStatementSyntax))
-        .Select(@group => @group
-							.OrderByDescending(complexity => complexity.nStatementSyntax))
+    returnNullBag
+        .GroupBy(returnNull => returnNull.FilePath)
+			.Select(returnNulls => returnNulls.OrderBy(returnNull => returnNull.SourceLine))
             .Dump();
 }
 
@@ -79,55 +77,64 @@ void Main()
 const string solutionPath = 
     @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
 
-// statements for independent paths through a program's source code
-private static readonly Func<StatementSyntax, bool> cyclomaticComplexityStatements =
+// statements for `return null;`
+private static readonly Func<StatementSyntax, bool> returnNullStatement =
         PredicateBuilder
-            .False<StatementSyntax>()
-            .Or(s => s is DoStatementSyntax)
-            .Or(s => s is ForEachStatementSyntax)
-            .Or(s => s is ForStatementSyntax)
-            .Or(s => s is IfStatementSyntax)
-            .Or(s => s is SwitchStatementSyntax)
-            .Or(s => s is UsingStatementSyntax)
-            .Or(s => s is WhileStatementSyntax)
+			.True<StatementSyntax>()
+            .And(s => s is ReturnStatementSyntax)
+			.And(s => (s as ReturnStatementSyntax).Expression != null)
+			.And(s => (s as ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
                 .Compile();
 
-private class Complexity
+private class ReturnNull
 {
     public string TypeIdentifier { get; set; }
-    public string MethodIdentifier { get; set; }
-    public int nStatementSyntax { get; set; }
-	public string FilePath { get; set; }
-	public int SourceLine { get; set; }
+    public string FilePath { get; set; }
+    public int SourceLine { get; set; }
 }
 
 // process descendant nodes of syntaxRoot
-private static async void CalculateComplexity(
+private static async void FindReturnNull(
                             Task<CommonSyntaxNode> syntaxRootAsync,
-                            ConcurrentBag<Complexity> complexityBag,
+                            ConcurrentBag<ReturnNull> returnNullBag,
                             CancellationToken cancellationToken)
 {
     Array.ForEach(
         (await syntaxRootAsync)
             .DescendantNodes()
-            .OfType<MethodDeclarationSyntax>()
-            .Select(methodDeclaration =>
-                        new Complexity
+            .OfType<ReturnStatementSyntax>()
+			.Where(returnNullStatement)
+            .Select(returnNull =>
+                        new ReturnNull
                         {
-                            TypeIdentifier = ((TypeDeclarationSyntax)methodDeclaration.Parent).Identifier.ValueText,
-                            MethodIdentifier = methodDeclaration.Identifier.ValueText,
-                            nStatementSyntax = methodDeclaration.DescendantNodes()
-                                                    .OfType<StatementSyntax>()
-                                                    .Where(cyclomaticComplexityStatements)
-                                                    .Count() + 1,
-							FilePath = methodDeclaration.GetLocation().SourceTree.FilePath,
-							SourceLine = methodDeclaration.GetLocation().SourceTree.GetLineSpan(methodDeclaration.Span, true, cancellationToken).StartLinePosition.Line
+                            TypeIdentifier = GetParentSyntax<TypeDeclarationSyntax>(returnNull).Identifier.ValueText,
+							FilePath = returnNull.GetLocation().SourceTree.FilePath,
+							SourceLine = returnNull
+											.GetLocation().SourceTree
+											.GetLineSpan(returnNull.Span, true, cancellationToken)
+												.StartLinePosition.Line + 1
                         })
-            .Where(complexity => complexity.nStatementSyntax > 10)
             .ToArray(),
-        complexity => 
+        returnNull => 
         {
-            complexityBag.Add(complexity);
+            returnNullBag.Add(returnNull);
             cancellationToken.ThrowIfCancellationRequested();
         });
+}
+
+private static TDeclarationSyntax GetParentSyntax<TDeclarationSyntax>(SyntaxNode statementSyntax)
+					where TDeclarationSyntax : MemberDeclarationSyntax
+{
+	SyntaxNode statement = statementSyntax;
+	while(statement != null && !(statement is TDeclarationSyntax))
+	{
+		statement = statement.Parent;
+	}
+	
+	if(statement == null || !(statement is TDeclarationSyntax))
+	{
+		throw new Exception(string.Format("Can't find parent {0} node", typeof(TDeclarationSyntax)));
+	}
+	
+	return (TDeclarationSyntax)statement;
 }
