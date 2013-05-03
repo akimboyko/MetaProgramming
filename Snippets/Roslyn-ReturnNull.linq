@@ -3,20 +3,10 @@
   <Reference>&lt;RuntimeDirectory&gt;\System.Threading.Tasks.dll</Reference>
   <NuGetReference Prerelease="true">Microsoft.Bcl.Immutable</NuGetReference>
   <NuGetReference>Roslyn.Services.CSharp</NuGetReference>
-  <NuGetReference>Rx-Core</NuGetReference>
-  <NuGetReference>Rx-Linq</NuGetReference>
-  <NuGetReference>Rx-Main</NuGetReference>
-  <NuGetReference>Rx-PlatformServices</NuGetReference>
   <Namespace>Roslyn.Compilers.Common</Namespace>
   <Namespace>Roslyn.Compilers.CSharp</Namespace>
   <Namespace>Roslyn.Services</Namespace>
   <Namespace>System.Collections.Concurrent</Namespace>
-  <Namespace>System.Reactive</Namespace>
-  <Namespace>System.Reactive.Concurrency</Namespace>
-  <Namespace>System.Reactive.Joins</Namespace>
-  <Namespace>System.Reactive.Linq</Namespace>
-  <Namespace>System.Reactive.Subjects</Namespace>
-  <Namespace>System.Reactive.Threading.Tasks</Namespace>
   <Namespace>System.Threading.Tasks</Namespace>
   <IncludePredicateBuilder>true</IncludePredicateBuilder>
 </Query>
@@ -34,24 +24,27 @@ void Main()
     // save a reference to original state
     cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
     
-    // build syntax root asynchronously for all documents from all projects 
-    var syntaxRootObservable =
-            origianlSolution
-                .Projects
-                .AsParallel()
-                    .AsUnordered()
-                .SelectMany(project => project.Documents)
-                .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-                    .ToObservable();
+    // build syntax root asynchronously in parallel for all documents from all projects 
+    var asyncSyntexRoots =
+        origianlSolution
+            .Projects
+            .AsParallel()
+                .AsUnordered()
+            .SelectMany(project => project.Documents)
+            .Select(document => document.GetSyntaxRootAsync(cancellationToken))
+            .ToArray();
     
     var returnNullBag = new ConcurrentBag<ReturnNull>();
     
-    // search for `return null;` for all methods using Rx Observables
-    syntaxRootObservable
-        .Subscribe(
-            syntaxRootAsync =>
-                FindReturnNull(syntaxRootAsync, returnNullBag, cancellationToken),
-            cancellationToken);
+    // calculate complexity for all methods in parallel
+    Parallel.ForEach(
+        asyncSyntexRoots,
+        new ParallelOptions
+        {
+            CancellationToken = cancellationToken
+        },
+        syntaxRootAsync =>
+            FindReturnNull(syntaxRootAsync, returnNullBag, cancellationToken));
     
     // throw an exception if more then 1 minute passed since start
     cancellationToken.ThrowIfCancellationRequested();

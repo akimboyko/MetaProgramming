@@ -85,6 +85,7 @@ private class Complexity
 {
     public string TypeIdentifier { get; set; }
     public string MethodIdentifier { get; set; }
+	public string SourcesSample { get; set; }
     public int nStatementSyntax { get; set; }
 	public string FilePath { get; set; }
 	public int SourceLine { get; set; }
@@ -105,6 +106,7 @@ private static async void CalculateComplexity(
                         {
                             TypeIdentifier = ((TypeDeclarationSyntax)methodDeclaration.Parent).Identifier.ValueText,
                             MethodIdentifier = methodDeclaration.Identifier.ValueText,
+							SourcesSample = methodDeclaration.ToString(),
                             nStatementSyntax = methodDeclaration.DescendantNodes()
                                                     .OfType<StatementSyntax>()
                                                     .Where(cyclomaticComplexityStatements)
