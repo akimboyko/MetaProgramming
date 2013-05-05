@@ -17,14 +17,18 @@ namespace MetaProgramming.RoslynCTP
         {
             var modelType = LoadModelTypesAppDomain(dataClassesInfo);
 
+            // INFO: Configure Roslyn Script Engine
             var scriptEngine = ConfigureScriptEngine(scriptInfo, modelType.Assembly);
 
+            // INFO: Read input data for Model of runtime types
             var models = LoadModelData(deserializeToType, modelType);
 
             Submission<object> submission;
 
+            // INFO: Create Roslyn Script Submission
             var submissionModel = CreateSubmission(scriptInfo, modelType, scriptEngine, out submission);
 
+            // INFO: Process all inputs
             return models
                     .Select(model =>
                         {
@@ -48,34 +52,43 @@ namespace MetaProgramming.RoslynCTP
 
         private static Type LoadModelTypesAppDomain(IEnumerable<ClassTemplateInfo> dataClassesInfo)
         {
+            // INFO: Transform JSON configuration into C# code using runtime T4 template
             var modelSourceCode = TranslateToModelSourceCode(dataClassesInfo);
 
-            var syntaxTree = SyntaxTree.ParseText(modelSourceCode,
-                                                    options:
-                                                        new ParseOptions(languageVersion: LanguageVersion.CSharp5));
+            // INFO: Build and load System.Type into AppDomain
+            return BuildAndLoadModelTypesIntoAppDomain(modelSourceCode);
+        }
+
+        private static Type BuildAndLoadModelTypesIntoAppDomain(string modelSourceCode)
+        {
+            var parseOptions = new ParseOptions(
+                compatibility: CompatibilityMode.None,
+                languageVersion: LanguageVersion.CSharp5,
+                preprocessorSymbols: new string[] {});
+
+            var syntaxTree = SyntaxTree.ParseText(modelSourceCode, options: parseOptions);
 
             if (syntaxTree.GetDiagnostics().Any())
             {
-                throw new Exception(string.Format("Parsing failed: {0}",
-                                        string.Join(", ", syntaxTree.GetDiagnostics().Select(diagnostic => diagnostic.Info.ToString()))));
+                ThrowError("Parsing failed", syntaxTree.GetDiagnostics());
             }
 
             var references = new[]
-            {
-                MetadataReference.CreateAssemblyReference(typeof(object).Assembly.FullName)
-            };
+                {
+                    MetadataReference.CreateAssemblyReference(typeof (object).Assembly.FullName)
+                };
 
             var modelDllName = string.Format("Model.{0}.dll", Guid.NewGuid());
 
             var compilation = Compilation.Create(
-                                    outputName: modelDllName,
-                                    options: new CompilationOptions(OutputKind.DynamicallyLinkedLibrary),
-                                    syntaxTrees: new[] { syntaxTree },
-                                    references: references);
+                outputName: modelDllName,
+                options: new CompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                syntaxTrees: new[] {syntaxTree},
+                references: references);
 
             if (compilation.GetDiagnostics().Any())
             {
-                ThrowCompilationError("Compilation failed", compilation.GetDiagnostics());
+                ThrowError("Compilation failed", compilation.GetDiagnostics());
             }
 
             using (var stream = new FileStream(modelDllName, FileMode.OpenOrCreate))
@@ -84,7 +97,7 @@ namespace MetaProgramming.RoslynCTP
 
                 if (!compileResult.Success)
                 {
-                    ThrowCompilationError("Compilation emit failed", compileResult.Diagnostics);
+                    ThrowError("Compilation emit failed", compileResult.Diagnostics);
                 }
             }
 
@@ -111,8 +124,7 @@ namespace MetaProgramming.RoslynCTP
 
         private static IEnumerable<object> LoadModelData(Func<Type, object> deserializeToType, Type modelType)
         {
-            var models = deserializeToType(modelType) as IEnumerable<object>;
-            return models;
+            return deserializeToType(modelType) as IEnumerable<object>;
         }
 
         private static object CreateSubmission(ScriptInfo scriptInfo, Type modelType, ScriptEngine scriptEngine,
@@ -121,11 +133,13 @@ namespace MetaProgramming.RoslynCTP
             var submissionModel = Activator.CreateInstance(modelType);
             var session = scriptEngine.CreateSession(submissionModel, modelType);
 
+            // INFO: Compile Rolsyn Script Submission
             submission = session.CompileSubmission<object>(scriptInfo.Script);
+
             return submissionModel;
         }
 
-        private static void ThrowCompilationError(string message, IEnumerable<Diagnostic> diagnostics)
+        private static void ThrowError(string message, IEnumerable<Diagnostic> diagnostics)
         {
             var exceptionMessage = new StringBuilder()
                 .AppendFormat("{0}: ", message)

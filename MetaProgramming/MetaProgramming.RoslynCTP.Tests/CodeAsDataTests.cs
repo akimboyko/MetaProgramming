@@ -16,6 +16,7 @@ namespace MetaProgramming.RoslynCTP.Tests
         public void ScriptAsData_ConvertJsonToScript_ScriptSubmission()
         {
             // Arrange
+            // INFO: JSON deserializer
             var scriptInfo = JsonConvert.DeserializeObject<ScriptInfo>(File.ReadAllText(@"./ScriptInfo.json"));
             var dataClassesInfo = JsonConvert.DeserializeObject<ClassTemplateInfo[]>(File.ReadAllText(@"./ClassTemplateInfos.json"));
             Func<Type, object> deserializeToType = type => JsonConvert.DeserializeObject(File.ReadAllText(@"./InputData.json"), type.MakeArrayType());
