@@ -14,6 +14,7 @@ namespace MetaProgramming.RoslynCTP.Tests
     [UseReporter(typeof(DiffReporter))]
     public class IntrospectionTests
     {
+        // source code downloaded from https://github.com/nhibernate/nhibernate-core
         const string SolutionPath = @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
 
         [Test]
