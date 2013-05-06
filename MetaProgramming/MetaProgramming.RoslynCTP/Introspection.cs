@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using MetaProgramming.RoslynCTP.Internal;
@@ -15,7 +14,6 @@ namespace MetaProgramming.RoslynCTP
 {
     public class Introspection
     {
-        [SecurityCritical]
         public IEnumerable<Complexity> SearchForComplexMethods(string solutionFile, int maxAllowedCyclomaticComplexity, CancellationToken cancellationToken)
         {
             // load workspace, i.e. solution from Visual Studio

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -31,7 +32,15 @@ namespace MetaProgramming.RoslynCTP.Tests
                         maxAllowedCyclomaticComplexity: 10,
                         cancellationToken: cancellationToken);
 
-            Approvals.Verify(JsonConvert.SerializeObject(methodsWithCyclomaticComplexityGt10, Formatting.Indented));
+            var methodsWithCyclomaticComplexityGt10Results = methodsWithCyclomaticComplexityGt10
+                .GroupBy(complexity => complexity.TypeIdentifier)
+                .OrderByDescending(@group => @group.Sum(complexity => complexity.nStatementSyntax))
+                .ThenBy(@group => @group.First().FilePath)
+                .Select(@group => @group
+                                    .OrderByDescending(complexity => complexity.nStatementSyntax)
+                                    .ThenBy(complexity => complexity.MethodIdentifier));
+
+            Approvals.Verify(JsonConvert.SerializeObject(methodsWithCyclomaticComplexityGt10Results, Formatting.Indented));
         }
     }
 }
