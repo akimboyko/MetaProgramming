@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CodeAsDataTests.cs" />
     <Compile Include="ConverterTests.cs" />
+    <Compile Include="IntrospectionTests.cs" />
     <Compile Include="RuntimeTextTemplateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +81,7 @@
     <Content Include="CodeAsDataTests.ScriptAsData_ConvertJsonToScript_ScriptSubmission.approved.txt" />
     <Content Include="ConverterTests.CSharp2VB_Convert_ValidCode.approved.txt" />
     <Content Include="ConverterTests.VB2CSharp_Convert_ValidCode.approved.txt" />
+    <Content Include="IntrospectionTests.Introspection_SearchForComplexityGt10_ApprovedList.approved.txt" />
     <Content Include="RuntimeTextTemplateTests.RuntimeTextTemplate_TransformText_ExpectedOutput.approved.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

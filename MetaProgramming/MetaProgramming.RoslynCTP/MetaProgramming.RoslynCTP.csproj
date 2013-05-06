@@ -69,8 +69,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassTemplateInfo.cs" />
+    <Compile Include="Introspection.cs" />
+    <Compile Include="Model\ClassTemplateInfo.cs" />
     <Compile Include="CodeAsData.cs" />
+    <Compile Include="Model\Complexity.cs" />
     <Compile Include="ConvertTo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeTextTemplate.cs">
@@ -78,7 +80,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RuntimeTextTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="ScriptInfo.cs" />
+    <Compile Include="Model\ScriptInfo.cs" />
+    <Compile Include="Internal\PredicateBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

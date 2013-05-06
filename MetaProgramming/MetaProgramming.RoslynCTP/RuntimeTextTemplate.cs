@@ -7,6 +7,9 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
+
+using MetaProgramming.RoslynCTP.Model;
+
 namespace MetaProgramming.RoslynCTP
 {
     using System.Linq;

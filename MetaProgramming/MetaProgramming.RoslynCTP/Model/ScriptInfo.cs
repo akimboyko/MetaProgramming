@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MetaProgramming.RoslynCTP
+namespace MetaProgramming.RoslynCTP.Model
 {
     public class ScriptInfo
     {

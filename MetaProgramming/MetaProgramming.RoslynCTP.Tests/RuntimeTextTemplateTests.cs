@@ -2,6 +2,7 @@
 using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using MetaProgramming.RoslynCTP.Model;
 using Newtonsoft.Json;
 using NUnit.Framework;
 

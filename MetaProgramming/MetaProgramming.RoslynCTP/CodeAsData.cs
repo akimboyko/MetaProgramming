@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Text;
+using MetaProgramming.RoslynCTP.Model;
 using Roslyn.Compilers;
 using Roslyn.Compilers.CSharp;
 using Roslyn.Scripting;
@@ -75,7 +77,7 @@ namespace MetaProgramming.RoslynCTP
 
             var references = new[]
                 {
-                    MetadataReference.CreateAssemblyReference(typeof (object).Assembly.FullName)
+                    MetadataReference.CreateAssemblyReference(typeof(object).Assembly.FullName)
                 };
 
             var modelDllName = string.Format("Model.{0}.dll", Guid.NewGuid());
