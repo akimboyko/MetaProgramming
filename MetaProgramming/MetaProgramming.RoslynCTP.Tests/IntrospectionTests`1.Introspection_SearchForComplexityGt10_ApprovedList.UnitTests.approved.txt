@@ -1,0 +1,12 @@
+﻿[
+  [
+    {
+      "TypeIdentifier": "ClassWithExtraComplexity",
+      "MethodIdentifier": "ComplexMethod",
+      "SourcesSample": "public string ComplexMethod()\r\n        {\r\n            int seed = new Random(DateTime.Now.Millisecond).Next() % 10;\r\n\r\n            if (seed == 0)\r\n            {\r\n                return @\"Case 0\";\r\n            }\r\n            \r\n            if (seed == 1)\r\n            {\r\n                return @\"Case 1\";\r\n            }\r\n            \r\n            if (seed == 2)\r\n            {\r\n                return @\"Case 2\";\r\n            }\r\n            \r\n            if (seed == 3)\r\n            {\r\n                return @\"Case 3\";\r\n            }\r\n            \r\n            if (seed == 4)\r\n            {\r\n                return @\"Case 4\";\r\n            }\r\n            \r\n            if (seed == 5)\r\n            {\r\n                return @\"Case 5\";\r\n            }\r\n            \r\n            if (seed == 6)\r\n            {\r\n                return @\"Case 6\";\r\n            }\r\n            \r\n            if (seed == 7)\r\n            {\r\n                return @\"Case 7\";\r\n            }\r\n            \r\n            if (seed == 8)\r\n            {\r\n                return @\"Case 8\";\r\n            }\r\n            \r\n            if (seed == 9)\r\n            {\r\n                return @\"Case 9\";\r\n            }\r\n\r\n            return @\"Default case\";\r\n        }",
+      "NStatementSyntax": 11,
+      "FilePath": "D:\\work\\Courses\\MetaProgramming\\MetaProgramming\\MetaProgramming.RoslynCTP.Tests\\bin\\Debug\\CodeSmells.Samples\\ClassWithExtraComplexity.cs",
+      "SourceLine": 11
+    }
+  ]
+]

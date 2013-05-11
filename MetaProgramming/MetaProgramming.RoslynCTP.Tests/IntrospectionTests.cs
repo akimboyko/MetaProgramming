@@ -2,26 +2,30 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
-using ApprovalTests;
 using ApprovalTests.Reporters;
 using MetaProgramming.RoslynCTP.Model;
+using MetaProgramming.RoslynCTP.Tests.Strategy;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using Approvals = ApprovalTests.Approvals;
 
 namespace MetaProgramming.RoslynCTP.Tests
 {
-    [TestFixture]
+    [TestFixture(typeof(IntegrationIntrospectionFixture))]
+    [TestFixture(typeof(CodeSmellsIntrospectionFixture))]
     [UseReporter(typeof(DiffReporter))]
-    public class IntrospectionTests
+    public class IntrospectionTests<TIntrospectionFixture>
+        where TIntrospectionFixture : IIntrospectionFixture, new()
     {
-        // source code downloaded from https://github.com/nhibernate/nhibernate-core
-        const string SolutionPath = @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
-        
+        private readonly TIntrospectionFixture _strategy = new TIntrospectionFixture();
+
         private CancellationTokenSource _cancellationTokenSource;
 
         [SetUp]
         public void SetUp()
         {
+            Approvals.RegisterDefaultNamerCreation(() => new StrategyNamer(_strategy.GetTestType()));
+
             _cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(1));
         }
 
@@ -33,7 +37,7 @@ namespace MetaProgramming.RoslynCTP.Tests
             IImmutableList<Complexity> methodsWithCyclomaticComplexityGt10 = 
                 new Introspection()
                     .SearchForComplexMethods(
-                        solutionFile: SolutionPath,
+                        solutionFile: _strategy.GetSolutionPath(),
                         maxAllowedCyclomaticComplexity: 10,
                         cancellationToken: cancellationToken);
 
@@ -58,7 +62,7 @@ namespace MetaProgramming.RoslynCTP.Tests
             IImmutableList<ReturnNull> returnNullStatements =
                 new Introspection()
                     .SearchForReturnNullStatements(
-                        solutionFile: SolutionPath,
+                        solutionFile: _strategy.GetSolutionPath(),
                         cancellationToken: cancellationToken);
 
             var orderedReturnNullStatements = returnNullStatements
@@ -70,6 +74,4 @@ namespace MetaProgramming.RoslynCTP.Tests
             Approvals.Verify(JsonConvert.SerializeObject(orderedReturnNullStatements, Formatting.Indented));
         }
     }
-
-    
 }
