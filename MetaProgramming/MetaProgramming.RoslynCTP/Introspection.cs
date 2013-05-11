@@ -19,10 +19,11 @@ namespace MetaProgramming.RoslynCTP
                                             int maxAllowedCyclomaticComplexity,
                                             CancellationToken cancellationToken)
         {
+            var calculateComplexity = new Action<Task<CommonSyntaxNode>, ConcurrentBag<Complexity>, CancellationToken>((task, bag, token) => CalculateComplexity(task, bag, maxAllowedCyclomaticComplexity, token));
+            
             return SearchFor(
                 solutionFile: solutionFile,
-                func: new Action<Task<CommonSyntaxNode>, ConcurrentBag<Complexity>, CancellationToken>(
-                            (task, bag, token) => CalculateComplexity(task, bag, maxAllowedCyclomaticComplexity, token)),
+                searchAction: calculateComplexity,
                 cancellationToken: cancellationToken);
         }
 
@@ -32,14 +33,14 @@ namespace MetaProgramming.RoslynCTP
         {
             return SearchFor(
                 solutionFile: solutionFile,
-                func: new Action<Task<CommonSyntaxNode>, ConcurrentBag<ReturnNull>, CancellationToken>(
+                searchAction: new Action<Task<CommonSyntaxNode>, ConcurrentBag<ReturnNull>, CancellationToken>(
                             GetReturnNullStatements),
                 cancellationToken: cancellationToken);
         }
 
         private static IImmutableList<TResult> SearchFor<TResult>(
                 string solutionFile,
-                Action<Task<CommonSyntaxNode>, ConcurrentBag<TResult>, CancellationToken> func,
+                Action<Task<CommonSyntaxNode>, ConcurrentBag<TResult>, CancellationToken> searchAction,
                 CancellationToken cancellationToken)
         {
             // load workspace, i.e. solution from Visual Studio
@@ -68,7 +69,7 @@ namespace MetaProgramming.RoslynCTP
                     CancellationToken = cancellationToken
                 },
                 syntaxRootAsync =>
-                    func(syntaxRootAsync, concurrentBagWithResults, cancellationToken));
+                    searchAction(syntaxRootAsync, concurrentBagWithResults, cancellationToken));
 
             // throw an exception if more then 1 minute passed since start
             cancellationToken.ThrowIfCancellationRequested();
