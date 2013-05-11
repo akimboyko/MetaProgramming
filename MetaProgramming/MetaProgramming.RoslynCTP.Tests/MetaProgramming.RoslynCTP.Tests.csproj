@@ -83,6 +83,7 @@
     <Content Include="ConverterTests.CSharp2VB_Convert_ValidCode.approved.txt" />
     <Content Include="ConverterTests.VB2CSharp_Convert_ValidCode.approved.txt" />
     <Content Include="IntrospectionTests.Introspection_SearchForComplexityGt10_ApprovedList.approved.txt" />
+    <Content Include="IntrospectionTests.Introspection_SearchForReturnNullStatements_ApprovedList.approved.txt" />
     <Content Include="RuntimeTextTemplateTests.RuntimeTextTemplate_TransformText_ExpectedOutput.approved.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
