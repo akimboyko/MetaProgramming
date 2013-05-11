@@ -19,42 +19,27 @@ namespace MetaProgramming.RoslynCTP
                                             int maxAllowedCyclomaticComplexity,
                                             CancellationToken cancellationToken)
         {
-            // load workspace, i.e. solution from Visual Studio
-            var workspace = Workspace.LoadSolution(solutionFile);
-
-            // save a reference to original state
-            var origianlSolution = workspace.CurrentSolution;
-
-            // build syntax root asynchronously in parallel for all documents from all projects 
-            var asyncSyntexRoots =
-                origianlSolution
-                    .Projects
-                    .AsParallel()
-                        .AsUnordered()
-                    .SelectMany(project => project.Documents)
-                    .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-                    .ToArray();
-
-            var complexityBag = new ConcurrentBag<Complexity>();
-
-            // calculate complexity for all methods in parallel
-            Parallel.ForEach(
-                asyncSyntexRoots,
-                new ParallelOptions
-                {
-                    CancellationToken = cancellationToken
-                },
-                syntaxRootAsync =>
-                    CalculateComplexity(syntaxRootAsync, complexityBag, maxAllowedCyclomaticComplexity, cancellationToken));
-
-            // throw an exception if more then 1 minute passed since start
-            cancellationToken.ThrowIfCancellationRequested();
-
-            return complexityBag.AsEnumerable();
+            return SearchFor(
+                solutionFile: solutionFile,
+                func: new Action<Task<CommonSyntaxNode>, ConcurrentBag<Complexity>, CancellationToken>(
+                            (task, bag, token) => CalculateComplexity(task, bag, maxAllowedCyclomaticComplexity, token)),
+                cancellationToken: cancellationToken);
         }
 
         public IEnumerable<ReturnNull> SearchForReturnNullStatements(
                 string solutionFile,
+                CancellationToken cancellationToken)
+        {
+            return SearchFor(
+                solutionFile: solutionFile,
+                func: new Action<Task<CommonSyntaxNode>, ConcurrentBag<ReturnNull>, CancellationToken>(
+                            GetReturnNullStatements),
+                cancellationToken: cancellationToken);
+        }
+
+        private static IEnumerable<TResult> SearchFor<TResult>(
+                string solutionFile,
+                Action<Task<CommonSyntaxNode>, ConcurrentBag<TResult>, CancellationToken> func,
                 CancellationToken cancellationToken)
         {
             // load workspace, i.e. solution from Visual Studio
@@ -73,7 +58,7 @@ namespace MetaProgramming.RoslynCTP
                     .Select(document => document.GetSyntaxRootAsync(cancellationToken))
                     .ToArray();
 
-            var complexityBag = new ConcurrentBag<ReturnNull>();
+            var complexityBag = new ConcurrentBag<TResult>();
 
             // calculate complexity for all methods in parallel
             Parallel.ForEach(
@@ -83,7 +68,7 @@ namespace MetaProgramming.RoslynCTP
                     CancellationToken = cancellationToken
                 },
                 syntaxRootAsync =>
-                    GetReturnNullStatements(syntaxRootAsync, complexityBag, cancellationToken));
+                    func(syntaxRootAsync, complexityBag, cancellationToken));
 
             // throw an exception if more then 1 minute passed since start
             cancellationToken.ThrowIfCancellationRequested();
