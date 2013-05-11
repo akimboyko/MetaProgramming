@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ namespace MetaProgramming.RoslynCTP
 {
     public class Introspection
     {
-        public IEnumerable<Complexity> SearchForComplexMethods(
+        public IImmutableList<Complexity> SearchForComplexMethods(
                                             string solutionFile,
                                             int maxAllowedCyclomaticComplexity,
                                             CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ namespace MetaProgramming.RoslynCTP
                 cancellationToken: cancellationToken);
         }
 
-        public IEnumerable<ReturnNull> SearchForReturnNullStatements(
+        public IImmutableList<ReturnNull> SearchForReturnNullStatements(
                 string solutionFile,
                 CancellationToken cancellationToken)
         {
@@ -37,7 +37,7 @@ namespace MetaProgramming.RoslynCTP
                 cancellationToken: cancellationToken);
         }
 
-        private static IEnumerable<TResult> SearchFor<TResult>(
+        private static IImmutableList<TResult> SearchFor<TResult>(
                 string solutionFile,
                 Action<Task<CommonSyntaxNode>, ConcurrentBag<TResult>, CancellationToken> func,
                 CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ namespace MetaProgramming.RoslynCTP
                     .Select(document => document.GetSyntaxRootAsync(cancellationToken))
                     .ToArray();
 
-            var complexityBag = new ConcurrentBag<TResult>();
+            var concurrentBagWithResults = new ConcurrentBag<TResult>();
 
             // calculate complexity for all methods in parallel
             Parallel.ForEach(
@@ -68,12 +68,12 @@ namespace MetaProgramming.RoslynCTP
                     CancellationToken = cancellationToken
                 },
                 syntaxRootAsync =>
-                    func(syntaxRootAsync, complexityBag, cancellationToken));
+                    func(syntaxRootAsync, concurrentBagWithResults, cancellationToken));
 
             // throw an exception if more then 1 minute passed since start
             cancellationToken.ThrowIfCancellationRequested();
 
-            return complexityBag.AsEnumerable();
+            return ImmutableList.Create(concurrentBagWithResults.AsEnumerable());
         }
 
         // statements for independent paths through a program's source code

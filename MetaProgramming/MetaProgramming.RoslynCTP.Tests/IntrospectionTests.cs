@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using ApprovalTests;
@@ -30,7 +30,7 @@ namespace MetaProgramming.RoslynCTP.Tests
         {
             var cancellationToken = _cancellationTokenSource.Token;
 
-            IEnumerable<Complexity> methodsWithCyclomaticComplexityGt10 = 
+            IImmutableList<Complexity> methodsWithCyclomaticComplexityGt10 = 
                 new Introspection()
                     .SearchForComplexMethods(
                         solutionFile: SolutionPath,
@@ -55,7 +55,7 @@ namespace MetaProgramming.RoslynCTP.Tests
         {
             var cancellationToken = _cancellationTokenSource.Token;
 
-            IEnumerable<ReturnNull> returnNullStatements =
+            IImmutableList<ReturnNull> returnNullStatements =
                 new Introspection()
                     .SearchForReturnNullStatements(
                         solutionFile: SolutionPath,
