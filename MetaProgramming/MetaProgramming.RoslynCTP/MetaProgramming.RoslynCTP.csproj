@@ -99,10 +99,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.Samples.csproj">
-      <Project>{af6664e5-9bb8-4487-a790-8e75bf2ab8d8}</Project>
-      <Name>CodeSmells.Samples</Name>
-    </ProjectReference>
     <ProjectReference Include="CSharpToVisualBasicConverter\CSharpToVisualBasicConverter.csproj">
       <Project>{4c23e864-a81e-45fc-b62e-a85e3b521864}</Project>
       <Name>CSharpToVisualBasicConverter</Name>

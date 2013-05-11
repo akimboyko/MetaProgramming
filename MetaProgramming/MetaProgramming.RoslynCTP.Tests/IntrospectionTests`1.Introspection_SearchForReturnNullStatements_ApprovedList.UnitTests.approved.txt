@@ -2,7 +2,7 @@
   {
     "TypeIdentifier": "ClassWithReturnNullMethods",
     "SourcesSample": "return null;",
-    "FilePath": "D:\\work\\Courses\\MetaProgramming\\MetaProgramming\\MetaProgramming.RoslynCTP.Tests\\bin\\Debug\\CodeSmells.Samples\\ClassWithReturnNullMethods.cs",
+    "FilePath": "Debug\\CodeSmells.Samples\\ClassWithReturnNullMethods.cs",
     "SourceLine": 12
   }
 ]

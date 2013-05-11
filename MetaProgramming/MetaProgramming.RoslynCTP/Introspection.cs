@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace MetaProgramming.RoslynCTP
                                             int maxAllowedCyclomaticComplexity,
                                             CancellationToken cancellationToken)
         {
-            var calculateComplexity = new Action<Task<CommonSyntaxNode>, ConcurrentBag<Complexity>, CancellationToken>((task, bag, token) => CalculateComplexity(task, bag, maxAllowedCyclomaticComplexity, token));
+            var calculateComplexity = new Action<Task<CommonSyntaxNode>, string, ConcurrentBag<Complexity>, CancellationToken>((task, solutionDir, bag, token) => CalculateComplexity(task, solutionDir, bag, maxAllowedCyclomaticComplexity, token));
             
             return SearchFor(
                 solutionFile: solutionFile,
@@ -33,14 +34,14 @@ namespace MetaProgramming.RoslynCTP
         {
             return SearchFor(
                 solutionFile: solutionFile,
-                searchAction: new Action<Task<CommonSyntaxNode>, ConcurrentBag<ReturnNull>, CancellationToken>(
+                searchAction: new Action<Task<CommonSyntaxNode>, string, ConcurrentBag<ReturnNull>, CancellationToken>(
                             GetReturnNullStatements),
                 cancellationToken: cancellationToken);
         }
 
         private static IImmutableList<TResult> SearchFor<TResult>(
                 string solutionFile,
-                Action<Task<CommonSyntaxNode>, ConcurrentBag<TResult>, CancellationToken> searchAction,
+                Action<Task<CommonSyntaxNode>, string, ConcurrentBag<TResult>, CancellationToken> searchAction,
                 CancellationToken cancellationToken)
         {
             // load workspace, i.e. solution from Visual Studio
@@ -60,6 +61,7 @@ namespace MetaProgramming.RoslynCTP
                     .ToArray();
 
             var concurrentBagWithResults = new ConcurrentBag<TResult>();
+            var solutionDir = Path.GetDirectoryName(solutionFile);
 
             // calculate complexity for all methods in parallel
             Parallel.ForEach(
@@ -69,7 +71,7 @@ namespace MetaProgramming.RoslynCTP
                     CancellationToken = cancellationToken
                 },
                 syntaxRootAsync =>
-                    searchAction(syntaxRootAsync, concurrentBagWithResults, cancellationToken));
+                    searchAction(syntaxRootAsync, solutionDir, concurrentBagWithResults, cancellationToken));
 
             // throw an exception if more then 1 minute passed since start
             cancellationToken.ThrowIfCancellationRequested();
@@ -101,6 +103,7 @@ namespace MetaProgramming.RoslynCTP
 
         private static async void CalculateComplexity(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
+                                    string solutionDir,
                                     ConcurrentBag<Complexity> complexityBag,
                                     int maxAllowedCyclomaticComplexity,
                                     CancellationToken cancellationToken)
@@ -119,7 +122,7 @@ namespace MetaProgramming.RoslynCTP
                                                             .OfType<StatementSyntax>()
                                                             .Where(CyclomaticComplexityStatements)
                                                             .Count() + 1,
-                                    FilePath = methodDeclaration.GetLocation().SourceTree.FilePath,
+                                    FilePath = GetRelativeFilePath(solutionDir, methodDeclaration.GetLocation().SourceTree.FilePath),
                                     SourceLine = methodDeclaration.GetLocation().SourceTree.GetLineSpan(methodDeclaration.Span, true, cancellationToken).StartLinePosition.Line
                                 })
                     .Where(complexity => complexity.NStatementSyntax > maxAllowedCyclomaticComplexity)
@@ -134,6 +137,7 @@ namespace MetaProgramming.RoslynCTP
         // statements for `return null;`
         private static async void GetReturnNullStatements(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
+                                    string solutionDir,
                                     ConcurrentBag<ReturnNull> returnNullBag,
                                     CancellationToken cancellationToken)
         {
@@ -147,7 +151,7 @@ namespace MetaProgramming.RoslynCTP
                                 {
                                     TypeIdentifier = GetParentSyntax<TypeDeclarationSyntax>(returnNull).Identifier.ValueText,
                                     SourcesSample = returnNull.ToString(),
-                                    FilePath = returnNull.GetLocation().SourceTree.FilePath,
+                                    FilePath = GetRelativeFilePath(solutionDir, returnNull.GetLocation().SourceTree.FilePath),
                                     SourceLine = returnNull
                                                      .GetLocation().SourceTree
                                                      .GetLineSpan(returnNull.Span, true, cancellationToken)
@@ -177,6 +181,14 @@ namespace MetaProgramming.RoslynCTP
             }
 
             return (TDeclarationSyntax)statement;
+        }
+
+        private static string GetRelativeFilePath(string solutionDir, string filePath)
+        {
+            var relativePath = new Uri(Path.GetDirectoryName(solutionDir)).MakeRelativeUri(new Uri(Path.GetDirectoryName(filePath))).ToString();
+
+            return Path.Combine(relativePath, Path.GetFileName(filePath))
+                       .Replace('/', Path.DirectorySeparatorChar);
         }
     }
 }

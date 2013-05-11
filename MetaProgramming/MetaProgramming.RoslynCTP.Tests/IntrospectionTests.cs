@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using MetaProgramming.RoslynCTP.Model;
 using MetaProgramming.RoslynCTP.Tests.Strategy;
@@ -24,8 +26,6 @@ namespace MetaProgramming.RoslynCTP.Tests
         [SetUp]
         public void SetUp()
         {
-            Approvals.RegisterDefaultNamerCreation(() => new StrategyNamer(_strategy.GetTestType()));
-
             _cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(1));
         }
 
@@ -51,7 +51,7 @@ namespace MetaProgramming.RoslynCTP.Tests
                                     .ThenBy(complexity => complexity.MethodIdentifier))
                 .ToArray();
 
-            Approvals.Verify(JsonConvert.SerializeObject(methodsWithCyclomaticComplexityGt10Results, Formatting.Indented));
+            ApprovalsVerify(methodsWithCyclomaticComplexityGt10Results);
         }
 
         [Test]
@@ -71,7 +71,14 @@ namespace MetaProgramming.RoslynCTP.Tests
                 .ThenBy(returnNull => returnNull.SourceLine)
                 .ToArray();
 
-            Approvals.Verify(JsonConvert.SerializeObject(orderedReturnNullStatements, Formatting.Indented));
+            ApprovalsVerify(orderedReturnNullStatements);
+        }
+
+        private void ApprovalsVerify<T>(IEnumerable<T> records)
+        {
+            var serializeObject = JsonConvert.SerializeObject(records, Formatting.Indented);
+            Approvals.Verify(new ApprovalTextWriter(serializeObject), new StrategyNamer(_strategy.GetTestType()),
+                             new DiffReporter());
         }
     }
 }
