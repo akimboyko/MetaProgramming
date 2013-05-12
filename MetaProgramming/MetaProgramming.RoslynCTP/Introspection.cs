@@ -20,7 +20,7 @@ namespace MetaProgramming.RoslynCTP
                 int maxAllowedCyclomaticComplexity,
                 CancellationToken cancellationToken)
         {
-            var calculateComplexity = new Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<Complexity>>>((task, solutionDir, token) => CalculateComplexity(task, solutionDir, maxAllowedCyclomaticComplexity, token));
+            var calculateComplexity = new Func<Task<CommonSyntaxNode>, Task<ISemanticModel>, string, CancellationToken, Task<IEnumerable<Complexity>>>((syntaxRootAsync, semanticModelAsync, solutionDir, token) => CalculateComplexity(syntaxRootAsync, semanticModelAsync, solutionDir, maxAllowedCyclomaticComplexity, token));
 
             return SearchFor(
                 solutionFile: solutionFile,
@@ -32,7 +32,7 @@ namespace MetaProgramming.RoslynCTP
                 string solutionFile,
                 CancellationToken cancellationToken)
         {
-            var getReturnNullStatements = new Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<ReturnNull>>>((task, solutionDir, token) => GetReturnNullStatements(task, solutionDir, token));
+            var getReturnNullStatements = new Func<Task<CommonSyntaxNode>, Task<ISemanticModel>, string, CancellationToken, Task<IEnumerable<ReturnNull>>>((syntaxRootAsync, semanticModelAsync, solutionDir, token) => GetReturnNullStatements(syntaxRootAsync, semanticModelAsync, solutionDir, token));
 
             return SearchFor(
                 solutionFile: solutionFile,
@@ -42,7 +42,7 @@ namespace MetaProgramming.RoslynCTP
 
         private static IImmutableList<TResult> SearchFor<TResult>(
                 string solutionFile,
-                Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<TResult>>> searchFunc,
+                Func<Task<CommonSyntaxNode>, Task<ISemanticModel>, string, CancellationToken, Task<IEnumerable<TResult>>> searchFunc,
                 CancellationToken cancellationToken)
         {
             IEnumerable<TResult> results;
@@ -65,8 +65,13 @@ namespace MetaProgramming.RoslynCTP
                             .AsUnordered()
                         .WithCancellation(cancellationToken)
                         .SelectMany(project => project.Documents)
-                        .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-                        .SelectMany(syntaxRootAsync => searchFunc(syntaxRootAsync, solutionDir, cancellationToken).Result)
+                        .Select(document =>
+                            new 
+                            {
+                                syntaxRootAsync = document.GetSyntaxRootAsync(cancellationToken),
+                                semanticModelAsync = document.GetSemanticModelAsync(cancellationToken)
+                            })
+                        .SelectMany(model => searchFunc(model.syntaxRootAsync, model.semanticModelAsync, solutionDir, cancellationToken).Result)
                         .ToList();
 
                 // throw an exception if more then 1 minute passed since start
@@ -115,8 +120,46 @@ namespace MetaProgramming.RoslynCTP
                                 )
                     .Compile();
 
+
+        private static async Task<bool> IsExpressionOfReferenceType(StatementSyntax statement, Task<ISemanticModel> semanticModelAsync)
+        {
+            var result = false;
+
+            if (statement is ReturnStatementSyntax)
+            {
+                result = await IsExpressionOfReferenceType(statement as ReturnStatementSyntax, semanticModelAsync);
+            }
+            else if (statement is YieldStatementSyntax)
+            {
+                result = await IsExpressionOfReferenceType(statement as YieldStatementSyntax, semanticModelAsync);
+            }
+
+            return result;
+        }
+
+        private static async Task<bool> IsExpressionOfReferenceType(ReturnStatementSyntax returnStatement, Task<ISemanticModel> semanticModelAsync)
+        {
+            var semanticModel = await semanticModelAsync;
+            var expressionSyntax = returnStatement.Expression;
+
+            return expressionSyntax != null &&
+                    (semanticModel.GetTypeInfo(expressionSyntax).Type == null
+                        || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);
+        }
+
+        private static async Task<bool> IsExpressionOfReferenceType(YieldStatementSyntax yieldStatement, Task<ISemanticModel> semanticModelAsync)
+        {
+            var semanticModel = await semanticModelAsync;
+            var expressionSyntax = yieldStatement.Expression;
+
+            return expressionSyntax != null &&
+                    (semanticModel.GetTypeInfo(expressionSyntax).Type == null
+                        || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);
+        }
+
         private static async Task<IEnumerable<Complexity>> CalculateComplexity(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
+                                    Task<ISemanticModel> semanticModelAsync,
                                     string solutionDir,
                                     int maxAllowedCyclomaticComplexity,
                                     CancellationToken cancellationToken)
@@ -152,16 +195,17 @@ namespace MetaProgramming.RoslynCTP
         //                `yield return null;`, `yield return default(object);`
         private static async Task<IEnumerable<ReturnNull>> GetReturnNullStatements(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
+                                    Task<ISemanticModel> semanticModelAsync,
                                     string solutionDir,
                                     CancellationToken cancellationToken)
         {
             var returnNulls = GetReturnNullStatements<ReturnStatementSyntax>(
-                                                            syntaxRootAsync, solutionDir,
-                                                            ReturnNullStatement, cancellationToken);
+                                                            syntaxRootAsync, semanticModelAsync,
+                                                            solutionDir, ReturnNullStatement, cancellationToken);
 
             var yieldReturnNull = GetReturnNullStatements<YieldStatementSyntax>(
-                                                            syntaxRootAsync, solutionDir,
-                                                            YieldReturnNullStatement, cancellationToken);
+                                                            syntaxRootAsync, semanticModelAsync,
+                                                            solutionDir, YieldReturnNullStatement, cancellationToken);
 
             var results = new List<ReturnNull>();
 
@@ -173,6 +217,7 @@ namespace MetaProgramming.RoslynCTP
 
         private static async Task<IEnumerable<ReturnNull>> GetReturnNullStatements<TReturnStatementSyntax>(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
+                                    Task<ISemanticModel> semanticModelAsync,
                                     string solutionDir,
                                     Func<TReturnStatementSyntax, bool> statement,
                                     CancellationToken cancellationToken)
@@ -185,6 +230,7 @@ namespace MetaProgramming.RoslynCTP
                     .WithCancellation(cancellationToken)
                     .OfType<TReturnStatementSyntax>()
                     .Where(statement)
+                    .Where(returnNull => IsExpressionOfReferenceType(returnNull, semanticModelAsync).Result)
                     .Select(returnNull =>
                             new ReturnNull
                             {

@@ -14,7 +14,7 @@ using Approvals = ApprovalTests.Approvals;
 
 namespace MetaProgramming.RoslynCTP.Tests
 {
-    [TestFixture(typeof(IntegrationIntrospectionFixture))]
+    //[TestFixture(typeof(IntegrationIntrospectionFixture))]
     [TestFixture(typeof(CodeSmellsIntrospectionFixture))]
     [UseReporter(typeof(DiffReporter))]
     public class IntrospectionTests<TIntrospectionFixture>
