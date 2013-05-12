@@ -1,4 +1,6 @@
-﻿namespace CodeSmells.Samples
+﻿using System.Collections.Generic;
+
+namespace CodeSmells.Samples
 {
     public class ClassWithReturnNullMethods
     {
@@ -17,6 +19,11 @@
             return default(object);
         }
 
+        public IEnumerable<object> ReturnEnumerableOfDefaultReferenceType()
+        {
+            yield return default(object);
+        }
+
         public int ReturnSomeValueType()
         {
             return new int();
@@ -25,6 +32,11 @@
         public int ReturnDefaultValueType()
         {
             return default(int);
+        }
+
+        public IEnumerable<int> ReturnEnumerableOfDefaultValueType()
+        {
+            yield return default(int);
         }
     }
 }

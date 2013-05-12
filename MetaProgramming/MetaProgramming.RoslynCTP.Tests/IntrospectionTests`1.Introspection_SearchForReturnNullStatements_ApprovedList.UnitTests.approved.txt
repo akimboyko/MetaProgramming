@@ -3,6 +3,18 @@
     "TypeIdentifier": "ClassWithReturnNullMethods",
     "SourcesSample": "return null;",
     "FilePath": "Debug\\CodeSmells.Samples\\ClassWithReturnNullMethods.cs",
-    "SourceLine": 12
+    "SourceLine": 14
+  },
+  {
+    "TypeIdentifier": "ClassWithReturnNullMethods",
+    "SourcesSample": "return default(object);",
+    "FilePath": "Debug\\CodeSmells.Samples\\ClassWithReturnNullMethods.cs",
+    "SourceLine": 19
+  },
+  {
+    "TypeIdentifier": "ClassWithReturnNullMethods",
+    "SourcesSample": "yield return default(object);",
+    "FilePath": "Debug\\CodeSmells.Samples\\ClassWithReturnNullMethods.cs",
+    "SourceLine": 24
   }
 ]

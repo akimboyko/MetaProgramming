@@ -20,4 +20,12 @@ public class Examples
 
         return null;
     }
+
+    public object FactoryMethodWithDefault()
+    {
+        if (true)
+            return new object();
+
+        return default(object);
+    }
 }
