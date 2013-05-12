@@ -2059,6 +2059,12 @@
   },
   {
     "TypeIdentifier": "Loader",
+    "SourcesSample": "yield return null;",
+    "FilePath": "nhibernate-core-master\\src\\NHibernate\\Loader\\Loader.cs",
+    "SourceLine": 554
+  },
+  {
+    "TypeIdentifier": "Loader",
     "SourcesSample": "return null;",
     "FilePath": "nhibernate-core-master\\src\\NHibernate\\Loader\\Loader.cs",
     "SourceLine": 1101

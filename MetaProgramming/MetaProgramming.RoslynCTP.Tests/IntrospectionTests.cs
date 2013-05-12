@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using FluentAssertions;
 using MetaProgramming.RoslynCTP.Model;
 using MetaProgramming.RoslynCTP.Tests.Strategy;
 using NUnit.Framework;
@@ -34,21 +35,26 @@ namespace MetaProgramming.RoslynCTP.Tests
         {
             var cancellationToken = _cancellationTokenSource.Token;
 
-            IImmutableList<Complexity> methodsWithCyclomaticComplexityGt10 = 
+            IEnumerable<Complexity> methodsWithCyclomaticComplexityGt10 = 
                 new Introspection()
                     .SearchForComplexMethods(
                         solutionFile: _strategy.GetSolutionPath(),
                         maxAllowedCyclomaticComplexity: 10,
                         cancellationToken: cancellationToken);
 
-            var methodsWithCyclomaticComplexityGt10Results = methodsWithCyclomaticComplexityGt10
-                .AsParallel()
-                .GroupBy(complexity => complexity.TypeIdentifier)
-                .OrderByDescending(@group => @group.Sum(complexity => complexity.NStatementSyntax))
-                .ThenBy(@group => @group.First().FilePath)
-                .Select(@group => @group
-                                    .OrderByDescending(complexity => complexity.NStatementSyntax)
-                                    .ThenBy(complexity => complexity.MethodIdentifier))
+            methodsWithCyclomaticComplexityGt10.Should()
+                            .NotBeNull()
+                            .And.BeOfType<ImmutableList<Complexity>>()
+                            .And.NotBeEmpty();
+
+            var methodsWithCyclomaticComplexityGt10Results = 
+                methodsWithCyclomaticComplexityGt10
+                    .GroupBy(complexity => complexity.TypeIdentifier)
+                    .OrderByDescending(@group => @group.Sum(complexity => complexity.NStatementSyntax))
+                    .ThenBy(@group => @group.First().FilePath)
+                    .Select(@group => @group
+                                        .OrderByDescending(complexity => complexity.NStatementSyntax)
+                                        .ThenBy(complexity => complexity.MethodIdentifier))
                 .ToArray();
 
             ApprovalsVerify(methodsWithCyclomaticComplexityGt10Results);
@@ -59,17 +65,22 @@ namespace MetaProgramming.RoslynCTP.Tests
         {
             var cancellationToken = _cancellationTokenSource.Token;
 
-            IImmutableList<ReturnNull> returnNullStatements =
+            IEnumerable<ReturnNull> returnNullStatements =
                 new Introspection()
                     .SearchForReturnNullStatements(
                         solutionFile: _strategy.GetSolutionPath(),
                         cancellationToken: cancellationToken);
 
-            var orderedReturnNullStatements = returnNullStatements
-                .AsParallel()
-                .OrderBy(returnNull => returnNull.FilePath)
-                .ThenBy(returnNull => returnNull.SourceLine)
-                .ToArray();
+            returnNullStatements.Should()
+                            .NotBeNull()
+                            .And.BeOfType<ImmutableList<ReturnNull>>()
+                            .And.NotBeEmpty();
+
+            var orderedReturnNullStatements = 
+                returnNullStatements
+                    .OrderBy(returnNull => returnNull.FilePath)
+                    .ThenBy(returnNull => returnNull.SourceLine)
+                    .ToArray();
 
             ApprovalsVerify(orderedReturnNullStatements);
         }

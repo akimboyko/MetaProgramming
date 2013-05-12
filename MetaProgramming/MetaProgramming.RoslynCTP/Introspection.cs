@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -16,36 +15,37 @@ namespace MetaProgramming.RoslynCTP
 {
     public class Introspection
     {
-        public IImmutableList<Complexity> SearchForComplexMethods(
-                                            string solutionFile,
-                                            int maxAllowedCyclomaticComplexity,
-                                            CancellationToken cancellationToken)
+        public IEnumerable<Complexity> SearchForComplexMethods(
+                string solutionFile,
+                int maxAllowedCyclomaticComplexity,
+                CancellationToken cancellationToken)
         {
-            var calculateComplexity = new Action<Task<CommonSyntaxNode>, string, ConcurrentBag<Complexity>, CancellationToken>((task, solutionDir, bag, token) => CalculateComplexity(task, solutionDir, bag, maxAllowedCyclomaticComplexity, token));
+            var calculateComplexity = new Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<Complexity>>>((task, solutionDir, token) => CalculateComplexity(task, solutionDir, maxAllowedCyclomaticComplexity, token));
 
             return SearchFor(
                 solutionFile: solutionFile,
-                searchAction: calculateComplexity,
+                searchFunc: calculateComplexity,
                 cancellationToken: cancellationToken);
         }
 
-        public IImmutableList<ReturnNull> SearchForReturnNullStatements(
+        public IEnumerable<ReturnNull> SearchForReturnNullStatements(
                 string solutionFile,
                 CancellationToken cancellationToken)
         {
+            var getReturnNullStatements = new Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<ReturnNull>>>((task, solutionDir, token) => GetReturnNullStatements(task, solutionDir, token));
+
             return SearchFor(
                 solutionFile: solutionFile,
-                searchAction: new Action<Task<CommonSyntaxNode>, string, ConcurrentBag<ReturnNull>, CancellationToken>(
-                            GetReturnNullStatements),
+                searchFunc: getReturnNullStatements,
                 cancellationToken: cancellationToken);
         }
 
         private static IImmutableList<TResult> SearchFor<TResult>(
                 string solutionFile,
-                Action<Task<CommonSyntaxNode>, string, ConcurrentBag<TResult>, CancellationToken> searchAction,
+                Func<Task<CommonSyntaxNode>, string, CancellationToken, Task<IEnumerable<TResult>>> searchFunc,
                 CancellationToken cancellationToken)
         {
-            var concurrentBagWithResults = new ConcurrentBag<TResult>();
+            IEnumerable<TResult> results;
 
             // load workspace, i.e. solution from Visual Studio
             using (var workspace = Workspace.LoadSolution(solutionFile))
@@ -53,33 +53,27 @@ namespace MetaProgramming.RoslynCTP
                 // save a reference to original state
                 var origianlSolution = workspace.CurrentSolution;
 
-                // build syntax root asynchronously in parallel for all documents from all projects 
-                var asyncSyntexRoots =
+                // Get absolute path to solution directory
+                var solutionDir = Path.GetDirectoryName(solutionFile);
+
+                // build syntax root asynchronously in parallel for all documents from all projects
+                // then get all syntax nodes
+                results =
                     origianlSolution
                         .Projects
                         .AsParallel()
-                        .AsUnordered()
+                            .AsUnordered()
+                        .WithCancellation(cancellationToken)
                         .SelectMany(project => project.Documents)
                         .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-                        .ToArray();
-
-                var solutionDir = Path.GetDirectoryName(solutionFile);
-
-                // calculate complexity for all methods in parallel
-                Parallel.ForEach(
-                    asyncSyntexRoots,
-                    new ParallelOptions
-                        {
-                            CancellationToken = cancellationToken
-                        },
-                    syntaxRootAsync =>
-                    searchAction(syntaxRootAsync, solutionDir, concurrentBagWithResults, cancellationToken));
+                        .SelectMany(syntaxRootAsync => searchFunc(syntaxRootAsync, solutionDir, cancellationToken).Result)
+                        .ToList();
 
                 // throw an exception if more then 1 minute passed since start
                 cancellationToken.ThrowIfCancellationRequested();
             }
-            
-            return ImmutableList.Create(concurrentBagWithResults.AsEnumerable());
+
+            return ImmutableList.Create(results);
         }
 
         // statements for independent paths through a program's source code
@@ -121,55 +115,60 @@ namespace MetaProgramming.RoslynCTP
                                 )
                     .Compile();
 
-        private static async void CalculateComplexity(
+        private static async Task<IEnumerable<Complexity>> CalculateComplexity(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
                                     string solutionDir,
-                                    ConcurrentBag<Complexity> complexityBag,
                                     int maxAllowedCyclomaticComplexity,
                                     CancellationToken cancellationToken)
         {
-            Array.ForEach(
-                (await syntaxRootAsync)
-                    .DescendantNodes()
-                    .OfType<MethodDeclarationSyntax>()
-                    .Select(methodDeclaration =>
-                                new Complexity
-                                {
-                                    TypeIdentifier = ((TypeDeclarationSyntax)methodDeclaration.Parent).Identifier.ValueText,
-                                    MethodIdentifier = methodDeclaration.Identifier.ValueText,
-                                    SourcesSample = methodDeclaration.ToString(),
-                                    NStatementSyntax = methodDeclaration.DescendantNodes()
-                                                            .OfType<StatementSyntax>()
-                                                            .Where(CyclomaticComplexityStatements)
-                                                            .Count() + 1,
-                                    FilePath = GetRelativeFilePath(solutionDir, methodDeclaration.GetLocation().SourceTree.FilePath),
-                                    SourceLine = methodDeclaration.GetLocation().SourceTree.GetLineSpan(methodDeclaration.Span, true, cancellationToken).StartLinePosition.Line
-                                })
-                    .Where(complexity => complexity.NStatementSyntax > maxAllowedCyclomaticComplexity)
-                    .ToArray(),
-                complexity =>
-                {
-                    complexityBag.Add(complexity);
-                    cancellationToken.ThrowIfCancellationRequested();
-                });
+            return (await syntaxRootAsync)
+                .DescendantNodes()
+                .AsParallel()
+                    .AsUnordered()
+                .WithCancellation(cancellationToken)
+                .OfType<MethodDeclarationSyntax>()
+                .Select(methodDeclaration =>
+                        new Complexity
+                            {
+                                TypeIdentifier = ((TypeDeclarationSyntax) methodDeclaration.Parent).Identifier.ValueText,
+                                MethodIdentifier = methodDeclaration.Identifier.ValueText,
+                                SourcesSample = methodDeclaration.ToString(),
+                                NStatementSyntax = methodDeclaration.DescendantNodes()
+                                                                    .OfType<StatementSyntax>()
+                                                                    .Where(CyclomaticComplexityStatements)
+                                                                    .Count() + 1,
+                                FilePath =
+                                    GetRelativeFilePath(solutionDir, methodDeclaration.GetLocation().SourceTree.FilePath),
+                                SourceLine =
+                                    methodDeclaration.GetLocation()
+                                                     .SourceTree.GetLineSpan(methodDeclaration.Span, true,
+                                                                             cancellationToken)
+                                                     .StartLinePosition.Line
+                            })
+                .Where(complexity => complexity.NStatementSyntax > maxAllowedCyclomaticComplexity);
         }
 
         // statements for `return null;`, `return default(object);`,
         //                `yield return null;`, `yield return default(object);`
-        private static async void GetReturnNullStatements(
+        private static async Task<IEnumerable<ReturnNull>> GetReturnNullStatements(
                                     Task<CommonSyntaxNode> syntaxRootAsync,
                                     string solutionDir,
-                                    ConcurrentBag<ReturnNull> returnNullBag,
                                     CancellationToken cancellationToken)
         {
-            var returnNulls = GetReturnNullStatements<ReturnStatementSyntax>(syntaxRootAsync, solutionDir,
-                                                           ReturnNullStatement, cancellationToken);
+            var returnNulls = GetReturnNullStatements<ReturnStatementSyntax>(
+                                                            syntaxRootAsync, solutionDir,
+                                                            ReturnNullStatement, cancellationToken);
 
-            var yieldReturnNull = GetReturnNullStatements<YieldStatementSyntax>(syntaxRootAsync, solutionDir,
-                                                           YieldReturnNullStatement, cancellationToken);
+            var yieldReturnNull = GetReturnNullStatements<YieldStatementSyntax>(
+                                                            syntaxRootAsync, solutionDir,
+                                                            YieldReturnNullStatement, cancellationToken);
 
-            Array.ForEach((await returnNulls).ToArray(), returnNullBag.Add);
-            Array.ForEach((await yieldReturnNull).ToArray(), returnNullBag.Add);
+            var results = new List<ReturnNull>();
+
+            results.AddRange(await returnNulls);
+            results.AddRange(await yieldReturnNull);
+
+            return results;
         }
 
         private static async Task<IEnumerable<ReturnNull>> GetReturnNullStatements<TReturnStatementSyntax>(
@@ -182,6 +181,7 @@ namespace MetaProgramming.RoslynCTP
             return (await syntaxRootAsync)
                     .DescendantNodes()
                     .AsParallel()
+                        .AsUnordered()
                     .WithCancellation(cancellationToken)
                     .OfType<TReturnStatementSyntax>()
                     .Where(statement)
@@ -218,7 +218,9 @@ namespace MetaProgramming.RoslynCTP
 
         private static string GetRelativeFilePath(string solutionDir, string filePath)
         {
-            var relativePath = new Uri(Path.GetDirectoryName(solutionDir)).MakeRelativeUri(new Uri(Path.GetDirectoryName(filePath))).ToString();
+            var relativePath = new Uri(Path.GetDirectoryName(solutionDir))
+                                        .MakeRelativeUri(
+                                            new Uri(Path.GetDirectoryName(filePath))).ToString();
 
             return Path.Combine(relativePath, Path.GetFileName(filePath))
                        .Replace('/', Path.DirectorySeparatorChar);
