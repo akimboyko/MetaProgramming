@@ -25,37 +25,45 @@ void Main()
 {
     // prepare cancellationToken for async operations
     var cancellationTokenSource = new CancellationTokenSource();
+	cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
     var cancellationToken = cancellationTokenSource.Token;
 
+	var complexityBag = new ConcurrentBag<Complexity>();
+
+	var stopwatch = new Stopwatch();
+	stopwatch.Start();
+
     // load workspace, i.e. solution from Visual Studio
-    var workspace = Workspace.LoadSolution(solutionPath);
-    var origianlSolution = workspace.CurrentSolution;
-    
-    // save a reference to original state
-    cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
-    
-    // build syntax root asynchronously for all documents from all projects 
-    var syntaxRootObservable =
-            origianlSolution
-                .Projects
-                .AsParallel()
-                    .AsUnordered()
-                .SelectMany(project => project.Documents)
-                .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-                    .ToObservable();
-    
-    var complexityBag = new ConcurrentBag<Complexity>();
-    
-    // calculate complexity for all methods using Rx Observables
-    syntaxRootObservable
-        .Subscribe(
-            syntaxRootAsync =>
-                CalculateComplexity(syntaxRootAsync, complexityBag, cancellationToken),
-            cancellationToken);
-    
-    // throw an exception if more then 1 minute passed since start
-    cancellationToken.ThrowIfCancellationRequested();
-    
+    using(var workspace = Workspace.LoadSolution(solutionPath))
+	{
+		// save a reference to original state
+		var origianlSolution = workspace.CurrentSolution;
+		
+		// build syntax root asynchronously for all documents from all projects 
+		var syntaxRootObservable =
+				origianlSolution
+					.Projects
+					.AsParallel()
+						.AsUnordered()
+					.WithCancellation(cancellationToken)
+					.SelectMany(project => project.Documents)
+					.Select(document => document.GetSyntaxRootAsync(cancellationToken))
+						.ToObservable();
+		
+		// calculate complexity for all methods using Rx Observables
+		syntaxRootObservable
+			.Subscribe(
+				syntaxRootAsync =>
+					CalculateComplexity(syntaxRootAsync, complexityBag, cancellationToken),
+				cancellationToken);
+		
+		// throw an exception if more then 1 minute passed since start
+		cancellationToken.ThrowIfCancellationRequested();
+    }
+	
+	stopwatch.Stop();
+	stopwatch.Elapsed.Dump("Elapsed time");
+	
     // show results
     complexityBag
         .GroupBy(complexity => complexity.FilePath)
@@ -92,16 +100,6 @@ private static readonly Func<StatementSyntax, bool> cyclomaticComplexityStatemen
             .Or(s => s is WhileStatementSyntax)
                 .Compile();
 
-private class Complexity
-{
-    public string TypeIdentifier { get; set; }
-    public string MethodIdentifier { get; set; }
-	public string SourcesSample { get; set; }
-    public int nStatementSyntax { get; set; }
-	public string FilePath { get; set; }
-	public int SourceLine { get; set; }
-}
-
 // process descendant nodes of syntaxRoot
 private static async void CalculateComplexity(
                             Task<CommonSyntaxNode> syntaxRootAsync,
@@ -132,4 +130,14 @@ private static async void CalculateComplexity(
             complexityBag.Add(complexity);
             cancellationToken.ThrowIfCancellationRequested();
         });
+}
+
+private class Complexity
+{
+    public string TypeIdentifier { get; set; }
+    public string MethodIdentifier { get; set; }
+	public string SourcesSample { get; set; }
+    public int nStatementSyntax { get; set; }
+	public string FilePath { get; set; }
+	public int SourceLine { get; set; }
 }

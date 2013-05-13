@@ -15,45 +15,55 @@ void Main()
 {
     // prepare cancellationToken for async operations
     var cancellationTokenSource = new CancellationTokenSource();
+	cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
     var cancellationToken = cancellationTokenSource.Token;
 
+	IEnumerable<ReturnNull> returnNulls;
+	
+	var stopwatch = new Stopwatch();
+	stopwatch.Start();
+
     // load workspace, i.e. solution from Visual Studio
-    var workspace = Workspace.LoadSolution(solutionPath);
-    var origianlSolution = workspace.CurrentSolution;
+    using(var workspace = Workspace.LoadSolution(solutionPath))
+	{
+		// save a reference to original state
+		var origianlSolution = workspace.CurrentSolution;
+		
+		// build syntax root and semantic model asynchronously in parallel 
+		// for all documents from all projects 
+		returnNulls =
+			origianlSolution
+				.Projects
+				.AsParallel()
+					.AsUnordered()
+				.WithCancellation(cancellationToken)
+				.SelectMany(project => project.Documents)
+				.Select(document => document.GetSyntaxRootAsync(cancellationToken))
+				// calculate complexity for all methods in parallel
+				.SelectMany(syntaxRootAsync => 
+							FindReturnNull(syntaxRootAsync, cancellationToken).Result)
+				.ToArray();
+		
+		// throw an exception if more then 1 minute passed since start
+		cancellationToken.ThrowIfCancellationRequested();
+	}
     
-    // save a reference to original state
-    cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
-    
-    // build syntax root asynchronously in parallel for all documents from all projects 
-    var asyncSyntexRoots =
-        origianlSolution
-            .Projects
-            .AsParallel()
-                .AsUnordered()
-            .SelectMany(project => project.Documents)
-            .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-            .ToArray();
-    
-    var returnNullBag = new ConcurrentBag<ReturnNull>();
-    
-    // calculate complexity for all methods in parallel
-    Parallel.ForEach(
-        asyncSyntexRoots,
-        new ParallelOptions
-        {
-            CancellationToken = cancellationToken
-        },
-        syntaxRootAsync =>
-            FindReturnNull(syntaxRootAsync, returnNullBag, cancellationToken));
-    
-    // throw an exception if more then 1 minute passed since start
-    cancellationToken.ThrowIfCancellationRequested();
-    
+	stopwatch.Stop();
+	stopwatch.Elapsed.Dump("Elapsed time");
+	
     // show results
-    returnNullBag
+    returnNulls
         .GroupBy(returnNull => returnNull.FilePath)
-			.Select(returnNulls => returnNulls.OrderBy(returnNull => returnNull.SourceLine))
-            .Dump();
+		.OrderBy(returnNullByFilePath => returnNullByFilePath.Key)
+		.Select(returnNullByFilePath => new
+					{
+						FilePath = returnNullByFilePath.Key,
+						ReturnNulls = 
+							returnNullByFilePath
+								.OrderBy(returnNull => returnNull.SourceLine)
+								.Select(returnNull => new { returnNull.SourceLine, returnNull.SourcesSample })
+					})
+        .Dump();
 }
 
 // cloc info about hibernate-core-master from github
@@ -79,25 +89,16 @@ private static readonly Func<StatementSyntax, bool> returnNullStatement =
 			.And(s => (s as ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
                 .Compile();
 
-private class ReturnNull
-{
-    public string TypeIdentifier { get; set; }
-	public string SourcesSample { get; set; }
-    public string FilePath { get; set; }
-    public int SourceLine { get; set; }
-}
-
 // process descendant nodes of syntaxRoot
-private static async void FindReturnNull(
+private static async Task<IEnumerable<ReturnNull>> FindReturnNull(
                             Task<CommonSyntaxNode> syntaxRootAsync,
-                            ConcurrentBag<ReturnNull> returnNullBag,
                             CancellationToken cancellationToken)
 {
-    Array.ForEach(
+    return
         (await syntaxRootAsync)
             .DescendantNodes()
             .OfType<ReturnStatementSyntax>()
-			.Where(returnNullStatement)
+			.Where(returnNull => returnNullStatement(returnNull))
             .Select(returnNull =>
                         new ReturnNull
                         {
@@ -108,13 +109,15 @@ private static async void FindReturnNull(
 											.GetLocation().SourceTree
 											.GetLineSpan(returnNull.Span, true, cancellationToken)
 												.StartLinePosition.Line + 1
-                        })
-            .ToArray(),
-        returnNull => 
-        {
-            returnNullBag.Add(returnNull);
-            cancellationToken.ThrowIfCancellationRequested();
-        });
+                        });
+}
+
+private class ReturnNull
+{
+    public string TypeIdentifier { get; set; }
+	public string SourcesSample { get; set; }
+    public string FilePath { get; set; }
+    public int SourceLine { get; set; }
 }
 
 private static TDeclarationSyntax GetParentSyntax<TDeclarationSyntax>(SyntaxNode statementSyntax)

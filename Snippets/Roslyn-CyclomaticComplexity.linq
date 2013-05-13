@@ -12,43 +12,43 @@ void Main()
 {
     // prepare cancellationToken for async operations
     var cancellationTokenSource = new CancellationTokenSource();
+	cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
     var cancellationToken = cancellationTokenSource.Token;
 
-    // load workspace, i.e. solution from Visual Studio
-    var workspace = Workspace.LoadSolution(solutionPath);
-    
-    // save a reference to original state
-    var origianlSolution = workspace.CurrentSolution;
-    
-    cancellationTokenSource.CancelAfter(TimeSpan.FromMinutes(1));
-    
-    // build syntax root asynchronously in parallel for all documents from all projects 
-    var asyncSyntexRoots =
-        origianlSolution
-            .Projects
-            .AsParallel()
-                .AsUnordered()
-            .SelectMany(project => project.Documents)
-            .Select(document => document.GetSyntaxRootAsync(cancellationToken))
-            .ToArray();
-    
-    var complexityBag = new ConcurrentBag<Complexity>();    
+	IEnumerable<Complexity> complexities;
 
-    // calculate complexity for all methods in parallel
-    Parallel.ForEach(
-        asyncSyntexRoots,
-        new ParallelOptions
-        {
-            CancellationToken = cancellationToken
-        },
-        syntaxRootAsync =>
-            CalculateComplexity(syntaxRootAsync, complexityBag, cancellationToken));
-    
-    // throw an exception if more then 1 minute passed since start
-    cancellationToken.ThrowIfCancellationRequested();
-    
+	var stopwatch = new Stopwatch();
+	stopwatch.Start();
+
+    // load workspace, i.e. solution from Visual Studio
+    using(var workspace = Workspace.LoadSolution(solutionPath))
+    {
+		// save a reference to original state
+		var origianlSolution = workspace.CurrentSolution;
+		
+		// build syntax root asynchronously in parallel for all documents from all projects 
+		complexities =
+			origianlSolution
+				.Projects
+				.AsParallel()
+					.AsUnordered()
+				.WithCancellation(cancellationToken)
+				.SelectMany(project => project.Documents)
+				.Select(document => document.GetSyntaxRootAsync(cancellationToken))
+				// calculate complexity for all methods in parallel
+				.SelectMany(syntaxRootAsync =>
+								CalculateComplexity(syntaxRootAsync, cancellationToken).Result)
+				.ToArray();
+		
+		// throw an exception if more then 1 minute passed since start
+		cancellationToken.ThrowIfCancellationRequested();
+    }
+	
+	stopwatch.Stop();
+	stopwatch.Elapsed.Dump("Elapsed time");
+	
     // show results
-    complexityBag
+    complexities
         .GroupBy(complexity => complexity.TypeIdentifier)
         .OrderByDescending(@group => @group.Sum(complexity => complexity.nStatementSyntax))
         .Select(@group => @group.OrderByDescending(complexity => complexity.nStatementSyntax))
@@ -81,23 +81,12 @@ private static readonly Func<StatementSyntax, bool> cyclomaticComplexityStatemen
             .Or(s => s is WhileStatementSyntax)
                 .Compile();
 
-private class Complexity
-{
-    public string TypeIdentifier { get; set; }
-    public string MethodIdentifier { get; set; }
-	public string SourcesSample { get; set; }
-    public int nStatementSyntax { get; set; }
-	public string FilePath { get; set; }
-	public int SourceLine { get; set; }
-}
-
 // process descendant nodes of syntaxRoot
-private static async void CalculateComplexity(
+private static async Task<IEnumerable<Complexity>> CalculateComplexity(
                             Task<CommonSyntaxNode> syntaxRootAsync,
-                            ConcurrentBag<Complexity> complexityBag,
                             CancellationToken cancellationToken)
 {
-    Array.ForEach(
+    return
         (await syntaxRootAsync)
             .DescendantNodes()
             .OfType<MethodDeclarationSyntax>()
@@ -115,10 +104,15 @@ private static async void CalculateComplexity(
 							SourceLine = methodDeclaration.GetLocation().SourceTree.GetLineSpan(methodDeclaration.Span, true, cancellationToken).StartLinePosition.Line
                         })
             .Where(complexity => complexity.nStatementSyntax > 10)
-            .ToArray(),
-        complexity => 
-        {
-            complexityBag.Add(complexity);
-            cancellationToken.ThrowIfCancellationRequested();
-        });
+            .ToArray();
+}
+
+private class Complexity
+{
+    public string TypeIdentifier { get; set; }
+    public string MethodIdentifier { get; set; }
+	public string SourcesSample { get; set; }
+    public int nStatementSyntax { get; set; }
+	public string FilePath { get; set; }
+	public int SourceLine { get; set; }
 }
