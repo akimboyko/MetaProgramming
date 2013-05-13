@@ -35,4 +35,4 @@ MetaProgramming .Net samples
   * [asynchronously](Snippets/Roslyn-ReturnNull.linq)
   * [using Rx](Snippets/Roslyn-ReturnNullRx.linq)
   * [using Syntax Walker](Snippets/Roslyn-ReturnNullSyntaxWalker.linq)
-  * [Full sample with `yeild return null;`, default and reference types check is here](https://github.com/akimboyko/MetaProgramming/blob/7d4d8533d2be673fad2fbad37bb4d7a75399519a/MetaProgramming/MetaProgramming.RoslynCTP/Introspection.cs)
+  * [Full sample with `yeild return null;`, `default(T)` and value/reference types check is here](https://github.com/akimboyko/MetaProgramming/blob/7d4d8533d2be673fad2fbad37bb4d7a75399519a/MetaProgramming/MetaProgramming.RoslynCTP/Introspection.cs)
