@@ -105,7 +105,7 @@ namespace MetaProgramming.RoslynCTP
                                 || ((s as ReturnStatementSyntax).Expression.Kind == SyntaxKind.DefaultExpression)
                                     && (((s as ReturnStatementSyntax).Expression as DefaultExpressionSyntax).Type != null)
                                 )
-                    .Compile();
+                       .Compile();
 
         // process descendant nodes of syntaxRoot
         private static readonly Func<StatementSyntax, bool> YieldReturnNullStatement =
@@ -118,39 +118,27 @@ namespace MetaProgramming.RoslynCTP
                                 || ((s as YieldStatementSyntax).Expression.Kind == SyntaxKind.DefaultExpression)
                                     && (((s as YieldStatementSyntax).Expression as DefaultExpressionSyntax).Type != null)
                                 )
-                    .Compile();
+                      .Compile();
 
 
         private static async Task<bool> IsExpressionOfReferenceType(StatementSyntax statement, Task<ISemanticModel> semanticModelAsync)
         {
-            var result = false;
+            ExpressionSyntax expressionSyntax;
 
             if (statement is ReturnStatementSyntax)
             {
-                result = await IsExpressionOfReferenceType(statement as ReturnStatementSyntax, semanticModelAsync);
+                expressionSyntax = (statement as ReturnStatementSyntax).Expression;
             }
             else if (statement is YieldStatementSyntax)
             {
-                result = await IsExpressionOfReferenceType(statement as YieldStatementSyntax, semanticModelAsync);
+                expressionSyntax = (statement as YieldStatementSyntax).Expression;
+            }
+            else
+            {
+                throw new ArgumentException("Not supported StatementSyntax", "statement");
             }
 
-            return result;
-        }
-
-        private static async Task<bool> IsExpressionOfReferenceType(ReturnStatementSyntax returnStatement, Task<ISemanticModel> semanticModelAsync)
-        {
             var semanticModel = await semanticModelAsync;
-            var expressionSyntax = returnStatement.Expression;
-
-            return expressionSyntax != null &&
-                    (semanticModel.GetTypeInfo(expressionSyntax).Type == null
-                        || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);
-        }
-
-        private static async Task<bool> IsExpressionOfReferenceType(YieldStatementSyntax yieldStatement, Task<ISemanticModel> semanticModelAsync)
-        {
-            var semanticModel = await semanticModelAsync;
-            var expressionSyntax = yieldStatement.Expression;
 
             return expressionSyntax != null &&
                     (semanticModel.GetTypeInfo(expressionSyntax).Type == null
@@ -166,9 +154,6 @@ namespace MetaProgramming.RoslynCTP
         {
             return (await syntaxRootAsync)
                 .DescendantNodes()
-                .AsParallel()
-                    .AsUnordered()
-                .WithCancellation(cancellationToken)
                 .OfType<MethodDeclarationSyntax>()
                 .Select(methodDeclaration =>
                         new Complexity
@@ -225,9 +210,6 @@ namespace MetaProgramming.RoslynCTP
         {
             return (await syntaxRootAsync)
                     .DescendantNodes()
-                    .AsParallel()
-                        .AsUnordered()
-                    .WithCancellation(cancellationToken)
                     .OfType<TReturnStatementSyntax>()
                     .Where(statement)
                     .Where(returnNull => IsExpressionOfReferenceType(returnNull, semanticModelAsync).Result)

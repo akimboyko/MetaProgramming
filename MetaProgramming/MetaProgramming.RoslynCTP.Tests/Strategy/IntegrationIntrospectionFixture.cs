@@ -16,5 +16,10 @@ namespace MetaProgramming.RoslynCTP.Tests.Strategy
         {
             return SolutionPath;
         }
+
+        public TimeSpan SeachTimeOut
+        {
+            get { return TimeSpan.FromMinutes(5); }
+        }
     }
 }

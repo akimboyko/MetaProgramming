@@ -12,7 +12,7 @@ namespace MetaProgramming.RoslynCTP.Tests.Strategy
         public CodeSmellsIntrospectionFixture()
         {
             _solutionFullPath = Directory
-                                    .GetFiles( Directory.GetCurrentDirectory(), SolutionFileName,
+                                    .GetFiles(Directory.GetCurrentDirectory(), SolutionFileName,
                                                 SearchOption.AllDirectories)
                                     .SingleOrDefault();
 
@@ -32,6 +32,11 @@ namespace MetaProgramming.RoslynCTP.Tests.Strategy
         public string GetSolutionPath()
         {
             return _solutionFullPath;
+        }
+
+        public TimeSpan SeachTimeOut
+        {
+            get { return TimeSpan.FromSeconds(20); }
         }
     }
 }

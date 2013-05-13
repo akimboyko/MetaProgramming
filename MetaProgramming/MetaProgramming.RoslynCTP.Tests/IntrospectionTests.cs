@@ -14,7 +14,7 @@ using Approvals = ApprovalTests.Approvals;
 
 namespace MetaProgramming.RoslynCTP.Tests
 {
-    //[TestFixture(typeof(IntegrationIntrospectionFixture))]
+    [TestFixture(typeof(IntegrationIntrospectionFixture))]
     [TestFixture(typeof(CodeSmellsIntrospectionFixture))]
     [UseReporter(typeof(DiffReporter))]
     public class IntrospectionTests<TIntrospectionFixture>
@@ -27,7 +27,7 @@ namespace MetaProgramming.RoslynCTP.Tests
         [SetUp]
         public void SetUp()
         {
-            _cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+            _cancellationTokenSource = new CancellationTokenSource(_strategy.SeachTimeOut);
         }
 
         [Test]
