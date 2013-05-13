@@ -31,3 +31,8 @@ MetaProgramming .Net samples
 * Roslyn CTP: Calculate code complexity
   * [asynchronously](Snippets/Roslyn-CyclomaticComplexity.linq)
   * [using Rx](Snippets/Roslyn-CyclomaticComplexityRx.linq)
+* Roslyn CTP: search for `return null;`. 
+  * [asynchronously](Snippets/Roslyn-ReturnNull.linq)
+  * [using Rx](Snippets/Roslyn-ReturnNullRx.linq)
+  * [using Syntax Walker](Snippets/Roslyn-ReturnNullSyntaxWalker.linq)
+  * [Full sample with `yeild return null;`, default and reference types check is here](https://github.com/akimboyko/MetaProgramming/blob/7d4d8533d2be673fad2fbad37bb4d7a75399519a/MetaProgramming/MetaProgramming.RoslynCTP/Introspection.cs)
