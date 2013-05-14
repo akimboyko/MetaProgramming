@@ -84,10 +84,13 @@ const string solutionPath =
 private static readonly Func<StatementSyntax, bool> returnNullStatement =
         PredicateBuilder
 			.True<StatementSyntax>()
-            .And(s => s is ReturnStatementSyntax)
+			// all return statements
+			.And(s => s is ReturnStatementSyntax)
+			// with expression
 			.And(s => (s as ReturnStatementSyntax).Expression != null)
+			// with expression "null"
 			.And(s => (s as ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
-                .Compile();
+				.Compile();
 
 // process descendant nodes of syntaxRoot
 private static async Task<IEnumerable<ReturnNull>> FindReturnNull(

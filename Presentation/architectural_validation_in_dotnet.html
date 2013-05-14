@@ -26,19 +26,78 @@
     </div>
 
     <div id="impress">
-        <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+        <div id="title" class="step" data-x="-200" data-y="0" data-z="0" data-rotate="0" data-scale="4">
             <h1>Architectural Validation in .Net</h1>
             <p class='right'>by <em>@AkimBoyko</em></p>
             <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
         </div>
 
-        <div id="WordsDefinitions" class="step" data-x="+2000" data-y="0" data-scale="1">
+        <div id="WordsDefinitions" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <p><strong>ἀρχιτέκτων</strong>:  from ἀρχι- "chief" and τέκτων "builder, carpenter, mason"
                 <br/>
                 by <em>@simonbrown</em></p>
+            <p><strong>validation</strong>:  from latin <em>validus-</em> strong
+                <br/>
+                is the process of checking that a software meets specifications and that it fulfills its intended purpose</p>
         </div>
 
-        <div id="DotNetBuildPipeLine" class="step" data-x="+3000" data-y="0" data-scale="1">
+        <div id="MurphysLaw" class="step" data-x="+2500" data-y="+500" data-z="0" data-rotate="0" data-scale="1">
+            <p>Anything that can go wrong will go wrong<br/>by <em>Edward Aloysius Murphy</em></p>
+        </div>
+
+        <div id="Why" class="step" data-x="+2700" data-y="+850" data-z="0" data-rotate="0" data-scale="1.5">
+            <h1>Почему всегда так?</h1>
+        </div>
+
+        <div id="ProjectContext" class="step" data-x="+2500" data-y="+950" data-z="0" data-rotate="0" data-scale="1">
+            <ul><li>
+                <h1>Context</h1>
+                Hot/cold start with source code
+            </li></ul>
+        </div>
+
+        <div id="ConventionOverConfiguration" class="step" data-x="+2500" data-y="+1050" data-z="0" data-rotate="0" data-scale="1">
+            <ul><li>
+                <h1>Convention over configuration</h1>
+                Coding by convention
+            </li></ul>
+        </div>
+
+        <div id="StaticTyping" class="step" data-x="+2500" data-y="+1150" data-z="0" data-rotate="0" data-scale="1">
+            <ul><li>
+                <h1>Static Typing</h1>
+                Compiled ≠ Ready
+            </li></ul>
+        </div>
+
+        <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+5000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+            <p>Roslyn CTP: search for <strong class="code">return null;</strong> statements</p>
+            <div class="code">
+                <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
+        PredicateBuilder
+            .True&lt;StatementSyntax&gt;()
+            <span style="color: #008000">// all return statements</span>
+            .And(s =&gt; s <span style="color: #0000ff">is</span> ReturnStatementSyntax)
+            <span style="color: #008000">// with expression</span>
+            .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression != <span style="color: #0000ff">null</span>)
+            <span style="color: #008000">// with expression &quot;null&quot;</span>
+            .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
+                .Compile();</pre></div>
+        </div> 
+
+        <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+5000" data-y="0" data-z="-2000" data-rotate="0" data-scale="1">
+            <p>Roslyn CTP: search for <strong class="code">return default(T);</strong> statements where T is reference type</p>
+            <div class="code">
+                <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
+
+ISemanticModel semanticModel = await semanticModelAsync;
+
+<span style="color: #0000ff">return</span> expressionSyntax != <span style="color: #0000ff">null</span> &amp;&amp;
+     (semanticModel.GetTypeInfo(expressionSyntax).Type == <span style="color: #0000ff">null</span>
+         || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
+        </div>
+
+        <div id="DotNetBuildPipeLine" class="step" data-x="+10000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <div id="main">
                 <h1>.Net build pipeline</h1>
 
