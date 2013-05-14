@@ -1,0 +1,59 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>ItBrunch Architectural Validation in .Net by @AkimBoyko</title>
+    
+    <meta name="description" content="ItBrunch Architectural Validation in .Net: TDD, AutoFixture, Reflection, RoslynCTP, PostSharp" />
+    <meta name="author" content="Akim Boyko" />
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+
+    <link href="css/architectural_validation.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+
+<body>
+    <div id="main">
+        <h1>.Net build pipeline</h1>
+
+        <div class="window" id="code" style="left: 50px; top: 150px;">
+            <strong>C# source code</strong>
+        </div>
+
+        <div class="window" id="cil" style="left: 250px; top: 150px;">
+            <strong>CIL</strong>(Common Intermediate Language)
+        </div>
+
+        <div class="window" id="asm" style="left: 650px; top: 150px;">
+            <strong>CLR</strong>(Common Language Runtime) 
+            +
+            <strong>Machine Instruction</strong>
+        </div>
+
+        <div class="window" id="modified" style="left: 450px; top: 400px;">
+            <strong>Modified CIL</strong>(Common Intermediate Language)
+        </div>
+
+    </div>
+
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js">
+    </script>
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js">
+    </script>
+
+    <script type="text/javascript" 
+            src="http://jsplumbtoolkit.com/js/jquery.jsPlumb-1.4.0-all-min.js">
+    </script>
+
+    <script type="text/javascript"
+            src="js/architectural_validation.js">
+    </script>
+</body>
