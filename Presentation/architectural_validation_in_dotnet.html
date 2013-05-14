@@ -18,29 +18,60 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
 
-<body>
-    <div id="main">
-        <h1>.Net build pipeline</h1>
+<body class="impress-not-supported">
 
-        <div class="window" id="code" style="left: 50px; top: 150px;">
-            <strong>C# source code</strong>
-        </div>
-
-        <div class="window" id="cil" style="left: 350px; top: 150px;">
-            <strong>CIL</strong>(Common Intermediate Language)
-        </div>
-
-        <div class="window" id="asm" style="left: 650px; top: 150px;">
-            <strong>CLR</strong>(Common Language Runtime) 
-            +
-            <strong>Machine Instruction</strong>
-        </div>
-
-        <div class="window" id="modified" style="left: 475px; top: 400px;">
-            <strong>Modified CIL</strong>(Common Intermediate Language)
-        </div>
-
+    <div class="fallback-message">
+        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+        <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
     </div>
+
+    <div id="impress">
+        <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+            <h1>Architectural Validation in .Net</h1>
+            <p class='right'>by <em>@AkimBoyko</em></p>
+            <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
+        </div>
+
+        <div id="WordsDefinitions" class="step" data-x="+2000" data-y="0" data-scale="1">
+            <p><strong>ἀρχιτέκτων</strong>:  from ἀρχι- "chief" and τέκτων "builder, carpenter, mason"
+                <br/>
+                by <em>@simonbrown</em></p>
+        </div>
+
+        <div id="DotNetBuildPipeLine" class="step" data-x="+3000" data-y="0" data-scale="1">
+            <div id="main">
+                <h1>.Net build pipeline</h1>
+
+                <div class="window" id="code" style="left: 50px; top: 150px;">
+                    <strong>C# source code</strong>
+                </div>
+
+                <div class="window" id="cil" style="left: 350px; top: 150px;">
+                    <strong>CIL</strong>(Common Intermediate Language)
+                </div>
+
+                <div class="window" id="asm" style="left: 650px; top: 150px;">
+                    <strong>CLR</strong>(Common Language Runtime) 
+                    +
+                    <strong>Machine Instruction</strong>
+                </div>
+
+                <div class="window" id="modified" style="left: 475px; top: 400px;">
+                    <strong>Modified CIL</strong>(Common Intermediate Language)
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="hint">
+        <p>Use a spacebar or arrow keys to navigate</p>
+    </div>
+    <script>
+    if ("ontouchstart" in document.documentElement) { 
+        document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    }
+    </script>
 
     <script type="text/javascript"
             src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js">
@@ -56,4 +87,13 @@
     <script type="text/javascript"
             src="js/architectural_validation.js">
     </script>
-</body>
+
+    <script src="js/impress.js"></script>
+    <script>
+        jsPlumb.bind("ready", function() {
+            impress().init();
+        });
+    </script>
+
+    </body>
+</html>
