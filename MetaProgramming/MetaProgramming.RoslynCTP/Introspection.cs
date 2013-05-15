@@ -82,16 +82,16 @@ namespace MetaProgramming.RoslynCTP
         }
 
         // statements for independent paths through a program's source code
+        // TODO: add clauses: else, catch, …
         private static readonly Func<StatementSyntax, bool> CyclomaticComplexityStatements =
                 PredicateBuilder
                     .False<StatementSyntax>()
-                    .Or(s => s is DoStatementSyntax)
-                    .Or(s => s is ForEachStatementSyntax)
-                    .Or(s => s is ForStatementSyntax)
                     .Or(s => s is IfStatementSyntax)
                     .Or(s => s is SwitchStatementSyntax)
-                    .Or(s => s is UsingStatementSyntax)
+                    .Or(s => s is DoStatementSyntax)
                     .Or(s => s is WhileStatementSyntax)
+                    .Or(s => s is ForStatementSyntax)
+                    .Or(s => s is ForEachStatementSyntax)
                         .Compile();
 
         // process descendant nodes of syntaxRoot
