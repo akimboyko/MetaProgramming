@@ -1,17 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using CodeSmells.FakeDataAccessLibrary.Aspect;
-using PostSharp.Extensibility;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CodeSmells.FakeDataAccessLibrary")]
+[assembly: AssemblyTitle("CodeSmells.FakeWebApplication")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CodeSmells.FakeDataAccessLibrary")]
+[assembly: AssemblyProduct("CodeSmells.FakeWebApplication")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +20,7 @@ using PostSharp.Extensibility;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4ca92ff1-b133-4532-96df-792650f4d1b6")]
+[assembly: Guid("afdf0dab-c8e3-42c2-ae4e-9d106207cbe6")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,8 +29,7 @@ using PostSharp.Extensibility;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

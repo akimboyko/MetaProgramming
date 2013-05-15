@@ -1,10 +1,10 @@
 ﻿using System;
-using NHibernate;
 
 namespace CodeSmells.FakeBusinessLogic
 {
     public class BusinessRule
     {
-        public static readonly Type NHibernateSessionType = typeof(ISession);
+        public static readonly Type NHibernateSessionType = typeof(NHibernate.ISession);
+        public static readonly Type JsonSerializerType = typeof(Newtonsoft.Json.JsonSerializer);
     }
 }

@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2B8BBA
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeSmells.FakeWebApplication", "CodeSmells.FakeWebApplication\CodeSmells.FakeWebApplication.csproj", "{D58FBEA8-A9E4-48DD-98AB-F3AC3FA21C6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{416F427F-3D45-45A9-A6D0-A1CD14E3364C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{416F427F-3D45-45A9-A6D0-A1CD14E3364C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{416F427F-3D45-45A9-A6D0-A1CD14E3364C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58FBEA8-A9E4-48DD-98AB-F3AC3FA21C6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58FBEA8-A9E4-48DD-98AB-F3AC3FA21C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58FBEA8-A9E4-48DD-98AB-F3AC3FA21C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58FBEA8-A9E4-48DD-98AB-F3AC3FA21C6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
