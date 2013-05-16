@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1024" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>ItBrunch Architectural Validation in .Net by @AkimBoyko</title>
+    <title>Architectural Validation in .Net by @AkimBoyko</title>
     
-    <meta name="description" content="ItBrunch Architectural Validation in .Net: TDD, AutoFixture, Reflection, RoslynCTP, PostSharp" />
+    <meta name="description" content="Architectural Validation in .Net: TDD, AutoFixture, Reflection, RoslynCTP, PostSharp" />
     <meta name="author" content="Akim Boyko" />
 
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
@@ -28,28 +28,40 @@
     <div id="impress">
         <div id="title" class="step" data-x="-200" data-y="0" data-z="0" data-rotate="0" data-scale="4">
             <h1>Architectural Validation in .Net</h1>
-            <p class='right'>by <em>@AkimBoyko</em></p>
-            <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
+            <div class='right'>
+                <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
+                <p><img style='width:150px; height: auto;' src='images\itera_logo.png' alt='Itera logo' /></p>
+            </div>
         </div>
 
         <!-- Intro -->
 
-        <div id="WordsDefinitions" class="step" data-x="+2500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
-            <p><strong>ἀρχιτέκτων</strong>:  from ἀρχι- "chief" and τέκτων "builder, carpenter, mason"
+        <div id="WordsDefinitionsArchitecture" class="step" data-x="+2500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+            <p><strong>Architecture</strong>
                 <br/>
-                by <em>@simonbrown</em></p>
-            <p><strong>validation</strong>:  from latin <em>validus-</em> strong
+                As a noun architecture can be summarised as being about <em>structure</em>
+                and is about the <em>decomposition</em> of a product into
+                a collection of components and interactions. 
                 <br/>
-                is the process of checking that a software meets specifications and that it fulfills its intended purpose</p>
+                <a href='https://leanpub.com/software-architecture-for-developers'>
+                    Software Architecture for Developers by <em>@simonbrown</em></a></p>
         </div>
 
-        <div id="MurphysLawIntro" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="WordsDefinitionsValidation" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+            <p><strong>Validation</strong>
+                <br/>
+                The <em>assurance</em> that a product, service, or system
+                meets the needs of the customer and other identified stakeholders</p>
+        </div>
+
+        <div id="MurphysLawIntro" class="step" data-x="+2500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
             <p>Anything that can go wrong will go wrong<br/>by <em>Edward Aloysius Murphy</em></p>
         </div>
 
-        <div id="PlasticBycicle" class="step" data-x="+2500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PlasticBycicle" class="step" data-x="+2500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
             <div align="center"><img src='.\images\plastic_bycicle.jpg' alt='Volvo plastic bycicle'/></div>
-            <p>The fact that not every box contained every part to assemble a bicycle frustrated many customers</p>
+            <p>The fact that not every box contained every part to assemble a bicycle <em>frustrated</em> many customers</p>
         </div>
 
         <!-- WHY -->
@@ -60,35 +72,41 @@
 
         <div id="ProjectContext" class="step" data-x="+4000" data-y="-850" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
-                <h1>Context</h1>
-                Hot/cold start with source code
+                Project context: Hot/Cold starts
             </li></ul>
         </div>
 
         <div id="ConventionOverConfiguration" class="step" data-x="+4000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
-                <h1>Convention over configuration</h1>
-                Coding by convention
+                Coding Convention vs. Coding by Convention
             </li></ul>
         </div>
 
         <div id="StaticTyping" class="step" data-x="+4000" data-y="-650" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
-                <h1>Static Typing</h1>
-                Compiled ≠ Ready
+                Static Typing: Compiled ≠ Ready
             </li></ul>
         </div>
 
-        <div id="FailFast" class="step" data-x="+4000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="SampleTypeNameCollisions" class="step" data-x="+4000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Type Name Collisions</h1>
+            <img src='images\type_name_collision.png' alt='Type Name Collisions with ReSharper' />
+            <p>What to choose: <strong class="code">Iesi.Collections.ISet</strong>, 
+                <strong class="code">System.Collections.Generic.ISet</strong> or
+                <strong class="code">NPOI.Util.Collections.ISet</strong>?</p>
+        </div>
+
+        <div id="FailFast" class="step" data-x="+4000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
             <p><strong>Fail fast!</strong><br/>
                  A fail-fast system is designed to immediately report any failure or condition that is likely to lead to failure</p>
         </div>
 
-        <div id="NotesCodebases" class="step" data-x="+4000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="NotesCodebases" class="step" data-x="+4000" data-y="1500" data-z="0" data-rotate="0" data-scale="1">
             Differences: 
             <ul>
-                <li>new vs. legacy codebase</li>
-                <li>library vs. web app</li>
+                <li>greenfield vs. browfield</li>
+                <li>API vs. enterprise</li>
+                <li>public vs. internal</li>
             </ul>
         </div>
 
@@ -264,6 +282,8 @@ ISemanticModel semanticModel = await semanticModelAsync;
                 <ul>
                     <li>Built-In Architecture Constraints</li>
                     <li>Custom Architecture Constraints</li>
+                    <li><strong class="code">ScalarConstraint</strong> and
+                        <strong class="code">ReferentialConstraint</strong></li>
                 </ul>
             </p>
         </div>
@@ -333,7 +353,12 @@ ISemanticModel semanticModel = await semanticModelAsync;
 </pre></div>
         </div>
 
-        <div id="PostSharpLimitations" class="step" data-x="+8500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpCompileTimeError" class="step" data-x="+8500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Compile-time error generated by PostSharp aspect validation</h1>
+            <img src='images\postsharp_validation_aspect-virtual_keyword_is_required.png' alt='Compile-time error generated by PostSharp aspect validation' />
+        </div>
+
+        <div id="PostSharpLimitations" class="step" data-x="+8500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
             <p>
                 Limitations: 
                 <ul>
