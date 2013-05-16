@@ -43,7 +43,7 @@
                 is the process of checking that a software meets specifications and that it fulfills its intended purpose</p>
         </div>
 
-        <div id="MurphysLaw" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="MurphysLawIntro" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <p>Anything that can go wrong will go wrong<br/>by <em>Edward Aloysius Murphy</em></p>
         </div>
 
@@ -217,7 +217,11 @@ ISemanticModel semanticModel = await semanticModelAsync;
 
         <!-- PostSharp -->
 
-        <div id="DotNetBuildPipeLine" class="step" data-x="+10000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpArchitectureConstraints" class="step" data-x="+8500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+            <p><strong>PostSharp: Architecture Constraints</strong></p>
+        </div>
+
+        <div id="DotNetAndPostSharpBuildPipeLine" class="step" data-x="+8500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <div id="BuildPipeLine">
                 <div style="margin-top: 50px;"><h1>.Net build pipeline</h1></div>
 
@@ -253,8 +257,113 @@ ISemanticModel semanticModel = await semanticModelAsync;
                 </div>
             </div>
         </div>
-    </div>
 
+        <div id="PostSharpArchitectureFramework" class="step" data-x="+8500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            <p>
+                <strong>Architecture Framework</strong>
+                <ul>
+                    <li>Built-In Architecture Constraints</li>
+                    <li>Custom Architecture Constraints</li>
+                </ul>
+            </p>
+        </div>
+
+        <div id="PocoClassWithTypicalCodeIssues" class="step" data-x="+8500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+            <p>POCO class with typical code issues</p>
+            <div class="code">
+                <pre class="code_block">public</span> <span style="color: #0000ff">class</span> <span style="color: #2b91af">Customer</span>
+{
+    <span style="color: #008000">// This property is defined as expected</span>
+    <span style="color: #0000ff">public</span> <span style="color: #0000ff">virtual</span> <span style="color: #2b91af">int</span> Id { <span style="color: #0000ff">get</span>; <span style="color: #0000ff">set</span>; }
+
+    <span style="color: #008000">// without `virtual` keyword PostSharp will generate compile-time error message</span>
+    <span style="color: #008000">// otherwise NHiberante will generate exception during run-time</span>
+    <span style="color: #0000ff">public</span> <span style="color: #008000">/*virtual*/</span> <span style="color: #2b91af">string</span> Name { <span style="color: #0000ff">get</span>; <span style="color: #0000ff">set</span>; } 
+
+    <span style="color: #008000">// Both getter/setter are required to be public</span>
+    <span style="color: #0000ff">internal</span> <span style="color: #0000ff">virtual</span> <span style="color: #2b91af">string</span> Description { <span style="color: #0000ff">get</span>; <span style="color: #0000ff">private</span> <span style="color: #0000ff">set</span>; }
+}
+</pre></div>
+        </div>
+
+        <div id="VirtualKeywordRequiredForEntities" class="step" data-x="+8500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+            <p>PostSharp: validate that all properties are <strong class="code">public</strong>, <strong class="code">virtual</strong> with getter and setter</p>
+            <div class="code">
+                <pre class="code_block">[Serializable]
+[MulticastAttributeUsage(MulticastTargets.Property)]
+<span style="color: #0000ff">public</span> <span style="color: #0000ff">class</span> <span style="color: #2b91af">VirtualKeywordRequiredForInstancePropertiesAttribute</span> : ScalarConstraint
+{
+    <span style="color: #008000">// Validation happens only at post-compile phase</span>
+    <span style="color: #0000ff">public</span> <span style="color: #0000ff">override</span> <span style="color: #0000ff">void</span> ValidateCode(<span style="color: #2b91af">object</span> target)
+    {
+        <span style="color: #2b91af">var</span> propertyInfo = (PropertyInfo)target;
+        <span style="color: #2b91af">var</span> targetType = propertyInfo.DeclaringType;
+
+        <span style="color: #0000ff">if</span> (targetType != <span style="color: #0000ff">null</span>)
+        {
+            <span style="color: #008000">// check that property is public, virtual with getter and setter</span>
+            <span style="color: #2b91af">var</span> virtualInstanceProperty = targetType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(propInfo =&gt; propInfo.CanRead &amp; propertyInfo.CanWrite)
+                .Where(propInfo =&gt; propInfo.GetGetMethod().IsVirtual)
+                .Where(propInfo =&gt; propInfo.GetSetMethod().IsVirtual)
+                .SingleOrDefault(propInfo =&gt; propInfo == propertyInfo);
+
+            <span style="color: #008000">// generate compile time error</span>
+            <span style="color: #0000ff">if</span> (virtualInstanceProperty == <span style="color: #0000ff">null</span>)
+            {
+                Message.Write(MessageLocation.Of(targetType),
+                                SeverityType.Error,
+                                <span style="color: #a31515">&quot;998&quot;</span>,
+                                <span style="color: #a31515">&quot;Property &#39;{0}&#39; in Entity class {1} show be public, virtual with both getter and setter&quot;</span>,
+                                propertyInfo.Name, targetType.FullName);
+            }
+        }
+    }
+}</pre></div>
+        </div>
+
+        <div id="PostSharpAspectMulticasting" class="step" data-x="+8500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+            <p>PostSharp: aspect multicasting</p>
+            <div class="code">
+                <pre class="code_block"><span style="color: #008000">// Multicast aspect to all properties of classes in namespace</span>
+[assembly: VirtualKeywordRequiredForInstanceProperties(
+            AttributeTargetTypes = &quot;CodeSmells.FakeDataAccessLibrary.Entity.*&quot;, 
+            AttributeTargetElements = MulticastTargets.Property)]
+</pre></div>
+        </div>
+
+        <div id="PostSharpLimitations" class="step" data-x="+8500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+            <p>
+                Limitations: 
+                <ul>
+                    <li>License for PostSharp 2/3</li>
+                    <li>Configuration issues</li>
+                </ul>
+            </p>
+        </div>
+
+
+        <!-- Outro -->
+
+        <div id="MurphysLawOutro" class="step" data-x="+10000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+            <p>If you perceive that there are four possible ways in which something can go wrong,
+                and circumvent these, then a fifth way, unprepared for, will promptly develop<br/>by <em>Edward Aloysius Murphy</em></p>
+        </div>
+
+        <div id="References" class="step" data-x="+10000" data-y="+0" data-z="0" data-rotate="0" data-scale="1">
+            <p>
+                References: 
+                <ul>
+                    <li><a href='http://msdn.microsoft.com/en-us/vstudio/roslyn.aspx'>Microsoft® “Roslyn” CTP</a></li>
+                    <li><a href='http://www.postsharp.net/'>PostSharp — Design Pattern Automation</a></li>
+                    <li><a href='http://www.manning.com/groves/'>AOP in .NET: Practical Aspect-Oriented Programming by @mgroves</a></li>
+                </ul>
+            </p>
+        </div>
+
+    </div>
+        
     <div class="hint">
         <p>Use a spacebar or arrow keys to navigate</p>
     </div>
