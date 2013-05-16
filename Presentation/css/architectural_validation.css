@@ -57,7 +57,7 @@ table {
 
 body {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    min-height: 800px;
+    min-height: 900px;
     padding: 0;
     margin: 0;
 
@@ -132,6 +132,17 @@ a:focus {
     line-height: 1.5;
 }
 
+.step h1 {
+    font-size: 50px;
+    font-weight: bold;
+
+    -webkit-transform: translateZ(20px);
+    -moz-transform:    translateZ(20px);
+    -ms-transform:     translateZ(20px);
+    -o-transform:      translateZ(20px);
+    transform:         translateZ(20px);  
+}
+
 .impress-enabled .step {
     margin: 0;
     opacity: 0.3;
@@ -184,6 +195,7 @@ a:focus {
 
 #title h1 {
     font-size: 100px;
+    font-weight: bold;
 
     -webkit-transform: translateZ(50px);
     -moz-transform:    translateZ(50px);
@@ -194,6 +206,7 @@ a:focus {
 
 #title h2 {
     font-size: 70px;
+    font-weight: bold;
 
     -webkit-transform: translateZ(50px);
     -moz-transform:    translateZ(50px);
