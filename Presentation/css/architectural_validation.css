@@ -255,13 +255,13 @@ a:focus {
 .impress-enabled          { pointer-events: none }
 .impress-enabled #impress { pointer-events: auto }
 
-#main {
+#BuildPipeLine {
     margin-top: 44px;
     margin-left: auto;
     position: relative;
     font-size: 80%;
     margin-right: auto;
-    width: 850px;
+    width: 900px;
     border-top: 2px solid #456;
     border-left: 2px solid #456;
     border-right: 2px solid #456;
@@ -275,12 +275,12 @@ a:focus {
     background-color:#eaedef;
 }
 
-#main h1
+#BuildPipeLine h1
 {
   text-align: center;
 }
 
-#main .window { 
+#BuildPipeLine .window { 
     width: 10em;
     height: 5em;
     padding: 1em;
@@ -343,4 +343,18 @@ a:focus {
 .code_block {
     margin: 0;
     line-height: 125%;
+}
+
+.code_box {
+    padding:.1em .1em;
+
+    font-size: 12px;
+    font-family: Consolas, monospace;
+
+    background: #ffffff;
+    opacity: 1.0; 
+    
+    overflow:auto;
+    border:solid gray;
+    border-width:.1em .1em .1em .1em;
 }

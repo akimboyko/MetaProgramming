@@ -93,6 +93,8 @@
 		_addEndpoints("cil", ["RightMiddle"], ["LeftMiddle"]);
 		_addEndpoints("asm", [], ["LeftMiddle"]);
 		_addEndpoints("modified", ["RightMiddle"], ["LeftMiddle"]);
+		_addEndpoints("validate", ["RightMiddle"], ["LeftMiddle"]);
+		_addEndpoints("initialize", ["RightMiddle"], ["LeftMiddle"]);
 					
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 

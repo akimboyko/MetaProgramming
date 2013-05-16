@@ -218,27 +218,39 @@ ISemanticModel semanticModel = await semanticModelAsync;
         <!-- PostSharp -->
 
         <div id="DotNetBuildPipeLine" class="step" data-x="+10000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
-            <div id="main">
-                <h1>.Net build pipeline</h1>
+            <div id="BuildPipeLine">
+                <div style="margin-top: 50px;"><h1>.Net build pipeline</h1></div>
 
-                <div class="window" id="code" style="left: 50px; top: 150px;">
+                <div class="window" id="code" style="left: 25px; top: 150px;">
                     <strong>C# source code</strong>
                 </div>
 
-                <div class="window" id="cil" style="left: 350px; top: 150px;">
-                    <strong>CIL</strong>(Common Intermediate Language)
+                <div class="window" id="cil" style="left: 300px; top: 150px;">
+                    <strong>Compilation:</strong><br/><em>CIL</em> (Common Intermediate Language)
                 </div>
 
                 <div class="window" id="asm" style="left: 650px; top: 150px;">
-                    <strong>CLR</strong>(Common Language Runtime) 
+                    <strong>Run-time:</strong><br/>
+                    <em>CLR</em>(Common Language Runtime) 
                     +
-                    <strong>Machine Instruction</strong>
+                    <em>Machine Instruction</em>
                 </div>
 
-                <div class="window" id="modified" style="left: 475px; top: 400px;">
-                    <strong>Modified CIL</strong>(Common Intermediate Language)
+                <div style="margin-top: 450px;"><h1>PostSharp build pipeline</h1></div>
+
+                <div class="window" id="modified" style="left: 75px; top: 400px;">
+                    <strong>Rewrite:</strong><br/>Modified <em>CLI</em> (Common Intermediate Language)
                 </div>
 
+                <div class="window" id="validate" style="left: 350px; top: 400px;">
+                    <strong class="code_box">CompileTimeValidate</strong>
+                    <p>Check constraints</p>
+                </div>
+
+                <div class="window" id="initialize" style="left: 625px; top: 400px;">
+                    <strong class="code_box">CompileTimeInitialize</strong>
+                    <p>Serialize state for runtime</p>
+                </div>
             </div>
         </div>
     </div>
