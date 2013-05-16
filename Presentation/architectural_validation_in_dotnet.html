@@ -89,9 +89,9 @@
         <div id="SampleTypeNameCollisions" class="step" data-x="+4000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <h1>Type Name Collisions</h1>
             <img src='images\type_name_collision.png' alt='Type Name Collisions with ReSharper' />
-            <p>What to choose: <strong class="code">Iesi.Collections.ISet</strong>, 
-                <strong class="code">System.Collections.Generic.ISet</strong> or
-                <strong class="code">NPOI.Util.Collections.ISet</strong>?</p>
+            <p>What to choose: <code class="inlineCode">Iesi.Collections.ISet</code>, 
+                <code class="inlineCode">System.Collections.Generic.ISet</code> or
+                <code class="inlineCode">NPOI.Util.Collections.ISet</code>?</p>
         </div>
 
         <div id="FailFast" class="step" data-x="+4000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
@@ -157,7 +157,7 @@
         </div>
         
         <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+7000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
-            <h1>Search for <strong class="code">return null;</strong> statements</h1>
+            <h1>Search for <code class="inlineCode">return null;</code> statements</h1>
             <div class="code">
                 <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
         PredicateBuilder
@@ -172,7 +172,7 @@
         </div> 
 
         <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+7000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
-            <h1>Search for <strong class="code">return default(T);</strong> statements where <strong class="code">T</strong> is reference type</h1>
+            <h1>Search for <code class="inlineCode">return default(T);</code> statements where <code class="inlineCode">T</code> is reference type</h1>
             <div class="code">
                 <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
 
@@ -185,7 +185,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 
         <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+7000" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limit references to assemblies</h1>
-            <p>Using <strong class="code">System.Reflection</strong></p>
+            <p>Using <code class="inlineCode">System.Reflection</code></p>
             <div class="code">
                 <pre class="code_block">[Test, Combinatorial]
 <span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span> TestReferencesIntersection(
@@ -220,7 +220,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             <p>
                 <ul>
                     <li>C#/VB.Net source code should be available</li>
-                    <li>Support of C# features: <strong class="code">dynamic</strong>, <strong class="code">async</strong>, <strong class="code">await</strong></li>
+                    <li>Support of C# features: <code class="inlineCode">dynamic</code>, <code class="inlineCode">async</code>, <code class="inlineCode">await</code></li>
                 </ul>
             </p>
         </div>
@@ -282,7 +282,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
                 </div>
 
                 <div class="window" id="initialize" style="left: 625px; top: 400px;">
-                    <strong class="code_box">CompileTimeInitialize</strong>
+                    <strong class="code_box">CompileTimeInitialize</code>
                     <p>Serialize state for runtime</p>
                 </div>
             </div>
@@ -294,8 +294,8 @@ ISemanticModel semanticModel = await semanticModelAsync;
                 <ul>
                     <li>Built-In Architecture Constraints</li>
                     <li>Custom Architecture Constraints</li>
-                    <li><strong class="code">ScalarConstraint</strong> and
-                        <strong class="code">ReferentialConstraint</strong></li>
+                    <li><code class="inlineCode">ScalarConstraint</code> and
+                        <code class="inlineCode">ReferentialConstraint</code></li>
                 </ul>
             </p>
         </div>
@@ -321,7 +321,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 
         <div id="VirtualKeywordRequiredForEntities" class="step" data-x="+8500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
             <h1>Validate constraint</h1>
-            <p>Validate that all properties are <strong class="code">public</strong>, <strong class="code">virtual</strong> with getter and setter</p>
+            <p>Validate that all properties are <code class="inlineCode">public</code>, <code class="inlineCode">virtual</code> with getter and setter</p>
             <div class="code">
                 <pre class="code_block">[Serializable]
 [MulticastAttributeUsage(MulticastTargets.Property)]
