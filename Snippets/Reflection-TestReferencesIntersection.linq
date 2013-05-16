@@ -1,8 +1,10 @@
 <Query Kind="Program">
   <Reference Relative="..\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeBusinessLogic\bin\Debug\CodeSmells.FakeBusinessLogic.dll">D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeBusinessLogic\bin\Debug\CodeSmells.FakeBusinessLogic.dll</Reference>
   <Reference Relative="..\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeDataAccessLibrary\bin\Debug\CodeSmells.FakeDataAccessLibrary.dll">D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeDataAccessLibrary\bin\Debug\CodeSmells.FakeDataAccessLibrary.dll</Reference>
+  <Reference Relative="..\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeWebApplication\bin\CodeSmells.FakeWebApplication.dll">D:\work\Courses\MetaProgramming\MetaProgramming\MetaProgramming.RoslynCTP.Tests\CodeSmells.Samples\CodeSmells.FakeWebApplication\bin\CodeSmells.FakeWebApplication.dll</Reference>
   <Reference>C:\Chocolatey\lib\NUnit.Runners.2.6.2\tools\nunit.framework.dll</Reference>
   <Reference>C:\Chocolatey\lib\NUnit.Runners.2.6.2\tools\lib\nunit-console-runner.dll</Reference>
+  <Reference>&lt;RuntimeDirectory&gt;\System.Web.dll</Reference>
   <Namespace>NUnit.Framework</Namespace>
 </Query>
 
@@ -21,6 +23,7 @@ public IEnumerable Assemblies
 	{
 		yield return typeof(CodeSmells.FakeDataAccessLibrary.Repository).Assembly;
 		yield return typeof(CodeSmells.FakeBusinessLogic.BusinessRule).Assembly;
+		yield return typeof(CodeSmells.FakeWebApplication.MvcApplication).Assembly;
 	}
 }
 
