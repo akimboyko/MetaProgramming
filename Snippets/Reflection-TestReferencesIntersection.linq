@@ -27,22 +27,17 @@ public IEnumerable Assemblies
 	}
 }
 
-[Test]
-[Combinatorial]
+[Test, Combinatorial]
 public void TestReferencesIntersection(
     [ValueSource("Assemblies")] Assembly leftAssembly,
     [ValueSource("Assemblies")] Assembly rightAssembly)
 {
-    if (leftAssembly == rightAssembly)
-    {
-        return;
-    }
+    if (leftAssembly == rightAssembly) return;
 
     var rightReferences = FilterOutAssemblies(rightAssembly);
     var leftReferences = FilterOutAssemblies(leftAssembly);
-    var intersection = leftReferences.Intersect(rightReferences).ToArray();
 
-    Assert.That(intersection, 
+    Assert.That(leftReferences.Intersect(rightReferences), 
 				Is.Not.Null.And.Empty);
 }
 
@@ -55,7 +50,6 @@ private static IEnumerable<string> FilterOutAssemblies(Assembly source)
                             && !assembly.Name.StartsWith(@"System")
                             && !assembly.Name.StartsWith(@"AutoMapper")
                             && !assembly.Name.StartsWith(@"nCrunch.TestRuntime")
-                            && !assembly.Name.StartsWith(@"Ninject")
-                            && !assembly.Name.StartsWith(@"log4net"))
+                            && !assembly.Name.StartsWith(@"PostSharp"))
         .Select(assembly => assembly.Name));
 }

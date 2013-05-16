@@ -32,7 +32,9 @@
             <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
         </div>
 
-        <div id="WordsDefinitions" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <!-- Intro -->
+
+        <div id="WordsDefinitions" class="step" data-x="+2500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <p><strong>ἀρχιτέκτων</strong>:  from ἀρχι- "chief" and τέκτων "builder, carpenter, mason"
                 <br/>
                 by <em>@simonbrown</em></p>
@@ -41,36 +43,91 @@
                 is the process of checking that a software meets specifications and that it fulfills its intended purpose</p>
         </div>
 
-        <div id="MurphysLaw" class="step" data-x="+2500" data-y="+500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="MurphysLaw" class="step" data-x="+2500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <p>Anything that can go wrong will go wrong<br/>by <em>Edward Aloysius Murphy</em></p>
         </div>
 
-        <div id="Why" class="step" data-x="+2500" data-y="+850" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PlasticBycicle" class="step" data-x="+2500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            <div align="center"><img src='.\images\plastic_bycicle.jpg' alt='Volvo plastic bycicle'/></div>
+            <p>The fact that not every box contained every part to assemble a bicycle frustrated many customers</p>
+        </div>
+
+        <!-- WHY -->
+
+        <div id="Why" class="step" data-x="+4000" data-y="-950" data-z="0" data-rotate="0" data-scale="1">
             <h1>Why?</h1>
         </div>
 
-        <div id="ProjectContext" class="step" data-x="+2500" data-y="+950" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ProjectContext" class="step" data-x="+4000" data-y="-850" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
                 <h1>Context</h1>
                 Hot/cold start with source code
             </li></ul>
         </div>
 
-        <div id="ConventionOverConfiguration" class="step" data-x="+2500" data-y="+1050" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ConventionOverConfiguration" class="step" data-x="+4000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
                 <h1>Convention over configuration</h1>
                 Coding by convention
             </li></ul>
         </div>
 
-        <div id="StaticTyping" class="step" data-x="+2500" data-y="+1150" data-z="0" data-rotate="0" data-scale="1">
+        <div id="StaticTyping" class="step" data-x="+4000" data-y="-650" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
                 <h1>Static Typing</h1>
                 Compiled ≠ Ready
             </li></ul>
         </div>
 
-        <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+5000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="FailFast" class="step" data-x="+4000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+            <p><strong>Fail fast!</strong><br/>
+                 A fail-fast system is designed to immediately report any failure or condition that is likely to lead to failure</p>
+        </div>
+
+        <div id="NotesCodebases" class="step" data-x="+4000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            Differences: 
+            <ul>
+                <li>new vs. legacy codebase</li>
+                <li>library vs. web app</li>
+            </ul>
+        </div>
+
+        <!-- AutoFixture -->
+
+        <!-- TBD -->
+
+        <!-- Reflection and Introspection -->
+
+        <div id="ReflectionVsIntrospection" class="step" data-x="+7000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+            <p><strong>Reflection</strong> vs. <strong>Introspection</strong></p>
+        </div>
+
+        <div id="CSharpSampleForReturnNull" class="step" data-x="+7000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+            <h1>C# code with <strong class="code">return null;</strong></h1>
+            <div class="code"><pre class="code_block">public</span> <span style="color: #2b91af">object</span> ReturnNullReferenceType()
+{
+    <span style="color: #0000ff">return</span> <span style="color: #0000ff">null</span>;
+}</pre></div>
+            <h1>Syntax Tree from Roslyn CTP</h1>
+            <div align="center"><img src='.\images\roslyn_syntax_tree_for_return_null.png' alt='Roslyn syntax tree sample'/></div>
+        </div>
+
+        <div id="IntrospectionCalculateCodeComplexity" class="step" data-x="+7000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            <p>Roslyn CTP: calculate code complexity</p>
+            <div class="code">
+                <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; CyclomaticComplexityStatements =
+        PredicateBuilder
+            .False&lt;StatementSyntax&gt;()
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> IfStatementSyntax)
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> SwitchStatementSyntax)
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> DoStatementSyntax)
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> WhileStatementSyntax)
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> ForStatementSyntax)
+            .Or(s =&gt; s <span style="color: #0000ff">is</span> ForEachStatementSyntax)
+                .Compile();</pre></div>
+        </div>
+        
+        <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+7000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
             <p>Roslyn CTP: search for <strong class="code">return null;</strong> statements</p>
             <div class="code">
                 <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
@@ -85,8 +142,8 @@
                 .Compile();</pre></div>
         </div> 
 
-        <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+5000" data-y="0" data-z="-2000" data-rotate="0" data-scale="1">
-            <p>Roslyn CTP: search for <strong class="code">return default(T);</strong> statements where T is reference type</p>
+        <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+7000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+            <p>Roslyn CTP: search for <strong class="code">return default(T);</strong> statements where <strong class="code">T</strong> is reference type</p>
             <div class="code">
                 <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
 
@@ -96,6 +153,69 @@ ISemanticModel semanticModel = await semanticModelAsync;
      (semanticModel.GetTypeInfo(expressionSyntax).Type == <span style="color: #0000ff">null</span>
          || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
         </div>
+
+        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+7000" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+            <p>Reflection: limit references to assemblies</p>
+            <div class="code">
+                <pre class="code_block">[Test, Combinatorial]
+<span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span> TestReferencesIntersection(
+    [ValueSource(&quot;Assemblies&quot;)] Assembly leftAssembly,
+    [ValueSource(&quot;Assemblies&quot;)] Assembly rightAssembly)
+{
+    <span style="color: #0000ff">if</span> (leftAssembly == rightAssembly) <span style="color: #0000ff">return</span>;
+
+    <span style="color: #2b91af">var</span> rightReferences = FilterOutAssemblies(rightAssembly);
+    <span style="color: #2b91af">var</span> leftReferences = FilterOutAssemblies(leftAssembly);
+
+    Assert.That(leftReferences.Intersect(rightReferences), 
+                Is.Not.Null.And.Empty);
+}
+
+<span style="color: #0000ff">private</span> <span style="color: #0000ff">static</span> IEnumerable&lt;<span style="color: #2b91af">string</span>&gt; FilterOutAssemblies(Assembly source)
+{
+    <span style="color: #0000ff">return</span> <span style="color: #0000ff">new</span> HashSet&lt;<span style="color: #2b91af">string</span>&gt;(source
+        .GetReferencedAssemblies()
+        .Where(assembly =&gt; assembly.Name != <span style="color: #a31515">@&quot;mscorlib&quot;</span>
+                            &amp;&amp; assembly.Name != <span style="color: #a31515">@&quot;Microsoft.CSharp&quot;</span>
+                            &amp;&amp; !assembly.Name.StartsWith(<span style="color: #a31515">@&quot;System&quot;</span>)
+                            &amp;&amp; !assembly.Name.StartsWith(<span style="color: #a31515">@&quot;AutoMapper&quot;</span>)
+                            &amp;&amp; !assembly.Name.StartsWith(<span style="color: #a31515">@&quot;nCrunch.TestRuntime&quot;</span>)
+                            &amp;&amp; !assembly.Name.StartsWith(<span style="color: #a31515">@&quot;PostSharp&quot;</span>))
+        .Select(assembly =&gt; assembly.Name));
+}</pre></div>
+        </div>
+
+        <div id="IntrospectionLimitations" class="step" data-x="+7000" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+            <p>
+                Limitations: 
+                <ul>
+                    <li>C#/VB.Net source code should be available</li>
+                    <li>Support of C# features: <strong class="code">dynamic</strong>, <strong class="code">async</strong>, <strong class="code">await</strong></li>
+                </ul>
+            </p>
+        </div>
+
+        <div id="IntrospectionAssertions" class="step" data-x="+7000" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
+            <p>
+                Assertions: 
+                <ul>
+                    <li>How to references back to sources?</li>
+                    <li>What to do if source code has been changed?</li>
+                </ul>
+            </p>
+        </div>
+
+        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+7000" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
+            <h1><strong>ApprovalTests</strong> — Capturing Human Intelligence</h1>
+            <img src='.\images\introspection_return_null_with_approvaltests.png' alt="Introspection assertions using ApprovalTests" />
+        </div>
+
+        <div id="IntrospectionNote" class="step" data-x="+7000" data-y="+6000" data-z="0" data-rotate="0" data-scale="1">
+            <p>Note: this is not a replacement for code review!</p>
+        </div>
+
+
+        <!-- PostSharp -->
 
         <div id="DotNetBuildPipeLine" class="step" data-x="+10000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <div id="main">
