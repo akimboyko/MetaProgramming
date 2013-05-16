@@ -19,15 +19,15 @@ namespace CodeSmells.FakeDataAccessLibrary.Aspect
 
             if (targetType != null)
             {
+                // check that property is public, virtual with getter and setter
                 var virtualInstanceProperty = targetType
                     .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(propInfo => propInfo.CanRead & propertyInfo.CanWrite)
-                    .Where(propInfo => propInfo.GetGetMethod() != null)
-                        .Where(propInfo => propInfo.GetGetMethod().IsVirtual)
-                    .Where(propInfo => propInfo.GetSetMethod() != null)
-                        .Where(propInfo => propInfo.GetSetMethod().IsVirtual)
+                    .Where(propInfo => propInfo.GetGetMethod().IsVirtual)
+                    .Where(propInfo => propInfo.GetSetMethod().IsVirtual)
                     .SingleOrDefault(propInfo => propInfo == propertyInfo);
 
+                // generate compile time error
                 if (virtualInstanceProperty == null)
                 {
                     Message.Write(MessageLocation.Of(targetType),
