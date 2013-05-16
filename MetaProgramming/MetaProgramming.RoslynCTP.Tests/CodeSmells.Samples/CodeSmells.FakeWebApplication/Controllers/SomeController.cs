@@ -26,9 +26,9 @@ namespace CodeSmells.FakeWebApplication.Controllers
         {
         }
 
-        // without both `userId` and `hmacSignature` parameters 
+        // without both `int userId` and `string hmacSignature` parameters 
         // PostSharp will generate compile-time error message
-        public void Delete(int userId, int id, string hmacSignature)
+        public void Delete(int userId, int id, decimal hmacSignature)
         {
         }
     }

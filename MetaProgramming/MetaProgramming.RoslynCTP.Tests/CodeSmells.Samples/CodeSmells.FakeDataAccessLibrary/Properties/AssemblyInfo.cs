@@ -36,3 +36,6 @@ using PostSharp.Extensibility;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: VirtualKeywordRequiredForInstanceProperties(
+            AttributeTargetTypes = "CodeSmells.FakeDataAccessLibrary.Entity.*", 
+            AttributeTargetElements = MulticastTargets.Property)]
