@@ -122,17 +122,13 @@
             </ul>
         </div>
 
-        <!-- AutoFixture -->
-
-        <!-- TBD -->
-
         <!-- Reflection and Introspection -->
 
-        <div id="ReflectionVsIntrospection" class="step" data-x="+7000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ReflectionVsIntrospection" class="step" data-x="+5500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Reflection vs. Introspection</h1>
         </div>
 
-        <div id="CSharpSampleForReturnNull" class="step" data-x="+7000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="CSharpSampleForReturnNull" class="step" data-x="+5500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <h1>C# code and syntax Tree from Roslyn CTP</h1>
             <div class="code"><pre class="code_block">public</span> <span style="color: #2b91af">object</span> ReturnNullReferenceType()
 {
@@ -140,23 +136,8 @@
 }</pre></div>
             <div align="center"><img src='.\images\roslyn_syntax_tree_for_return_null.png' alt='Roslyn syntax tree sample'/></div>
         </div>
-
-        <div id="IntrospectionCalculateCodeComplexity" class="step" data-x="+7000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
-            <h1>Calculate code complexity</h1>
-            <div class="code">
-                <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; CyclomaticComplexityStatements =
-        PredicateBuilder
-            .False&lt;StatementSyntax&gt;()
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> IfStatementSyntax)
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> SwitchStatementSyntax)
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> DoStatementSyntax)
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> WhileStatementSyntax)
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> ForStatementSyntax)
-            .Or(s =&gt; s <span style="color: #0000ff">is</span> ForEachStatementSyntax)
-                .Compile();</pre></div>
-        </div>
         
-        <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+7000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+5500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Search for <code class="inlineCode">return null;</code> statements</h1>
             <div class="code">
                 <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
@@ -171,7 +152,7 @@
                 .Compile();</pre></div>
         </div> 
 
-        <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+7000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+5500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
             <h1>Search for <code class="inlineCode">return default(T);</code> statements where <code class="inlineCode">T</code> is reference type</h1>
             <div class="code">
                 <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
@@ -183,7 +164,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
          || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
         </div>
 
-        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+7000" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+5500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limit references to assemblies</h1>
             <p>Using <code class="inlineCode">System.Reflection</code></p>
             <div class="code">
@@ -215,7 +196,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 }</pre></div>
         </div>
 
-        <div id="IntrospectionLimitations" class="step" data-x="+7000" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionLimitations" class="step" data-x="+5500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limitations</h1>
             <p>
                 <ul>
@@ -225,7 +206,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </p>
         </div>
 
-        <div id="IntrospectionAssertions" class="step" data-x="+7000" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertions" class="step" data-x="+5500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Assertions</h1>
             <p>
                 <ul>
@@ -235,23 +216,23 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </p>
         </div>
 
-        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+7000" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+5500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
             <h1>ApprovalTests</h1>
             <p>Capturing Human Intelligence</p>
             <img style='margin-left: -100px;' src='.\images\introspection_return_null_with_approvaltests.png' alt="Introspection assertions using ApprovalTests" />
         </div>
 
-        <div id="IntrospectionNote" class="step" data-x="+7000" data-y="+6000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
             <p>Note: this is not a replacement for code review!</p>
         </div>
 
         <!-- PostSharp -->
 
-        <div id="PostSharpArchitectureConstraints" class="step" data-x="+8500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpArchitectureConstraints" class="step" data-x="+7000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <h1>PostSharp: Architecture Constraints</h1>
         </div>
 
-        <div id="DotNetAndPostSharpBuildPipeLine" class="step" data-x="+8500" data-y="0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="DotNetAndPostSharpBuildPipeLine" class="step" data-x="+7000" data-y="0" data-z="0" data-rotate="0" data-scale="1">
             <div id="BuildPipeLine">
                 <div style="margin-top: 50px;"><h1>.Net build pipeline</h1></div>
 
@@ -282,13 +263,13 @@ ISemanticModel semanticModel = await semanticModelAsync;
                 </div>
 
                 <div class="window" id="initialize" style="left: 625px; top: 400px;">
-                    <strong class="code_box">CompileTimeInitialize</code>
+                    <strong class="code_box">CompileTimeInitialize</strong>
                     <p>Serialize state for runtime</p>
                 </div>
             </div>
         </div>
 
-        <div id="PostSharpArchitectureFramework" class="step" data-x="+8500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpArchitectureFramework" class="step" data-x="+7000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Architecture Framework</h1>
             <p>
                 <ul>
@@ -300,7 +281,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </p>
         </div>
 
-        <div id="PocoClassWithTypicalCodeIssues" class="step" data-x="+8500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PocoClassWithTypicalCodeIssues" class="step" data-x="+7000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
             <h1>POCO class</h1>
             <p>class with typical code issues</p>
             <div class="code">
@@ -319,7 +300,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 </pre></div>
         </div>
 
-        <div id="VirtualKeywordRequiredForEntities" class="step" data-x="+8500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="VirtualKeywordRequiredForEntities" class="step" data-x="+7000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
             <h1>Validate constraint</h1>
             <p>Validate that all properties are <code class="inlineCode">public</code>, <code class="inlineCode">virtual</code> with getter and setter</p>
             <div class="code">
@@ -357,7 +338,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 }</pre></div>
         </div>
 
-        <div id="PostSharpAspectMulticasting" class="step" data-x="+8500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpAspectMulticasting" class="step" data-x="+7000" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Multicasting</h1>
             <div class="code">
                 <pre class="code_block"><span style="color: #008000">// Multicast aspect to all properties of classes in namespace</span>
@@ -367,13 +348,13 @@ ISemanticModel semanticModel = await semanticModelAsync;
 </pre></div>
         </div>
 
-        <div id="PostSharpCompileTimeError" class="step" data-x="+8500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpCompileTimeError" class="step" data-x="+7000" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Compile-time error</h1>
             <p>Error generated by PostSharp aspect validation</p>
             <img src='images\postsharp_validation_aspect-virtual_keyword_is_required.png' alt='Compile-time error generated by PostSharp aspect validation' />
         </div>
 
-        <div id="PostSharpLimitations" class="step" data-x="+8500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="PostSharpLimitations" class="step" data-x="+7000" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limitations</h1>
             <p>
                 <ul>
@@ -386,12 +367,12 @@ ISemanticModel semanticModel = await semanticModelAsync;
 
         <!-- Outro -->
 
-        <div id="MurphysLawOutro" class="step" data-x="+10000" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="MurphysLawOutro" class="step" data-x="+8500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <p>If you perceive that there are four possible ways in which something can go wrong,
                 and circumvent these, then a fifth way, unprepared for, will promptly develop<br/>by <em>Edward Aloysius Murphy</em></p>
         </div>
 
-        <div id="References" class="step" data-x="+10000" data-y="+0" data-z="0" data-rotate="0" data-scale="1">
+        <div id="References" class="step" data-x="+8500" data-y="+0" data-z="0" data-rotate="0" data-scale="1">
             <h1>References</h1>
             <p>
                 <ul>
