@@ -314,6 +314,11 @@ a:focus {
     color: red;
 }
 
+.center {
+    text-align: center;
+    width: auto;
+}
+
 .right {
     text-align: right;
 }
