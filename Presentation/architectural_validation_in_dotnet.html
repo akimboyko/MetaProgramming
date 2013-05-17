@@ -31,7 +31,7 @@
             <h1>Architectural Validation in .Net</h1>
             <div class='right'>
                 <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
-                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">GitHub repository</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">MetaProgramming@GitHub</a></p>
                 <p><img style='width:150px; height: auto;' 
                         src='images\itera_logo.png'
                         alt='Itera logo' /></p>
@@ -67,11 +67,11 @@
 
         <!-- WHY -->
 
-        <div id="Why" class="step" data-x="+4000" data-y="-950" data-z="0" data-rotate="0" data-scale="1">
+        <div id="Why" class="step" data-x="+4000" data-y="-850" data-z="0" data-rotate="0" data-scale="1">
             <h1>Why?</h1>
         </div>
 
-        <div id="ProjectContext" class="step" data-x="+4000" data-y="-850" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ProjectContext" class="step" data-x="+4000" data-y="-800" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
                 Project context: Hot/Cold starts
             </li></ul>
@@ -83,7 +83,7 @@
             </li></ul>
         </div>
 
-        <div id="StaticTyping" class="step" data-x="+4000" data-y="-650" data-z="0" data-rotate="0" data-scale="1">
+        <div id="StaticTyping" class="step" data-x="+4000" data-y="-700" data-z="0" data-rotate="0" data-scale="1">
             <ul><li>
                 Static Typing: Compiled ≠ Ready
             </li></ul>
@@ -103,11 +103,11 @@
                 failure or condition that is likely to lead to failure</p>
         </div>
 
-        <div id="NotesCodebases01" class="step" data-x="+4000" data-y="1300" data-z="0" data-rotate="0" data-scale="1">
+        <div id="NotesCodebases01" class="step" data-x="+4000" data-y="1400" data-z="0" data-rotate="0" data-scale="1">
             <h1>Differences</h1>
         </div>
 
-        <div id="NotesCodebases02" class="step" data-x="+4000" data-y="1400" data-z="0" data-rotate="0" data-scale="1">
+        <div id="NotesCodebases02" class="step" data-x="+4000" data-y="1450" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Greenfield vs. Browfield</li>
             </ul>
@@ -119,7 +119,7 @@
             </ul>
         </div>
 
-        <div id="NotesCodebases04" class="step" data-x="+4000" data-y="1600" data-z="0" data-rotate="0" data-scale="1">
+        <div id="NotesCodebases04" class="step" data-x="+4000" data-y="1550" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>public vs. internal</li>
             </ul>
@@ -169,7 +169,42 @@ ISemanticModel semanticModel = await semanticModelAsync;
          || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
         </div>
 
-        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+5500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+
+        <div id="AdvancedSamples01" class="step" data-x="+5500" data-y="+2150" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Advanced samples</h1>
+        </div>
+
+        <div id="AdvancedSamples02" class="step" data-x="+5500" data-y="+2200" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li><code class="inlineCode">IEnumerable&lt;T&gt;</code> or <code class="inlineCode">IQuerable&lt;T&gt;</code></li>
+            </ul>
+        </div>
+
+        <div id="AdvancedSamples03" class="step" data-x="+5500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Constructor-over injection or <code class="inlineCode">new</code> in constructor</li>
+            </ul>
+        </div>
+
+        <div id="AdvancedSamples04" class="step" data-x="+5500" data-y="+2300" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Singletons</li>
+            </ul>
+        </div>
+
+        <div id="AdvancedSamples05" class="step" data-x="+5500" data-y="+2350" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Verify declarative <code class="inlineCode">[Attribute]</code> composition</li>
+            </ul>
+        </div>
+
+        <div id="AdvancedSamples06" class="step" data-x="+5500" data-y="+2400" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li><code class="inlineCode">DateTime.Now()</code></li>
+            </ul>
+        </div>
+
+        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+5500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limit references to assemblies</h1>
             <p>Using <code class="inlineCode">System.Reflection</code></p>
             <div class="code">
@@ -201,7 +236,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 }</pre></div>
         </div>
 
-        <div id="IntrospectionLimitations" class="step" data-x="+5500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionLimitations" class="step" data-x="+5500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limitations</h1>
             <ul>
                 <li>C#/VB.Net source code should be available</li>
@@ -209,7 +244,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="IntrospectionAssertions" class="step" data-x="+5500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertions" class="step" data-x="+5500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
             <h1>Assertions</h1>
             <ul>
                 <li>How to references back to sources?</li>
@@ -217,7 +252,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+5500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+5500" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
             <h1>ApprovalTests</h1>
             <p>Capturing Human Intelligence</p>
             <img style='margin-left: -100px;' 
@@ -225,7 +260,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
                  alt="Introspection assertions using ApprovalTests" />
         </div>
 
-        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+6000" data-z="0" data-rotate="0" data-scale="1">
             <p>Note: this is not a replacement for code review!</p>
         </div>
 
@@ -385,6 +420,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
     <div class="hint">
         <p>Use a spacebar or arrow keys to navigate</p>
     </div>
+
     <script>
     if ("ontouchstart" in document.documentElement) { 
         document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
@@ -394,6 +430,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
     <script type="text/javascript"
             src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js">
     </script>
+
     <script type="text/javascript"
             src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js">
     </script>
@@ -407,6 +444,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
     </script>
 
     <script src="js/impress.js"></script>
+
     <script>
         jsPlumb.bind("ready", function() {
             impress().init();
