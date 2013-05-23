@@ -1,0 +1,267 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Metaprogramming in .NET: Microsoft® “Roslyn” CTP and Nemerle by @AkimBoyko</title>
+    
+    <meta name="description" content="Metaprogramming in .NET: “Roslyn” CTP and Nemerle by Akim Boyko" />
+    <meta name="author" content="Akim Boyko" />
+
+    <link href="css/metaprogramming_roslyn_and_nemerle.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+
+    <!-- Title -->
+
+    <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+        <h1>Metaprogramming in .NET</h1>
+        <h2>“Roslyn” CTP and Nemerle</h2>
+        <div class='right'>
+                <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">MetaProgramming@GitHub</a></p>
+                <p><img style='width:150px; height: auto;' 
+                        src='images\itera_logo.png'
+                        alt='Itera logo' /></p>
+            </div>
+    </div>
+
+    <!-- Intro -->
+
+    <div id="WordsDefinitions" class="step" data-x="+2000" data-y="0" data-scale="1">
+        <p><strong>μετά</strong>: after, beyond, self, adjacent</p>
+        <p><strong>metaprogramming</strong>: The classic definition for a metaprogram is “a computer program that writes new computer programs”
+            <br/>
+            by <em>@KevinHazzard</em> and <em>@JasonBock</em></p>
+    </div>
+
+    <!-- JavaScript sample -->
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample" class="step" data-x="+3000" data-y="0" data-scale="1">
+        <p>JavaScript <code class="inlineCode">eval()</code> as metaprogramming example</p>
+        <p>from Metaprogramming in .Net by <em>@KevinHazzard</em> and <em>@JasonBock</em></p>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample01" class="step" data-x="+3000" data-y="0" data-z="-3000" data-scale="1">
+        <p>Initial state</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_00_Begin.png' alt="JavaScript Metaprogramming via Scripting" />
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample02" class="step" data-x="+3000" data-y="0"  data-z="-6000" data-scale="1">
+        <p>Simple multiplication</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_02_UseFunctionDynamicly.png' alt="Use Function Dynamicly" />
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample03" class="step" data-x="+3000" data-y="0"  data-z="-9000" data-scale="1">
+        <p>Injection values into local execution scope</p>
+        <img src='images/JavaScriptMetaprogrammingViaScripting_03_InjectionValuesIntoLocalExecutionScope.png' alt="Injection Values into Local Execution Scope" />
+    </div>
+
+    <!-- C# is multiparadigm language -->
+
+    <div id="AndersHejlsbergCitation" class="step" data-x="+6000" data-y="0" data-scale="1">
+        <h1>C# is <strong>multiparadigm</strong> language</h1>
+        <p>Languages are losing their classifications</p>
+        <p><em>Anders Hejlsberg</em> talk about C# 3.0</p>
+        <ul>
+            <li><strong>object-oriented</strong>: class-based and statically typed</li>
+            <li><strong>imperative</strong></li>
+            <li><strong>C# 2.0</strong>: generic programming</li>
+            <li><strong>C# 3.0</strong>: functional/declarative: <code class="inlineCode">LINQ</code>, <code class="inlineCode">Rx</code></li>
+            <li><strong>C# 4.0</strong>: dynamic: <code class="inlineCode">DLR</code>, <code class="inlineCode">microORM</code></li>
+        </ul>
+    </div>
+
+    <div id="CompilersAreBlackBoxes" class="step" data-x="+10000" data-y="0" data-scale="1">
+        <h1>Compilers are black boxes</h1>
+        <p>Applying this technique leads to a <strong>self-hosting compiler</strong>.</p>
+        <p><b>TBD</b>: schema HERE</p>
+    </div>
+
+    <!-- Roslyn -->
+
+    <div id="CompilerAsService" class="step" data-x="+15500" data-y="-150"  data-rotate="-90" data-scale="1">
+        <h1><strong>Compiler as a Service</strong></h1>
+    </div>
+
+    <div id="MetaprogrammingByList" class="step" data-x="+16000" data-y="0" data-scale="1">
+        <h1><strong>Metaprogramming by …</strong></h1>
+        <ul>
+            <li>Scripting</li>
+            <li>Code generation</li>
+            <li>Dynamic objects and λ-expression</li>
+            <li>Reflection</li>
+        </ul>
+    </div>
+
+    <div id="Demo01InternalsSyntaxTreesAndHostEnvironment" class="step" data-x="+19000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #01</strong></p>
+        <p><a href='images\RoslynSyntaxTree_00.png'>Syntax/Semantic tree tree sample from Roslyn</a></p>
+    </div>
+
+    <div id="CSharpSampleForReturnNull" class="step" data-x="+19000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            <h1>C# code and syntax tree</h1>
+            <p>From Roslyn CTP</p>
+            <div class="code"><pre class="code_block"><span style="color: #0000ff">public</span> <span style="color: #2b91af">object</span> ReturnNullReferenceType()
+{
+    <span style="color: #0000ff">return</span> <span style="color: #0000ff">null</span>;
+}</pre></div>
+            <div class="center"><img src='.\images\roslyn_syntax_tree_for_return_null.png' alt='Roslyn syntax tree sample'/></div>
+    </div>
+    
+    <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+19000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Search for <code class="inlineCode">return null;</code></h1>
+        <div class="code">
+            <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
+    PredicateBuilder
+        .True&lt;StatementSyntax&gt;()
+        <span style="color: #008000">// all return statements</span>
+        .And(s =&gt; s <span style="color: #0000ff">is</span> ReturnStatementSyntax)
+        <span style="color: #008000">// with expression</span>
+        .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression != <span style="color: #0000ff">null</span>)
+        <span style="color: #008000">// with expression &quot;null&quot;</span>
+        .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
+            .Compile();</pre></div>
+    </div> 
+
+    <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+19000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Search for <code class="inlineCode">return default(T);</code></h1>
+        <p>Where <code class="inlineCode">T</code> is reference type</p>
+        <div class="code">
+            <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
+
+ISemanticModel semanticModel = await semanticModelAsync;
+
+<span style="color: #0000ff">return</span> expressionSyntax != <span style="color: #0000ff">null</span> &amp;&amp;
+ (semanticModel.GetTypeInfo(expressionSyntax).Type == <span style="color: #0000ff">null</span>
+     || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
+    </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynAndScriptCS" class="step" data-x="+20000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #02</strong></p>
+        <p>Scripting: <a href='images\JavaScript_Eval_vs_Roslyn_ScriptEngine.png'>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn and ScriptCS</a></p>
+        <ul>
+            <li><a href='http://chocolatey.org/'>How to setup Chocolatey</a></li>
+            <li><a href='http://chocolatey.org/packages/ScriptCs'>How to setup ScriptCS</a></li>
+            <li><a href='https://gist.github.com/akimboyko/5115064'>Sample script from gist.github.com</a></li>
+        </ul>
+    </div>
+
+    <div id="DemoScript03RoslynAndT4" class="step" data-x="+22000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #03</strong></p>
+        <p>Code-as-Data: Roslyn and T4</p>
+        <ul>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP.Tests/RuntimeTextTemplateTests.cs'>Runtime template transformation</a></li>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP/CodeAsData.cs'>Code-as-Data</a></li>
+        </ul>
+    </div>
+
+    <div id="DemoScript04ConvertCodeWrittenOnOneLanguageToAnother" class="step" data-x="+23000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #04</strong></p>
+        <p>Code-as-Data: Convert code written in one language to another</p>
+        <p><a href='images\CodeAsData_ConvertVBtoCSharp.png'>VB → C# and back again</a></p>
+    </div>
+
+    <div id="Note01MefAndDsl" class="step" data-x="+26000" data-y="0" data-scale="1">
+        <p><strong>Note about "Code-as-Data"</strong></p>
+        <ul>
+            <li>Roslyn vs. MEF</li>
+            <li>Roslyn vs. DSL</li>
+        </ul>
+    </div>
+
+    <div id="Note02Lambda" class="step" data-x="+26000" data-y="+750" data-scale="1">
+        <p><strong>Note about "Dynamic" programming</strong></p>
+        <ul>
+            <li>Roslyn vs. λ-expression and DLR</li>
+        </ul>
+    </div>
+
+    <div id="CornerCases" class="step" data-x="+28500" data-y="-250"  data-rotate="-90" data-scale="1">
+        <h1><strong>Corner cases</strong></h1>
+    </div>
+
+    <div id="CornerCasesList01" class="step" data-x="+29000" data-y="0" data-scale="1">
+        <ul>
+            <li>Roslyn could not decompile IL</li>
+            <li>Breaking changes with compilers</li>
+            <li><code class="inlineCode">dynamic</code> keyword support</li>
+            <li><code class="inlineCode">async/await</code> keywords</li>
+            <li>Implementation issues of current version</li>
+            <li>Sandbox for scripts</li>
+        </ul>
+    </div>
+
+    <div id="CornerCasesList02" class="step" data-x="+30000" data-y="0" data-scale="1">
+        <ul>
+            <li>Support: <em>Dustin Campbell</em>, <em>Eric Lippert</em>, <em>Kevin Pilch-Bisson</em> and whole team!</li>
+            <li>Roslyn CTP license limitations</li>
+        </ul>
+    </div>
+
+    <!-- Nemerle -->
+
+    <div id="Nemerle" class="step" data-x="+31500" data-y="-300"  data-rotate="-90" data-scale="1">
+        <h1><strong>Nemerle</strong></h1>
+    </div>
+
+    <div id="NemerleCompileTimeMacros" class="step" data-x="+32000" data-y="0" data-scale="1">
+        <h1>Compile-time macros</h1>
+        TBD
+    </div>
+
+    <!-- References -->
+
+    <div id="References01" class="step" data-x="+33000" data-y="0" data-scale="1">
+        <ul style="">
+            <li><strong><a href='http://msdn.microsoft.com/en-us/hh500769'>The Roslyn Project</a></strong></li>
+            <li><strong><a href='http://www.manning.com/hazzard/'>Metaprogramming in .NET by by <em>@KevinHazzard</em> and <em>@JasonBock</em></a></strong></li>
+            <li><a href='http://scriptcs.net/'>ScriptCS by <em>@gblock</em> and others</a></li>
+        </ul>
+    </div>
+
+    <div id="References02" class="step" data-x="+34000" data-y="0" data-scale="1">
+        <ul>
+            <li><a href='http://channel9.msdn.com/'>Microsoft Channel9</a></li>
+            <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=649'>DotNetRocks #649: <em>Eric Lippert</em> Talks About Project Roslyn</a></li>
+            <li><a href='http://deepfriedbytes.com/podcast/episode-81-looking-at-the-next-net-compilers-aka-ldquo-roslyn-rdquo-project/'>Episode #81: Looking at the Next .NET Compilers AKA “Roslyn” Project with <em>@pilchie</em></a></li>
+        </ul>
+    </div>
+
+    <div id="References03" class="step" data-x="+35000" data-y="0" data-scale="1">
+        <ul>
+            <li><a href='http://vimeo.com/43612919'>@philiplaureano — I Can't Believe It's Not Roslyn — Using Nemerle Macros to extend the C# Language</a></li>
+            <li><a href='http://vimeo.com/43690661'>Igor Tkachev - Metaprogramming with Nemerle</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+
+<script>
+if ("ontouchstart" in document.documentElement) { 
+    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+}
+</script>
+
+<script src="js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
