@@ -2,10 +2,10 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using AfterProgramming.Model;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using FluentAssertions;
-using MetaProgramming.RoslynCTP.Model;
 using MetaProgramming.RoslynCTP.Tests.Strategy;
 using NUnit.Framework;
 using Newtonsoft.Json;
@@ -39,7 +39,8 @@ namespace MetaProgramming.RoslynCTP.Tests
                     .SearchForComplexMethods(
                         solutionFile: _strategy.GetSolutionPath(),
                         maxAllowedCyclomaticComplexity: 10,
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken)
+                            .ToList();
 
             methodsWithCyclomaticComplexityGt10.Should()
                             .NotBeNull()
@@ -68,7 +69,8 @@ namespace MetaProgramming.RoslynCTP.Tests
                 new Introspection()
                     .SearchForReturnNullStatements(
                         solutionFile: _strategy.GetSolutionPath(),
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken)
+                            .ToList();
 
             returnNullStatements.Should()
                             .NotBeNull()
