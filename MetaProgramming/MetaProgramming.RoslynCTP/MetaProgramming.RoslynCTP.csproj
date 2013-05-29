@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AfterProgramming">
+      <HintPath>..\packages\AfterProgramming.0.0.1-alpha\lib\net45\AfterProgramming.dll</HintPath>
+    </Reference>
     <Reference Include="Roslyn.Compilers, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Roslyn.Compilers.Common.1.2.20906.2\lib\net45\Roslyn.Compilers.dll</HintPath>
@@ -76,9 +79,7 @@
     <Compile Include="Introspection.cs" />
     <Compile Include="Model\ClassTemplateInfo.cs" />
     <Compile Include="CodeAsData.cs" />
-    <Compile Include="Model\Complexity.cs" />
     <Compile Include="ConvertTo.cs" />
-    <Compile Include="Model\ReturnNull.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeTextTemplate.cs">
       <AutoGen>True</AutoGen>

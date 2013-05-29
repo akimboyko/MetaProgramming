@@ -2,10 +2,10 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
+using AfterProgramming.Model;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using FluentAssertions;
-using MetaProgramming.RoslynCTP.Model;
 using MetaProgramming.RoslynCTP.Tests.Strategy;
 using NUnit.Framework;
 using Newtonsoft.Json;
