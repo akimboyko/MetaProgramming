@@ -39,8 +39,7 @@ namespace MetaProgramming.RoslynCTP.Tests
                     .SearchForComplexMethods(
                         solutionFile: _strategy.GetSolutionPath(),
                         maxAllowedCyclomaticComplexity: 10,
-                        cancellationToken: cancellationToken)
-                            .ToList();
+                        cancellationToken: cancellationToken);
 
             methodsWithCyclomaticComplexityGt10.Should()
                             .NotBeNull()
@@ -69,8 +68,7 @@ namespace MetaProgramming.RoslynCTP.Tests
                 new Introspection()
                     .SearchForReturnNullStatements(
                         solutionFile: _strategy.GetSolutionPath(),
-                        cancellationToken: cancellationToken)
-                            .ToList();
+                        cancellationToken: cancellationToken);
 
             returnNullStatements.Should()
                             .NotBeNull()
