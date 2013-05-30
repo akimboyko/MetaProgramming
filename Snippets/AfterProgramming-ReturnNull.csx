@@ -1,4 +1,4 @@
-//scriptcs -install -pre — run to install dependencies
+// scriptcs -install -pre — run to install dependencies
 
 using System.Threading;
 using System.Diagnostics;
@@ -8,12 +8,13 @@ using Newtonsoft.Json;
 using AfterProgramming;
 using AfterProgramming.Internal;
 
+// change path to solution
 const string solutionPath = @"D:\temp\nhibernate-core-master\src\NHibernate.Everything.sln";
 
 var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 var cancellationToken = cancellationTokenSource.Token;
 
-Console.WriteLine("Start introspection…");
+Console.WriteLine("Start introspection at {0}…", solutionPath);
 
 var watch = Stopwatch.StartNew();
 
