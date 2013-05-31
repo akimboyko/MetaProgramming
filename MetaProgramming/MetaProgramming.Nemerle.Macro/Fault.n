@@ -10,8 +10,14 @@ using System.Linq;
 
 namespace MetaProgramming.Nemerle.Macro
 {
-    macro execute(body, fault) 
-    syntax ("execute", body, "fault", fault) 
+    macro execute(body, actionOnFault, actionOnFinally) 
+    syntax (
+        "try",
+            body,
+        "fault",
+            actionOnFault,
+        "finally",
+            actionOnFinally) 
     {
         <[
             try
@@ -20,7 +26,11 @@ namespace MetaProgramming.Nemerle.Macro
             }
             catch
             {
-                | e is System.Exception => { $fault; throw; }
+                | e is System.Exception => { $actionOnFault; throw; }
+            }
+            finally
+            {
+                $actionOnFinally;
             }
         ]>
   }

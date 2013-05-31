@@ -10,11 +10,17 @@ namespace MetaProgramming.Nemerle.Tests.CSharp
         [Test]
         public void FaultKeywordAtNemerle_NormalFlow_BodyHasBeenExecuted()
         {
+            var finallyHasBeenExecuted = false;
+            var uniqueString = Guid.NewGuid().ToString();
+
             new FaultKeywordSample()
                     .ExecuteFaultCSharpNemerle(
-                        () => "body",
-                        () => { throw new Exception("Should not execute `fault`"); })
-                    .Should().Be("body");
+                        () => uniqueString,
+                        () => { throw new Exception("Should not execute `fault`"); },
+                        () => { finallyHasBeenExecuted = true; })
+                    .Should().Be(uniqueString);
+
+            finallyHasBeenExecuted.Should().BeTrue();
         }
 
         [Test]
@@ -22,6 +28,8 @@ namespace MetaProgramming.Nemerle.Tests.CSharp
         {
             var bodyHasBeenExecuted = false;
             var faultHasBeenExecuted = false;
+            var finallyHasBeenExecuted = false;
+            var uniqueExceptionalMessage = string.Format("Exceptional Flow {0}", Guid.NewGuid());
 
             Action act = () =>
                 new FaultKeywordSample()
@@ -29,18 +37,17 @@ namespace MetaProgramming.Nemerle.Tests.CSharp
                         () =>
                         {
                             bodyHasBeenExecuted = true;
-                            throw new Exception("Exceptional Flow");
+                            throw new Exception(uniqueExceptionalMessage);
                         },
-                        () =>
-                        {
-                            faultHasBeenExecuted = true;
-                        });
+                        () => { faultHasBeenExecuted = true; },
+                        () => { finallyHasBeenExecuted = true; });
 
             act.ShouldThrow<Exception>()
-                .WithMessage("Exceptional Flow");
+                .WithMessage(uniqueExceptionalMessage);
 
             bodyHasBeenExecuted.Should().BeTrue();
             faultHasBeenExecuted.Should().BeTrue();
+            finallyHasBeenExecuted.Should().BeTrue();
         }
     }
 }

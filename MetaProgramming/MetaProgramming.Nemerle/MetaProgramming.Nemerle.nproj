@@ -75,11 +75,6 @@
       <Private>False</Private>
     </MacroProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="FaultKeywordSample.cs">
-      <SubType>Content</SubType>
-    </Compile>
-  </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
 		To modify your build process, add your task inside one of the targets below and uncomment it. 
