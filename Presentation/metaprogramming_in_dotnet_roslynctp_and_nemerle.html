@@ -107,6 +107,8 @@
         </ul>
     </div>
 
+    <!-- Demo 01 -->
+
     <div id="Demo01InternalsSyntaxTreesAndHostEnvironment" class="step" data-x="+19000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #01</strong></p>
         <p><a href='images\RoslynSyntaxTree_00.png'>Syntax/Semantic tree tree sample from Roslyn</a></p>
@@ -159,6 +161,8 @@ ISemanticModel semanticModel = await semanticModelAsync;
         </ul>
     </div>
 
+    <!-- Demo 02 -->
+
     <div id="DemoScript02EvalForCSharpUsingRoslynAndScriptCS" class="step" data-x="+20000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #02</strong></p>
         <p>Scripting: <a href='images\JavaScript_Eval_vs_Roslyn_ScriptEngine.png'>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn and ScriptCS</a></p>
@@ -208,7 +212,7 @@ Console.WriteLine(engine.GetType());
         <img src='images\scriptcs_execution_screenshot.png' alt="ScriptCS execution sample" />
     </div>
 
-
+    <!-- Demo 03 -->
 
     <div id="DemoScript03RoslynAndT4" class="step" data-x="+22000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #03</strong></p>
@@ -223,11 +227,15 @@ Console.WriteLine(engine.GetType());
         <p>TBD: Add schema</p>
     </div>
 
+    <!-- Demo 04 -->
+
     <div id="DemoScript04ConvertCodeWrittenOnOneLanguageToAnother" class="step" data-x="+23000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #04</strong></p>
         <p>Code-as-Data: Convert code written in one language to another</p>
         <p><a href='images\CodeAsData_ConvertVBtoCSharp.png'>VB → C# and back again</a></p>
     </div>
+
+    <!-- Notes -->
 
     <div id="Note01MefAndDsl" class="step" data-x="+26000" data-y="0" data-scale="1">
         <p><strong>Note about "Code-as-Data"</strong></p>
@@ -245,6 +253,8 @@ Console.WriteLine(engine.GetType());
         </ul>
     </div>
 
+    <!-- Corner cases -->
+
     <div id="CornerCases" class="step" data-x="+28500" data-y="-250"  data-rotate="-90" data-scale="1">
         <h1><strong>Corner cases</strong></h1>
     </div>
@@ -256,14 +266,8 @@ Console.WriteLine(engine.GetType());
             <li><code class="inlineCode">dynamic</code> keyword support</li>
             <li><code class="inlineCode">async/await</code> keywords</li>
             <li>Implementation issues of current version</li>
-            <li>Sandbox for scripts</li>
-        </ul>
-    </div>
-
-    <div id="CornerCasesList02" class="step" data-x="+30000" data-y="0" data-scale="1">
-        <ul>
             <li>Support: <em>Dustin Campbell</em>, <em>Eric Lippert</em>, <em>Kevin Pilch-Bisson</em> and whole team!</li>
-            <li>Roslyn CTP license limitations</li>
+            <li><u>Roslyn CTP license limitations</u></li>
         </ul>
     </div>
 
@@ -275,12 +279,91 @@ Console.WriteLine(engine.GetType());
 
     <div id="NemerleCompileTimeMacros" class="step" data-x="+32000" data-y="0" data-scale="1">
         <h1>Compile-time macros</h1>
-        TBD
+        <p>with possibility to modify Abstract Syntax Tree during compilation</p>
+    </div>
+
+    <div id="NemerleCompileTimeMacrosVsRuntime" class="step" data-x="+32000" data-y="+750" data-scale="1">
+        <h1>Nemerle macro: compile- with run- time execution</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #008000">// Test macros to show difference between compile time and runtime execution</span>
+<span style="color: #0000ff">public macro</span> TestMacro(inputAST)
+{
+    Console.WriteLine(<span style="color: #a31515">&quot;Compile-time execution: &#39;{0}&#39; of type {1}\n&quot;</span>, 
+                            inputAST, inputAST.GetType());
+                            
+    &lt;[ Console.WriteLine(<span style="color: #a31515">&quot;Run-time execution: {0} of type {1}\n&quot;</span>, 
+                            <span style="border: 1px solid #FF0000">$</span>inputAST, <span style="border: 1px solid #FF0000">$</span>inputAST.GetType()) ]&gt;;
+}</pre></div>
+
+        <h2>Expected console output during build</h2>
+        <img src='images\nemerle_compiletime_macro_execution.png' alt='nemerle compiletime macro execution' />
+    </div>
+
+    <div id="NemerleNewSyntaxKeyword" class="step" data-x="+32000" data-y="+1500" data-scale="1">
+        <h1>New keyword <code class="inlineCode">fault</code></h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #0000ff">try</span>
+{
+    result = body();
+}
+<span style="color: #0000ff">fault</span> <span style="color: #008000">// here is a _new keyword_ `fault` only executed after exceptions</span>
+{
+    onFault();
+}
+<span style="color: #0000ff">finally</span>
+{
+    onFinally();
+}
+</pre></div>
+    </div>
+
+    <div id="NemerleNewSyntaxMacroDefinition" class="step" data-x="+32000" data-y="+2250" data-scale="1">
+        <h1><code class="inlineCode">fault</code> macro definition</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #0000ff">macro</span> execute(body, actionOnFault, actionOnFinally) 
+<span style="color: #0000ff">syntax</span> (
+    <span style="color: #a31515">&quot;try&quot;</span>,
+        body,
+    <span style="color: #a31515">&quot;fault&quot;</span>,
+        actionOnFault,
+    <span style="color: #a31515">&quot;finally&quot;</span>,
+        actionOnFinally) 
+{
+    &lt;[
+        <span style="color: #0000ff">try</span>
+        {
+            <span style="border: 1px solid #FF0000">$</span>body;
+        }
+        <span style="color: #0000ff">catch</span>
+        {
+            | e <span style="color: #0000ff">is</span> System.Exception =&gt; { <span style="border: 1px solid #FF0000">$</span>actionOnFault; <span style="color: #0000ff">throw</span>; }
+        }
+        <span style="color: #0000ff">finally</span>
+        {
+            <span style="border: 1px solid #FF0000">$</span>actionOnFinally;
+        }
+    ]&gt;
+}</pre></div>
+
+    </div>
+
+    <!-- Notes -->
+
+    <div id="NemerleNote03" class="step" data-x="+32000" data-y="+3000" data-scale="1">
+        <p><strong>Note about Nemerle</strong></p>
+        <ul>
+            <li>Nemerle macro could manipulate AST, similar to Roslyn</li>
+            <li>Nemerle implements <em>only</em> C# 3.5 syntax</li>
+            <li><code class="inlineCode">dynamic</code> keyword not supported</li>
+            <li><code class="inlineCode">async/await</code> keywords not supported</li>
+            <li>Syntax extension are not allowed in C# code, only at Nemerle</li>
+            <li>All other non-syntax extension are allowed both in C# and Nemerle code</li>
+        </ul>
     </div>
 
     <!-- References -->
 
-    <div id="References01" class="step" data-x="+33000" data-y="0" data-scale="1">
+    <div id="References01" class="step" data-x="+35000" data-y="0" data-scale="1">
         <ul style="">
             <li><strong><a href='http://msdn.microsoft.com/en-us/hh500769'>The Roslyn Project</a></strong></li>
             <li><strong><a href='http://www.manning.com/hazzard/'>Metaprogramming in .NET by by <em>@KevinHazzard</em> and <em>@JasonBock</em></a></strong></li>
@@ -288,7 +371,7 @@ Console.WriteLine(engine.GetType());
         </ul>
     </div>
 
-    <div id="References02" class="step" data-x="+34000" data-y="0" data-scale="1">
+    <div id="References02" class="step" data-x="+35000" data-y="+750" data-scale="1">
         <ul>
             <li><a href='http://channel9.msdn.com/'>Microsoft Channel9</a></li>
             <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=649'>DotNetRocks #649: <em>Eric Lippert</em> Talks About Project Roslyn</a></li>
@@ -296,7 +379,7 @@ Console.WriteLine(engine.GetType());
         </ul>
     </div>
 
-    <div id="References03" class="step" data-x="+35000" data-y="0" data-scale="1">
+    <div id="References03" class="step" data-x="+35000" data-y="+1500" data-scale="1">
         <ul>
             <li><a href='http://vimeo.com/43612919'>@philiplaureano — I Can't Believe It's Not Roslyn — Using Nemerle Macros to extend the C# Language</a></li>
             <li><a href='http://vimeo.com/43690661'>Igor Tkachev - Metaprogramming with Nemerle</a></li>

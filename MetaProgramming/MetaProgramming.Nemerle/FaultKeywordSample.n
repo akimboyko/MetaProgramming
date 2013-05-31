@@ -21,7 +21,7 @@ namespace MetaProgramming.Nemerle
             {
                 result = body();
             }
-            fault // here is a new keyword `fault` only executed on exception
+            fault // here is a _new keyword_ `fault` only executed after exceptions
             {
                 onFault();
             }

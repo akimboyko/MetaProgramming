@@ -8,9 +8,16 @@ using Nemerle.Utility;
 namespace MetaProgramming.Nemerle.Macro
 {
     // Test macros to show difference between compile time and runtime execution
-    public macro TestMacro(input)
+    public macro TestMacro(inputAST)
     {
-        Console.WriteLine("Compile-time execution: '{0}' of type {1}\n", input, input.GetType());
-        <[ Console.WriteLine("Run-time execution: {0} of type {1}\n", $input, $input.GetType()) ]>;
+        Console.WriteLine("Compile-time execution: '{0}' of type {1}\n", 
+                                inputAST, inputAST.GetType());
+                            
+        <[ Console.WriteLine("Run-time execution: {0} of type {1}\n", 
+                                $inputAST, $inputAST.GetType()) ]>;
     }
+    
+    // Expected console output during build
+    // 3>	Compile-time execution: '"literal"' of type Nemerle.Compiler.Parsetree.PExpr+Literal
+    // 3>	Compile-time execution: 'x' of type Nemerle.Compiler.Parsetree.PExpr+Ref
 }
