@@ -10,11 +10,18 @@ using System.Linq;
 
 namespace MetaProgramming.Nemerle.Macro
 {
-    macro fault(expr) 
-    syntax ("fault", expr) 
+    macro execute(body, fault) 
+    syntax ("execute", body, "fault", fault) 
     {
         <[
-            $expr;
+            try
+            {
+                $body;
+            }
+            catch
+            {
+                | e is System.Exception => { $fault; throw; }
+            }
         ]>
   }
 }
