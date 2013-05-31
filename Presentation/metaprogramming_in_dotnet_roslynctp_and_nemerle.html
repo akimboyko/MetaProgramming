@@ -150,15 +150,65 @@ ISemanticModel semanticModel = await semanticModelAsync;
      || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
     </div>
 
+    <div id="IntrospectionInstructions" class="step" data-x="+19000" data-y="+3000" data-scale="1">
+        <p>Installation instruction for introspection sample</p>
+        <ul>
+            <li><a href='http://chocolatey.org/'>How to setup Chocolatey</a></li>
+            <li><a href='http://chocolatey.org/packages/ScriptCs'>How to setup ScriptCS</a></li>
+            <li><a href='http://bit.ly/APsample'>Installation instructions at gist.github.com: http://bit.ly/APsample</a></li>
+        </ul>
+    </div>
+
     <div id="DemoScript02EvalForCSharpUsingRoslynAndScriptCS" class="step" data-x="+20000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #02</strong></p>
         <p>Scripting: <a href='images\JavaScript_Eval_vs_Roslyn_ScriptEngine.png'>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn and ScriptCS</a></p>
         <ul>
             <li><a href='http://chocolatey.org/'>How to setup Chocolatey</a></li>
             <li><a href='http://chocolatey.org/packages/ScriptCs'>How to setup ScriptCS</a></li>
-            <li><a href='https://gist.github.com/akimboyko/5115064'>Sample script from gist.github.com</a></li>
+            <li><a href='http://bit.ly/RoslynEval'>Installation instructions at gist.github.com: http://bit.ly/RoslynEval</a></li>
         </ul>
     </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynCode" class="step" data-x="+20000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+        <h1>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #2b91af">var</span> scripts = <span style="color: #0000ff">new</span> []
+    {
+        System.Console.ReadLine(),         <span style="color: #008000">//fromValue:</span>
+        System.Console.ReadLine()          <span style="color: #008000">//formula:</span>
+    };
+
+<span style="color: #2b91af">var</span> engine = <span style="color: #0000ff">new</span> ScriptEngine();           <span style="color: #008000">// create script engine</span>
+
+Array.ForEach(                             <span style="color: #008000">// add references to assembiles</span>
+    <span style="color: #0000ff">new</span>[] { <span style="color: #0000ff">typeof</span>(<span style="color: #2b91af">object</span>).Assembly, GetType().Assembly },
+    @assembly =&gt; engine.AddReference(@assembly));
+
+Array.ForEach(                             <span style="color: #008000">// import namespaces</span>
+    <span style="color: #0000ff">new</span>[] { <span style="color: #a31515">&quot;System&quot;</span> },
+    @namespace =&gt; engine.ImportNamespace(@namespace));    
+
+Console.WriteLine(engine.GetType());
+
+<span style="color: #2b91af">var</span> session = engine.CreateSession();      <span style="color: #008000">// create session</span>
+
+<span style="color: #2b91af">object</span> resultModel = <span style="color: #0000ff">null</span>;
+
+<span style="color: #008000">// INFO: scripts are using same session</span>
+<span style="color: #0000ff">foreach</span>(<span style="color: #2b91af">var</span> script <span style="color: #0000ff">in</span> scripts)
+{
+    resultModel = session                 <span style="color: #008000">// process scripts</span>
+                    .CompileSubmission&lt;<span style="color: #2b91af">object</span>&gt;(script)
+                    .Execute();
+}</pre></div>
+    </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynScreenShot" class="step" data-x="+20000" data-y="+1500" data-scale="1">
+        <p>ScriptCS execution sample</p>
+        <img src='images\scriptcs_execution_screenshot.png' alt="ScriptCS execution sample" />
+    </div>
+
+
 
     <div id="DemoScript03RoslynAndT4" class="step" data-x="+22000" data-y="0" data-scale="1">
         <p><strong class="red">Demo #03</strong></p>

@@ -19,27 +19,28 @@
 // System.Math.Sqrt(x * 7)
 var scripts = new []
     {
-        Util.ReadLine(@"fromValue:"),
-        Util.ReadLine(@"formula:")
+        Util.ReadLine(@"fromValue:"),       //fromValue:
+        Util.ReadLine(@"formula:")          //formula:
     };
 
-var engine = new ScriptEngine();
+var engine = new ScriptEngine();           // create script engine
 
-Array.ForEach(
-    new[] { typeof(object).Assembly, this.GetType().Assembly },
+Array.ForEach(                             // add references to assembiles
+    new[] { typeof(object).Assembly, GetType().Assembly },
     @assembly => engine.AddReference(@assembly));
 
-Array.ForEach(
+Array.ForEach(                             // import namespaces
     new[] { "System" },
     @namespace => engine.ImportNamespace(@namespace));    
 
-var session = engine.CreateSession();
+var session = engine.CreateSession();      // create session
 
 dynamic resultModel = null;
 
+// INFO: scripts are using same session
 foreach(var script in scripts)
 {
-    resultModel = session
+    resultModel = session                  // process scripts
                     .CompileSubmission<dynamic>(script)
                     .Execute();
 }
