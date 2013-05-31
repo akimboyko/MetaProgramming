@@ -10,7 +10,7 @@ namespace MetaProgramming.Nemerle.Macro
     // Test macros to show difference between compile time and runtime execution
     public macro TestMacro(input)
     {
-        Console.WriteLine("Compile-time execution: {0}\n", input);
-        <[ Console.WriteLine("Run-time execution: {0}\n", $input) ]>;
+        Console.WriteLine("Compile-time execution: '{0}' of type {1}\n", input, input.GetType());
+        <[ Console.WriteLine("Run-time execution: {0} of type {1}\n", $input, $input.GetType()) ]>;
     }
 }

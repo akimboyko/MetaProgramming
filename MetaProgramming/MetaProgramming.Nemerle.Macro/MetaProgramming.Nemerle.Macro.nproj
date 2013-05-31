@@ -62,8 +62,14 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyMacro.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TestMacro.n" />
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="Fault.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
