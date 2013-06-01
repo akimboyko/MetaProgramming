@@ -258,7 +258,7 @@ a:focus {
 .impress-enabled          { pointer-events: none }
 .impress-enabled #impress { pointer-events: auto }
 
-#BuildPipeLine {
+#RuntimeProcessing {
     margin-top: 44px;
     margin-left: auto;
     position: relative;
@@ -278,12 +278,12 @@ a:focus {
     background-color:#eaedef;
 }
 
-#BuildPipeLine h1
+#RuntimeProcessing h1
 {
   text-align: center;
 }
 
-#BuildPipeLine .window { 
+#RuntimeProcessing .window { 
     width: 10em;
     height: 5em;
     padding: 1em;

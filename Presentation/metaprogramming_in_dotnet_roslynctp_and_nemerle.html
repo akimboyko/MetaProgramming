@@ -104,8 +104,6 @@
         <ul>
             <li>Scripting</li>
             <li>Code generation</li>
-            <li>Dynamic objects and λ-expression</li>
-            <li>Reflection</li>
         </ul>
     </div>
 
@@ -162,6 +160,40 @@ ISemanticModel semanticModel = await semanticModelAsync;
             <li><a href='http://bit.ly/APsample'>Installation instructions at gist.github.com: http://bit.ly/APsample</a></li>
         </ul>
     </div>
+
+    <div id="IntrospectionAdvancedSamples01" class="step" data-x="+19000" data-y="+3650" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Advanced samples</h1>
+        </div>
+
+        <div id="IntrospectionAdvancedSamples02" class="step" data-x="+19000" data-y="+3700" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li><code class="inlineCode">IEnumerable&lt;T&gt;</code> or <code class="inlineCode">IQuerable&lt;T&gt;</code></li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionAdvancedSamples03" class="step" data-x="+19000" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Constructor-over injection or <code class="inlineCode">new</code> in constructor</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionAdvancedSamples04" class="step" data-x="+19000" data-y="+3800" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Singletons</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionAdvancedSamples05" class="step" data-x="+19000" data-y="+3850" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Verify declarative <code class="inlineCode">[Attribute]</code> composition</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionAdvancedSamples06" class="step" data-x="+19000" data-y="+3900" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li><code class="inlineCode">DateTime.Now()</code></li>
+            </ul>
+        </div>
 
     <!-- Demo 02 -->
 
@@ -222,11 +254,55 @@ Console.WriteLine(engine.GetType());
         <ul>
             <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP.Tests/RuntimeTextTemplateTests.cs'>Runtime template transformation</a></li>
             <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP/CodeAsData.cs'>Code-as-Data</a></li>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP/RuntimeTextTemplate.tt'>T4 template for DTO</a></li>
         </ul>
     </div>
 
-    <div id="DemoScript03Schema" class="step" data-x="+22000" data-y="+750" data-scale="1">
-        <p>TBD: Add schema</p>
+    <div id="DemoScript03Schema" class="step" data-x="+22000" data-y="750" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Roslyn CTP and T4: runtime processing</h1>
+        <div id="RuntimeProcessing">
+            
+            <!-- DTO -->
+
+            <div class="window" id="DtoJson" style="left: 25px; top: 25px;">
+                <em>DTO types description .json</em>
+            </div>
+
+            <div class="window" id="RuntimeT4" style="left: 25px; top: 225px;">
+                <strong>Runtime T4 creates C# code</strong>
+            </div>
+
+            <div class="window" id="RoslynDynamicAssembly" style="left: 25px; top: 425px;">
+                <strong>Roslyn compiles assembly</strong>
+            </div>
+
+            <!-- scripting -->
+
+            <div class="window" id="ScriptJson" style="left: 325px; top: 25px;">
+                <em>Script.json</em>
+            </div>
+
+            <div class="window" id="RoslynCreatesCubmission" style="left: 325px; top: 225px;">
+                <strong>Roslyn creates submission</strong>
+            </div>
+
+            <!-- Input -->
+
+            <div class="window" id="InputJson" style="left: 625px; top: 25px;">
+                <em>Input.json</em>
+            </div>
+
+            <!-- Processing -->
+
+            <div class="window" id="AppDomain" style="left: 325px; top: 425px;">
+                <strong>.Net App Domain</strong>
+            </div>
+
+            <div class="window" id="Processing" style="left: 625px; top: 425px;">
+                <strong>Processing</strong>
+            </div>
+            
+        </div>
     </div>
 
     <!-- Demo 04 -->
@@ -281,7 +357,10 @@ Console.WriteLine(engine.GetType());
 
     <div id="NemerleCompileTimeMacros" class="step" data-x="+32000" data-y="0" data-scale="1">
         <h1>Compile-time macros</h1>
-        <p>with possibility to modify Abstract Syntax Tree during compilation</p>
+        <h2>with possibility to modify Abstract Syntax Tree during compilation</h2>
+        <p>You can think about macros as of a system of compile-time transformations and automatic generation of code with regard to some rules
+            <br/>
+            by <a href='http://nemerle.org/'>Nemerle.org</a></p>
     </div>
 
     <div id="NemerleCompileTimeMacrosVsRuntime" class="step" data-x="+32000" data-y="+750" data-scale="1">
@@ -396,14 +475,34 @@ Console.WriteLine(engine.GetType());
     <p>Use a spacebar or arrow keys to navigate</p>
 </div>
 
-<script>
-if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
-}
-</script>
+    <script>
+    if ("ontouchstart" in document.documentElement) { 
+        document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    }
+    </script>
 
-<script src="js/impress.js"></script>
-<script>impress().init();</script>
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js">
+    </script>
 
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js">
+    </script>
+
+    <script type="text/javascript" 
+            src="http://jsplumbtoolkit.com/js/jquery.jsPlumb-1.4.0-all-min.js">
+    </script>
+
+    <script type="text/javascript"
+            src="js/metaprogramming_roslyn.js">
+    </script>
+
+    <script src="js/impress.js"></script>
+
+    <script>
+        jsPlumb.bind("ready", function() {
+            impress().init();
+        });
+    </script>
 </body>
 </html>
