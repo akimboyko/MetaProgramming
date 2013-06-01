@@ -1,0 +1,36 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using MetaProgramming.Nemerle.Macro;
+
+namespace MetaProgramming.Nemerle
+{
+    public partial class FaultKeywordSample
+    {
+        public ExecuteFaultCSharpNemerle(body : Func[string], onFault : Action, onFinally : Action) : string
+        {
+            mutable result : string = null;
+            
+            try
+            {
+                result = body();
+            }
+            fault // here is a _new keyword_ `fault` only executed after exceptions
+            {
+                onFault();
+            }
+            finally
+            {
+                onFinally();
+            }
+            
+            result;
+        }
+    }
+}

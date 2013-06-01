@@ -1,0 +1,556 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Metaprogramming in .NET: Microsoft® “Roslyn” CTP and Nemerle by @AkimBoyko</title>
+    
+    <meta name="description" content="Metaprogramming in .NET: “Roslyn” CTP and Nemerle by Akim Boyko" />
+    <meta name="author" content="Akim Boyko" />
+
+    <link href="css/metaprogramming_roslyn_and_nemerle.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+
+    <!-- Title -->
+
+    <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+        <h1>Metaprogramming in .NET</h1>
+        <h2>“Roslyn” CTP and Nemerle</h2>
+        <div class='right'>
+                <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">MetaProgramming@GitHub</a></p>
+                <p><img style='width:150px; height: auto;' 
+                        src='images\itera_logo.png'
+                        alt='Itera logo' /></p>
+            </div>
+    </div>
+
+    <!-- Intro -->
+
+    <div id="WordsDefinitions" class="step" data-x="+2000" data-y="0" data-scale="1">
+        <p><strong>μετά</strong>: after, beyond, self, adjacent</p>
+        <p><strong>metaprogramming</strong>: The classic definition for a metaprogram is “a computer program that writes new computer programs”
+            <br/>
+            by <em>@KevinHazzard</em> and <em>@JasonBock</em></p>
+    </div>
+
+    <!-- JavaScript sample -->
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample" class="step" data-x="+3000" data-y="0" data-scale="1">
+        <p>JavaScript <code class="inlineCode">eval()</code> as metaprogramming example</p>
+        <p>from Metaprogramming in .Net by <em>@KevinHazzard</em> and <em>@JasonBock</em></p>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample01" class="step" data-x="+3000" data-y="0" data-z="-3000" data-scale="1">
+        <p>Initial state</p>
+        <div class="center"><img src='images/JavaScriptMetaprogrammingViaScripting_00_Begin.png' alt="JavaScript Metaprogramming via Scripting" /></div>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample02" class="step" data-x="+3000" data-y="0"  data-z="-6000" data-scale="1">
+        <p>Simple multiplication</p>
+        <div class="center"><img src='images/JavaScriptMetaprogrammingViaScripting_02_UseFunctionDynamicly.png' alt="Use Function Dynamicly" /></div>
+    </div>
+
+    <div id="JavaScriptEvalAsMetaprogrammingExample03" class="step" data-x="+3000" data-y="0"  data-z="-9000" data-scale="1">
+        <p>Injection values into local execution scope</p>
+        <div class="center"><img src='images/JavaScriptMetaprogrammingViaScripting_03_InjectionValuesIntoLocalExecutionScope.png' alt="Injection Values into Local Execution Scope" /></div>
+    </div>
+
+    <!-- C# is multiparadigm language -->
+
+    <div id="AndersHejlsbergCitation" class="step" data-x="+6000" data-y="0" data-scale="1">
+        <h1>C# is <strong>multiparadigm</strong> language</h1>
+        <p>Languages are losing their classifications</p>
+        <p><em>Anders Hejlsberg</em> talk about C# 3.0</p>
+        <ul>
+            <li><strong>object-oriented</strong>: class-based and statically typed</li>
+            <li><strong>imperative</strong></li>
+            <li><strong>C# 2.0</strong>: generic programming</li>
+            <li><strong>C# 3.0</strong>: functional/declarative: <code class="inlineCode">LINQ</code>, <code class="inlineCode">Rx</code></li>
+            <li><strong>C# 4.0</strong>: dynamic: <code class="inlineCode">DLR</code>, <code class="inlineCode">microORM</code></li>
+        </ul>
+    </div>
+
+    <div id="CompilersAreBlackBoxes" class="step" data-x="+10000" data-y="0" data-scale="1">
+        <h1>Compilers are black boxes</h1>
+        <p>Applying this technique leads to a <strong>self-hosting compiler</strong>.</p>
+        <div class="center">
+            <img style='width:850px; height: auto;' src='images\roslyn_ctp_compiler_pipeline_api_and_services.png' alt='Roslyn CTP: compiler pipeline, API and services' />
+        </div>
+    </div>
+
+    <!-- Roslyn -->
+
+    <div id="CompilerAsService" class="step" data-x="+15500" data-y="-150"  data-rotate="-90" data-scale="1">
+        <h1><strong>Compiler as a Service</strong></h1>
+    </div>
+
+    <div id="MetaprogrammingByList" class="step" data-x="+16000" data-y="0" data-scale="1">
+        <h1><strong>Metaprogramming by …</strong></h1>
+        <ul>
+            <li>Scripting</li>
+            <li>Code generation</li>
+        </ul>
+    </div>
+
+    <!-- Demo 01 -->
+
+    <div id="Demo01InternalsSyntaxTreesAndHostEnvironment" class="step" data-x="+19000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #01</strong></p>
+        <p><a href='images\RoslynSyntaxTree_00.png'>Syntax/Semantic tree tree sample from Roslyn</a></p>
+    </div>
+
+    <div id="CSharpSampleForReturnNull" class="step" data-x="+19000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+            <h1>C# code and syntax tree</h1>
+            <p>From Roslyn CTP</p>
+            <div class="code"><pre class="code_block"><span style="color: #0000ff">public</span> <span style="color: #2b91af">object</span> ReturnNullReferenceType()
+{
+    <span style="color: #0000ff">return</span> <span style="color: #0000ff">null</span>;
+}</pre></div>
+            <div class="center"><img src='.\images\roslyn_syntax_tree_for_return_null.png' alt='Roslyn syntax tree sample'/></div>
+    </div>
+    
+    <div id="IntrospectionSearchReturnNullSimple" class="step" data-x="+19000" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Search for <code class="inlineCode">return null;</code></h1>
+        <div class="code">
+            <pre class="code_block">Func&lt;StatementSyntax, <span style="color: #2b91af">bool</span>&gt; returnNullStatement =
+    PredicateBuilder
+        .True&lt;StatementSyntax&gt;()
+        <span style="color: #008000">// all return statements</span>
+        .And(s =&gt; s <span style="color: #0000ff">is</span> ReturnStatementSyntax)
+        <span style="color: #008000">// with expression</span>
+        .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression != <span style="color: #0000ff">null</span>)
+        <span style="color: #008000">// with expression &quot;null&quot;</span>
+        .And(s =&gt; (s <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression.Kind == SyntaxKind.NullLiteralExpression)
+            .Compile();</pre></div>
+    </div> 
+
+    <div id="IntrospectionSearchReturnNullSemanticAnalysis" class="step" data-x="+19000" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Search for <code class="inlineCode">return default(T);</code></h1>
+        <p>Where <code class="inlineCode">T</code> is reference type</p>
+        <div class="code">
+            <pre class="code_block">ExpressionSyntax expressionSyntax = (statement <span style="color: #0000ff">as</span> ReturnStatementSyntax).Expression;
+
+ISemanticModel semanticModel = await semanticModelAsync;
+
+<span style="color: #0000ff">return</span> expressionSyntax != <span style="color: #0000ff">null</span> &amp;&amp;
+ (semanticModel.GetTypeInfo(expressionSyntax).Type == <span style="color: #0000ff">null</span>
+     || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
+    </div>
+
+    <div id="IntrospectionInstructions" class="step" data-x="+19000" data-y="+3000" data-scale="1">
+        <p>Installation instruction for introspection sample</p>
+        <ul>
+            <li><a href='http://chocolatey.org/'>How to setup Chocolatey</a></li>
+            <li><a href='http://chocolatey.org/packages/ScriptCs'>How to setup ScriptCS</a></li>
+            <li><a href='http://bit.ly/APsample'>Installation instructions at gist.github.com: http://bit.ly/APsample</a></li>
+        </ul>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples01" class="step" data-x="+19000" data-y="+3650" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Advanced samples</h1>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples02" class="step" data-x="+19000" data-y="+3700" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li><code class="inlineCode">IEnumerable&lt;T&gt;</code> or <code class="inlineCode">IQuerable&lt;T&gt;</code></li>
+        </ul>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples03" class="step" data-x="+19000" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Constructor-over injection or <code class="inlineCode">new</code> in constructor</li>
+        </ul>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples04" class="step" data-x="+19000" data-y="+3800" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Singletons</li>
+        </ul>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples05" class="step" data-x="+19000" data-y="+3850" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Verify declarative <code class="inlineCode">[Attribute]</code> composition</li>
+        </ul>
+    </div>
+
+    <div id="IntrospectionAdvancedSamples06" class="step" data-x="+19000" data-y="+3900" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li><code class="inlineCode">DateTime.Now()</code></li>
+        </ul>
+    </div>
+
+    <!-- Demo 02 -->
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynAndScriptCS" class="step" data-x="+20000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #02</strong></p>
+        <p>Scripting: <a href='images\JavaScript_Eval_vs_Roslyn_ScriptEngine.png'>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn and ScriptCS</a></p>
+        <ul>
+            <li><a href='http://chocolatey.org/'>How to setup Chocolatey</a></li>
+            <li><a href='http://chocolatey.org/packages/ScriptCs'>How to setup ScriptCS</a></li>
+            <li><a href='http://bit.ly/RoslynEval'>Installation instructions at gist.github.com: http://bit.ly/RoslynEval</a></li>
+        </ul>
+    </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynCode" class="step" data-x="+20000" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
+        <h1>`<code class="inlineCode">eval()</code>`-like for C# using Roslyn</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #2b91af">var</span> scripts = <span style="color: #0000ff">new</span> []
+    {
+        System.Console.ReadLine(),         <span style="color: #008000">//fromValue:</span>
+        System.Console.ReadLine()          <span style="color: #008000">//formula:</span>
+    };
+
+<span style="color: #2b91af">var</span> engine = <span style="color: #0000ff">new</span> ScriptEngine();           <span style="color: #008000">// create script engine</span>
+
+Array.ForEach(                             <span style="color: #008000">// add references to assembiles</span>
+    <span style="color: #0000ff">new</span>[] { <span style="color: #0000ff">typeof</span>(<span style="color: #2b91af">object</span>).Assembly, GetType().Assembly },
+    @assembly =&gt; engine.AddReference(@assembly));
+
+Array.ForEach(                             <span style="color: #008000">// import namespaces</span>
+    <span style="color: #0000ff">new</span>[] { <span style="color: #a31515">&quot;System&quot;</span> },
+    @namespace =&gt; engine.ImportNamespace(@namespace));    
+
+Console.WriteLine(engine.GetType());
+
+<span style="color: #2b91af">var</span> session = engine.CreateSession();      <span style="color: #008000">// create session</span>
+
+<span style="color: #2b91af">object</span> resultModel = <span style="color: #0000ff">null</span>;
+
+<span style="color: #008000">// INFO: scripts are using same session</span>
+<span style="color: #0000ff">foreach</span>(<span style="color: #2b91af">var</span> script <span style="color: #0000ff">in</span> scripts)
+{
+    resultModel = session                 <span style="color: #008000">// process scripts</span>
+                    .CompileSubmission&lt;<span style="color: #2b91af">object</span>&gt;(script)
+                    .Execute();
+}</pre></div>
+    </div>
+
+    <div id="DemoScript02EvalForCSharpUsingRoslynScreenShot" class="step" data-x="+20000" data-y="+1500" data-scale="1">
+        <p>ScriptCS execution sample</p>
+        <div class="center"><img src='images\scriptcs_execution_screenshot.png' alt="ScriptCS execution sample" /></div>
+    </div>
+
+    <!-- Demo 03 -->
+
+    <div id="DemoScript03RoslynAndT4" class="step" data-x="+22000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #03</strong></p>
+        <p>Code-as-Data: Roslyn and T4</p>
+        <ul>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP.Tests/RuntimeTextTemplateTests.cs'>Runtime template transformation</a></li>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP/CodeAsData.cs'>Code-as-Data</a></li>
+            <li><a href='https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.RoslynCTP/RuntimeTextTemplate.tt'>T4 template for DTO</a></li>
+        </ul>
+    </div>
+
+    <div id="DemoScript03Schema" class="step" data-x="+22000" data-y="750" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Roslyn CTP and T4: runtime processing</h1>
+        <div id="RuntimeProcessing">
+            
+            <!-- DTO -->
+
+            <div class="window" id="DtoJson" style="left: 25px; top: 25px;">
+                <em>DTO types description .json</em>
+            </div>
+
+            <div class="window" id="RuntimeT4" style="left: 25px; top: 225px;">
+                <strong>Runtime T4 creates C# code</strong>
+            </div>
+
+            <div class="window" id="RoslynDynamicAssembly" style="left: 25px; top: 425px;">
+                <strong>Roslyn compiles assembly</strong>
+            </div>
+
+            <!-- scripting -->
+
+            <div class="window" id="ScriptJson" style="left: 325px; top: 25px;">
+                <em>Script.json</em>
+            </div>
+
+            <div class="window" id="RoslynCreatesCubmission" style="left: 325px; top: 225px;">
+                <strong>Roslyn creates submission</strong>
+            </div>
+
+            <!-- Input -->
+
+            <div class="window" id="InputJson" style="left: 625px; top: 25px;">
+                <em>Input.json</em>
+            </div>
+
+            <!-- Processing -->
+
+            <div class="window" id="AppDomain" style="left: 325px; top: 425px;">
+                <strong>.Net App Domain</strong>
+            </div>
+
+            <div class="window" id="Processing" style="left: 625px; top: 425px;">
+                <strong>Processing</strong>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Demo 04 -->
+
+    <div id="DemoScript04ConvertCodeWrittenOnOneLanguageToAnother" class="step" data-x="+23000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #04</strong></p>
+        <p>Code-as-Data: Convert code written in one language to another</p>
+        <p><a href='images\CodeAsData_ConvertVBtoCSharp.png'>VB → C# and back again</a></p>
+    </div>
+
+    <!-- Notes -->
+
+    <div id="Note01MefAndDsl" class="step" data-x="+26000" data-y="0" data-scale="1">
+        <p><strong>Note about "Code-as-Data"</strong></p>
+        <ul>
+            <li>Roslyn vs. MEF</li>
+            <li>Roslyn vs. DSL</li>
+        </ul>
+    </div>
+
+    <div id="Note02Lambda" class="step" data-x="+26000" data-y="+750" data-scale="1">
+        <p><strong>Note about "Dynamic" programming</strong></p>
+        <ul>
+            <li>Roslyn vs. λ-expression and DLR</li>
+            <li>Assembly vs. <code class='inlineCode'>DynamicMethod</code></li>
+        </ul>
+    </div>
+
+    <!-- Corner cases -->
+
+    <div id="CornerCases" class="step" data-x="+28500" data-y="-250"  data-rotate="-90" data-scale="1">
+        <h1><strong>Corner cases</strong></h1>
+    </div>
+
+    <div id="CornerCasesList01" class="step" data-x="+29000" data-y="0" data-scale="1">
+        <ul>
+            <li>Roslyn could not decompile IL</li>
+            <li>Breaking changes with compilers</li>
+            <li><code class="inlineCode">dynamic</code> keyword support</li>
+            <li><code class="inlineCode">async/await</code> keywords</li>
+            <li>Implementation issues of current version</li>
+            <li>Support: <em>Dustin Campbell</em>, <em>Eric Lippert</em>, <em>Kevin Pilch-Bisson</em> and whole team!</li>
+            <li><u>Roslyn CTP license limitations</u></li>
+        </ul>
+    </div>
+
+    <!-- Nemerle -->
+
+    <div id="Nemerle" class="step" data-x="+31500" data-y="-300"  data-rotate="-90" data-scale="1">
+        <h1><strong>Nemerle</strong></h1>
+    </div>
+
+    <div id="NemerleCompileTimeMacros" class="step" data-x="+32000" data-y="0" data-scale="1">
+        <h1>Compile-time macros</h1>
+        <h2>with possibility to modify Abstract Syntax Tree during compilation</h2>
+        <p>You can think about macros as of a system of compile-time transformations and automatic generation of code with regard to some rules
+            <br/>
+            by <a href='http://nemerle.org/'>Nemerle.org</a></p>
+    </div>
+
+    <div id="NemerleCompileTimeMacrosVsRuntime" class="step" data-x="+32000" data-y="+750" data-scale="1">
+        <h1>Nemerle macro: compile- with run- time execution</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #008000">// Test macros to show difference between compile time and runtime execution</span>
+<span style="color: #0000ff">public macro</span> TestMacro(inputAST)
+{
+    Console.WriteLine(<span style="color: #a31515">&quot;Compile-time execution: &#39;{0}&#39; of type {1}\n&quot;</span>, 
+                            inputAST, inputAST.GetType());
+                            
+    &lt;[ Console.WriteLine(<span style="color: #a31515">&quot;Run-time execution: {0} of type {1}\n&quot;</span>, 
+                            <span style="border: 1px solid #FF0000">$</span>inputAST, <span style="border: 1px solid #FF0000">$</span>inputAST.GetType()) ]&gt;;
+}</pre></div>
+
+        <h2>Expected console output during build</h2>
+        <div class="center">
+            <img style='width:850px; height: auto;' src='images\nemerle_compiletime_macro_execution.png' alt='nemerle compiletime macro execution' />
+        </div>
+    </div>
+
+    <div id="NemerleNewSyntaxKeyword" class="step" data-x="+32000" data-y="+1500" data-scale="1">
+        <h1>New keyword <code class="inlineCode">fault</code></h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #0000ff">try</span>
+{
+    result = body();
+}
+<span style="color: #0000ff">fault</span> <span style="color: #008000">// here is a _new keyword_ `fault` only executed after exceptions</span>
+{
+    onFault();
+}
+<span style="color: #0000ff">finally</span>
+{
+    onFinally();
+}
+</pre></div>
+    </div>
+
+    <div id="NemerleNewSyntaxMacroDefinition" class="step" data-x="+32000" data-y="+2250" data-scale="1">
+        <h1><code class="inlineCode">fault</code> macro definition</h1>
+        <div class="code">
+            <pre class="code_block"><span style="color: #0000ff">macro</span> execute(body, actionOnFault, actionOnFinally) 
+<span style="color: #0000ff">syntax</span> (
+    <span style="color: #a31515">&quot;try&quot;</span>,
+        body,
+    <span style="color: #a31515">&quot;fault&quot;</span>,
+        actionOnFault,
+    <span style="color: #a31515">&quot;finally&quot;</span>,
+        actionOnFinally) 
+{
+    &lt;[
+        <span style="color: #0000ff">try</span>
+        {
+            <span style="border: 1px solid #FF0000">$</span>body;
+        }
+        <span style="color: #0000ff">catch</span>
+        {
+            | e <span style="color: #0000ff">is</span> System.Exception =&gt; { <span style="border: 1px solid #FF0000">$</span>actionOnFault; <span style="color: #0000ff">throw</span>; }
+        }
+        <span style="color: #0000ff">finally</span>
+        {
+            <span style="border: 1px solid #FF0000">$</span>actionOnFinally;
+        }
+    ]&gt;
+}</pre></div>
+
+    </div>
+
+    <div id="NemerleAdvancedSamples01" class="step" data-x="+32000" data-y="+2900" data-z="0" data-rotate="0" data-scale="1">
+        <h1>Advanced samples</h1>
+    </div>
+
+    <div id="NemerleAdvancedSamples02" class="step" data-x="+32000" data-y="+2950" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Design by contract</li>
+        </ul>
+    </div>
+
+    <div id="NemerleAdvancedSamples03" class="step" data-x="+32000" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Compile-time validation</li>
+        </ul>
+    </div>
+
+    <div id="NemerleAdvancedSamples04" class="step" data-x="+32000" data-y="+3050" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Domain-specific language</li>
+        </ul>
+    </div>
+
+    <div id="NemerleAdvancedSamples05" class="step" data-x="+32000" data-y="+3100" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Partial evaluation</li>
+        </ul>
+    </div>
+
+    <div id="NemerleAdvancedSamples06" class="step" data-x="+32000" data-y="+3150" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Concurrency constructs</li>
+        </ul>
+    </div>
+
+    <div id="NemerleAdvancedSamples07" class="step" data-x="+32000" data-y="+3200" data-z="0" data-rotate="0" data-scale="1">
+        <ul>
+            <li>Aspects-Oriented programming</li>
+        </ul>
+    </div>
+
+    <!-- Notes -->
+
+    <div id="NemerleNote03" class="step" data-x="+32000" data-y="+3750" data-scale="1">
+        <p><strong>Note about Nemerle</strong></p>
+        <ul>
+            <li>Nemerle macro could manipulate AST, similar to Roslyn</li>
+            <li>Nemerle implements <em>only</em> C# 3.5 syntax</li>
+            <li><code class="inlineCode">dynamic</code> keyword not supported</li>
+            <li><code class="inlineCode">async/await</code> keywords not supported</li>
+            <li>Syntax extension are not allowed in C# code, only at Nemerle</li>
+            <li>All other non-syntax extension are allowed both in C# and Nemerle code</li>
+        </ul>
+    </div>
+
+    <!-- References -->
+
+    <div id="References01" class="step" data-x="+35000" data-y="0" data-scale="1">
+        <ul style="">
+            <li><strong><a href='http://msdn.microsoft.com/en-us/hh500769'>The Roslyn Project</a></strong></li>
+            <li><strong><a href='http://www.manning.com/hazzard/'>Metaprogramming in .NET by <em>@KevinHazzard</em> and <em>@JasonBock</em></a></strong></li>
+            <li><a href='http://deepfriedbytes.com/podcast/episode-92-discussing-metaprogramming-with-kevin-hazzard/'>DeepFriedBytes #92: Discussing Metaprogramming with <em>@KevinHazzard</em></a></li>
+
+            
+            <li><a href='http://scriptcs.net/'>ScriptCS by <em>@GBlock</em> and others</a></li>
+            <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=853'>DotNetRocks #853: <em>@GBlock</em> Goes Open Source with ScriptCS and others</a></li>
+            <li><a href='http://herdingcode.com/herding-code-167-glenn-block-on-scriptcs/'>Herding Code #167: <em>@GBlock</em> on ScriptCS</a></li>
+
+        </ul>
+    </div>
+
+    <div id="References02" class="step" data-x="+35000" data-y="+750" data-scale="1">
+        <ul>
+            <li><a href='http://channel9.msdn.com/'>Microsoft Channel9</a></li>
+            <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=649'>DotNetRocks #649: <em>@/EricLippert</em> Talks About Project Roslyn</a></li>
+            <li><a href='http://deepfriedbytes.com/podcast/episode-81-looking-at-the-next-net-compilers-aka-ldquo-roslyn-rdquo-project/'>DeepFriedBytes #81: Looking at the Next .NET Compilers AKA “Roslyn” Project with <em>@pilchie</em></a></li>
+            <li><a href='http://herdingcode.com/herding-code-146-shay-friedman-on-roslyn-ironruby-and-the-dlr/'>Herding Code #146: <em>@ironshay</em> on Roslyn, IronRuby and THE DLR</a></li>
+        </ul>
+    </div>
+
+    <div id="References03" class="step" data-x="+35000" data-y="+1500" data-scale="1">
+        <ul>
+            <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=704'>DotNetRocks #704: <em>@PhilipLaureano</em> Programs In Nemerle</a></li>
+            <li><a href='http://vimeo.com/43612919'>@PhilipLaureano — I Can't Believe It's Not Roslyn — Using Nemerle Macros to extend the C# Language</a></li>
+            <li><a href='http://vimeo.com/43690661'>Igor Tkachev - Metaprogramming with Nemerle</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+
+    <script>
+    if ("ontouchstart" in document.documentElement) { 
+        document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    }
+    </script>
+
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js">
+    </script>
+
+    <script type="text/javascript"
+            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js">
+    </script>
+
+    <script type="text/javascript" 
+            src="http://jsplumbtoolkit.com/js/jquery.jsPlumb-1.4.0-all-min.js">
+    </script>
+
+    <script type="text/javascript"
+            src="js/metaprogramming_roslyn.js">
+    </script>
+
+    <script src="js/impress.js"></script>
+
+    <script>
+        jsPlumb.bind("ready", function() {
+            impress().init();
+        });
+    </script>
+</body>
+</html>
