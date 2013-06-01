@@ -38,3 +38,10 @@ MetaProgramming .Net samples
   * [Full sample with `yeild return null;`, `default(T)` and value/reference types check is here](https://github.com/akimboyko/MetaProgramming/blob/7d4d8533d2be673fad2fbad37bb4d7a75399519a/MetaProgramming/MetaProgramming.RoslynCTP/Introspection.cs)
 * Using `System.Reflection` to limit dependencies of assemblies
   * [Test dependencies of assemblies intersection](/Snippets/Reflection-TestReferencesIntersection.linq)
+
+#Nemerle: compile-time macro
+* Nemerle macro: compile- with run- time execution
+  * [compile-time macro](https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.Nemerle.Macro/TestMacro.n)
+  * [compile-time macro usage](https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.Nemerle/CompileTimeVsRunTimeExecutionSample.n)
+  * [introduce new syntax keyword `fault`](https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.Nemerle.Macro/Fault.n)
+  * [new syntax keyword `fault` usage](https://github.com/akimboyko/MetaProgramming/blob/master/MetaProgramming/MetaProgramming.Nemerle/FaultKeywordSample.n)
