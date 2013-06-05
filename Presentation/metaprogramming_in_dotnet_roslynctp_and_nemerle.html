@@ -356,8 +356,7 @@ Console.WriteLine(engine.GetType());
     </div>
 
     <div id="NemerleCompileTimeMacros" class="step" data-x="+32000" data-y="0" data-scale="1">
-        <h1>Compile-time macros</h1>
-        <h2>with possibility to modify Abstract Syntax Tree during compilation</h2>
+        <h1>Compile-time metaprogramming using macros</h1>
         <p>You can think about macros as of a system of compile-time transformations and automatic generation of code with regard to some rules
             <br/>
             by <a href='http://nemerle.org/'>Nemerle.org</a></p>
@@ -478,7 +477,7 @@ Console.WriteLine(engine.GetType());
             <li>Nemerle macro could manipulate AST, similar to Roslyn</li>
             <li>Nemerle implements <em>only</em> C# 3.5 syntax</li>
             <li><code class="inlineCode">dynamic</code> keyword not supported</li>
-            <li><code class="inlineCode">async/await</code> keywords not supported</li>
+            <li><code class="inlineCode">async/await</code> keywords for Nemerle 1.1 and .NET 4.0.</li>
             <li>Syntax extension are not allowed in C# code, only at Nemerle</li>
             <li>All other non-syntax extension are allowed both in C# and Nemerle code</li>
         </ul>
