@@ -26,15 +26,19 @@ void Main()
         var fileSystem = kernel.Get<ScriptCs.IFileSystem>();
         var packageAssemblyResolver = kernel.Get<IPackageAssemblyResolver>();
         var packageInstaller = kernel.Get<IPackageInstaller>();
+        var scriptPackResolver = kernel.Get<IScriptPackResolver>();
         var scriptExecutor = kernel.Get<IScriptExecutor>();
     
         try
         {
-            var nuGetReferences = PreparePackages(fileSystem, packageAssemblyResolver, packageInstaller, logger.Info);
+            var nuGetReferences = PreparePackages(
+                                    fileSystem, packageAssemblyResolver,
+                                    packageInstaller, logger.Info);
             
-            scriptExecutor.Execute(
-                                scriptPath,
-                                nuGetReferences, Enumerable.Empty<IScriptPack>());
+            var scriptPacks = scriptPackResolver.GetPacks();
+            // var scriptPacks = Enumerable.Empty<IScriptPack>();
+            
+            scriptExecutor.Execute(scriptPath, nuGetReferences, scriptPacks);
         }
         catch(Exception ex)
         {
@@ -72,7 +76,7 @@ private static IEnumerable<string> PreparePackages(
             outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
         }
         
-        yield return assemblyName;
+        yield return destFile;
     }
 }
 
@@ -131,5 +135,9 @@ public class ScriptModule : NinjectModule
         Bind<IPackageManager>()
             .To<PackageManager>()
             .InSingletonScope();   
+            
+        Bind<IScriptPackResolver>()
+            .To<ScriptPackResolver>()
+            .InSingletonScope();
     }
 }
