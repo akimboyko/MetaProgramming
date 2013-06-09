@@ -28,15 +28,23 @@ void Main()
         var packageInstaller = kernel.Get<IPackageInstaller>();
         var scriptExecutor = kernel.Get<IScriptExecutor>();
     
-        PreparePackages(fileSystem, packageAssemblyResolver, packageInstaller, logger.Info);
-        
-        scriptExecutor.Execute(
-                            scriptPath,
-                            Enumerable.Empty<string>(), Enumerable.Empty<IScriptPack>());
+        try
+        {
+            var nuGetReferences = PreparePackages(fileSystem, packageAssemblyResolver, packageInstaller, logger.Info);
+            
+            scriptExecutor.Execute(
+                                scriptPath,
+                                nuGetReferences, Enumerable.Empty<IScriptPack>());
+        }
+        catch(Exception ex)
+        {
+            logger.Error(ex);
+            throw;
+        }
     }
 }
 
-private static void PreparePackages(
+private static IEnumerable<string> PreparePackages(
                         ScriptCs.IFileSystem fileSystem, IPackageAssemblyResolver packageAssemblyResolver,
                         IPackageInstaller packageInstaller, Action<string> outputCallback = null)
 {
@@ -51,8 +59,8 @@ private static void PreparePackages(
         fileSystem.CreateDirectory(binDirectory);
     }
 
-    foreach(var assemblyName in packageAssemblyResolver
-                                .GetAssemblyNames(workingDirectory, outputCallback))
+    foreach(var assemblyName 
+                in packageAssemblyResolver.GetAssemblyNames(workingDirectory, outputCallback))
     {
         var assemblyFileName = Path.GetFileName(assemblyName);
         var destFile = Path.Combine(binDirectory, assemblyFileName);
@@ -61,8 +69,10 @@ private static void PreparePackages(
         
         if(outputCallback != null)
         {
-            outputCallback(string.Format("Copy: '{0}' into '{1}'", assemblyName, binDirectory));
+            outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
         }
+        
+        yield return assemblyName;
     }
 }
 
