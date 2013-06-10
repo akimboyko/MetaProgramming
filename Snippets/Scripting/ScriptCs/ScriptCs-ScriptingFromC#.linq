@@ -69,12 +69,22 @@ private static IEnumerable<string> PreparePackages(
         var assemblyFileName = Path.GetFileName(assemblyName);
         var destFile = Path.Combine(binDirectory, assemblyFileName);
     
-        fileSystem.Copy(assemblyName, destFile, overwrite: true);
-        
-        if(outputCallback != null)
+        var sourceFileLastWriteTime = fileSystem.GetLastWriteTime(assemblyName);
+        var destFileLastWriteTime = fileSystem.GetLastWriteTime(destFile);
+
+        if (sourceFileLastWriteTime == destFileLastWriteTime)
         {
-            outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
+             outputCallback(string.Format("Skipped: '{0}' because it is already exists", assemblyName));
         }
+        else
+        {
+            fileSystem.Copy(assemblyName, destFile, overwrite: true);
+            
+            if(outputCallback != null)
+            {
+                outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
+            }
+        }        
         
         yield return destFile;
     }
