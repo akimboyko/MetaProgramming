@@ -1,153 +1,209 @@
 <Query Kind="Program">
+  <NuGetReference>Autofac</NuGetReference>
   <NuGetReference>Common.Logging</NuGetReference>
-  <NuGetReference>Ninject</NuGetReference>
   <NuGetReference>Nuget.Core</NuGetReference>
   <NuGetReference>ScriptCs.Core</NuGetReference>
   <NuGetReference>ScriptCs.Engine.Roslyn</NuGetReference>
   <Namespace>Common.Logging</Namespace>
   <Namespace>Common.Logging.Simple</Namespace>
-  <Namespace>Ninject</Namespace>
-  <Namespace>Ninject.Modules</Namespace>
+  <Namespace>NuGet</Namespace>
   <Namespace>ScriptCs</Namespace>
   <Namespace>ScriptCs.Contracts</Namespace>
   <Namespace>ScriptCs.Engine.Roslyn</Namespace>
   <Namespace>ScriptCs.Package</Namespace>
   <Namespace>ScriptCs.Package.InstallationProvider</Namespace>
-  <Namespace>NuGet</Namespace>
+  <Namespace>Autofac</Namespace>
+  <Namespace>Autofac.Core</Namespace>
 </Query>
 
 void Main()
 {
-    Environment.CurrentDirectory = workingDirectory;
+    const string scriptPath = @"D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\sample.csx";
     
-    using(var kernel = new StandardKernel(new ScriptModule()))
+    var builder = new ContainerBuilder();
+    
+    builder.RegisterModule(new ScriptModule());
+    
+    using(var container = builder.Build())
     {
-        var logger = kernel.Get<ILog>();
-        var fileSystem = kernel.Get<ScriptCs.IFileSystem>();
-        var packageAssemblyResolver = kernel.Get<IPackageAssemblyResolver>();
-        var packageInstaller = kernel.Get<IPackageInstaller>();
-        var scriptPackResolver = kernel.Get<IScriptPackResolver>();
-        var scriptExecutor = kernel.Get<IScriptExecutor>();
+        using (var scope = container.BeginLifetimeScope())
+        {
+            var logger = scope.Resolve<ILog>();
+            var executeScriptCs = scope.Resolve<ExecuteScriptCs>();
+        
+            try
+            {
+                executeScriptCs.Run(scriptPath);
+            }
+            catch(Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
+        }
+    }
+}
+
+public class ExecuteScriptCs
+{
+    private readonly ILog logger;
+    private readonly ScriptCs.IFileSystem fileSystem;
+    private readonly IPackageAssemblyResolver packageAssemblyResolver;
+    private readonly IPackageInstaller packageInstaller;
+    private readonly IScriptPackResolver scriptPackResolver;
+    private readonly IScriptExecutor scriptExecutor;
+     
+    public ExecuteScriptCs(ILog logger, ScriptCs.IFileSystem fileSystem, 
+                            IPackageAssemblyResolver packageAssemblyResolver, IPackageInstaller packageInstaller,
+                            IScriptPackResolver scriptPackResolver, IScriptExecutor scriptExecutor)
+    {
+        this.logger = logger;
+        this.fileSystem = fileSystem;
+        this.packageAssemblyResolver = packageAssemblyResolver;
+        this.packageInstaller = packageInstaller;
+        this.scriptPackResolver = scriptPackResolver;
+        this.scriptExecutor = scriptExecutor;
+    }
     
+    public void Run(string scriptPath)
+    {
+        var previousCurrentDirectory = Environment.CurrentDirectory;
+        
         try
         {
+            Environment.CurrentDirectory = Path.GetDirectoryName(scriptPath);
+        
             var nuGetReferences = PreparePackages(
-                                    fileSystem, packageAssemblyResolver,
-                                    packageInstaller, logger.Info);
-            
+                                            scriptPath,
+                                            fileSystem, packageAssemblyResolver,
+                                            packageInstaller, logger.Info);
+                    
             var scriptPacks = scriptPackResolver.GetPacks();
-            // var scriptPacks = Enumerable.Empty<IScriptPack>();
             
             scriptExecutor.Execute(scriptPath, nuGetReferences, scriptPacks);
         }
-        catch(Exception ex)
+        finally 
         {
-            logger.Error(ex);
-            throw;
+            Environment.CurrentDirectory = previousCurrentDirectory;
         }
     }
-}
-
-private static IEnumerable<string> PreparePackages(
-                        ScriptCs.IFileSystem fileSystem, IPackageAssemblyResolver packageAssemblyResolver,
-                        IPackageInstaller packageInstaller, Action<string> outputCallback = null)
-{
-    var packages = packageAssemblyResolver.GetPackages(workingDirectory);
     
-    packageInstaller.InstallPackages(
-                        packages,
-                        allowPreRelease: true, packageInstalled: outputCallback);
-
-    if (!fileSystem.DirectoryExists(binDirectory))
+    private static IEnumerable<string> PreparePackages(
+                            string scriptPath,
+                            ScriptCs.IFileSystem fileSystem, IPackageAssemblyResolver packageAssemblyResolver,
+                            IPackageInstaller packageInstaller, Action<string> outputCallback = null)
     {
-        fileSystem.CreateDirectory(binDirectory);
-    }
-
-    foreach(var assemblyName 
-                in packageAssemblyResolver.GetAssemblyNames(workingDirectory, outputCallback))
-    {
-        var assemblyFileName = Path.GetFileName(assemblyName);
-        var destFile = Path.Combine(binDirectory, assemblyFileName);
+        var workingDirectory = Path.GetDirectoryName(scriptPath);
+        var binDirectory = Path.Combine(workingDirectory, ScriptCs.Constants.BinFolder);
     
-        var sourceFileLastWriteTime = fileSystem.GetLastWriteTime(assemblyName);
-        var destFileLastWriteTime = fileSystem.GetLastWriteTime(destFile);
-
-        if (sourceFileLastWriteTime == destFileLastWriteTime)
+        var packages = packageAssemblyResolver.GetPackages(workingDirectory);
+        
+        packageInstaller.InstallPackages(
+                            packages,
+                            allowPreRelease: true, packageInstalled: outputCallback);
+    
+        if (!fileSystem.DirectoryExists(binDirectory))
         {
-             outputCallback(string.Format("Skipped: '{0}' because it is already exists", assemblyName));
+            fileSystem.CreateDirectory(binDirectory);
         }
-        else
+    
+        foreach(var assemblyName 
+                    in packageAssemblyResolver.GetAssemblyNames(workingDirectory, outputCallback))
         {
-            fileSystem.Copy(assemblyName, destFile, overwrite: true);
-            
-            if(outputCallback != null)
+            var assemblyFileName = Path.GetFileName(assemblyName);
+            var destFile = Path.Combine(binDirectory, assemblyFileName);
+        
+            var sourceFileLastWriteTime = fileSystem.GetLastWriteTime(assemblyName);
+            var destFileLastWriteTime = fileSystem.GetLastWriteTime(destFile);
+    
+            if (sourceFileLastWriteTime == destFileLastWriteTime)
             {
-                outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
+                outputCallback(string.Format("Skipped: '{0}' because it is already exists", assemblyName));
             }
-        }        
-        
-        yield return destFile;
+            else
+            {
+                fileSystem.Copy(assemblyName, destFile, overwrite: true);
+                
+                if(outputCallback != null)
+                {
+                    outputCallback(string.Format("Copy: '{0}' to '{1}'", assemblyName, destFile));
+                }
+            }        
+            
+            yield return destFile;
+        }
     }
 }
 
-const string scriptPath = @"D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\sample.csx";
-static readonly string workingDirectory = Path.GetDirectoryName(scriptPath);
-static readonly string binDirectory = Path.Combine(workingDirectory, ScriptCs.Constants.BinFolder);
-
-public class ScriptModule : NinjectModule
+public class ScriptModule : Autofac.Module
 {
-    public override void Load()
+    protected override void Load(ContainerBuilder builder)
     {
-        Bind<ScriptCs.IFileSystem>()
-            .To<ScriptCs.FileSystem>()
-            .InSingletonScope();
-            
-        Bind<ILog>()
-            .To<ConsoleOutLogger>()
-            .InSingletonScope()
-            .WithConstructorArgument("logName", @"Custom ScriptCs from C#")
-            .WithConstructorArgument("logLevel", Common.Logging.LogLevel.All)
-            .WithConstructorArgument("showLevel", true)
-            .WithConstructorArgument("showDateTime", true)
-            .WithConstructorArgument("showLogName", true)
-            .WithConstructorArgument("dateTimeFormat", @"yyyy-mm-dd hh:mm:ss");
-            
-        Bind<IFilePreProcessor>()
-            .To<FilePreProcessor>()
-            .InSingletonScope();
+        builder
+            .RegisterType<ScriptCs.FileSystem>()
+            .As<ScriptCs.IFileSystem>()
+            .SingleInstance();
         
-        Bind<IScriptHostFactory>()
-            .To<ScriptHostFactory>()
-            .InSingletonScope();
-            
-        Bind<IScriptEngine>()
-            .To<RoslynScriptEngine>();
-            
-        Bind<IScriptExecutor>()
-            .To<ScriptExecutor>();
-            
-        Bind<IInstallationProvider>()
-            .To<NugetInstallationProvider>()
-            .InSingletonScope();
-            
-        Bind<IPackageAssemblyResolver>()
-            .To<PackageAssemblyResolver>()
-            .InSingletonScope();
-            
-        Bind<IPackageContainer>()
-            .To<PackageContainer>()
-            .InSingletonScope();
+        builder
+            .RegisterType<ConsoleOutLogger>()
+            .As<ILog>()
+            .SingleInstance()
+            .WithParameter("logName", @"Custom ScriptCs from C#") 
+            .WithParameter("logLevel", Common.Logging.LogLevel.All)
+            .WithParameter("showLevel", true)
+            .WithParameter("showDateTime", true) 
+            .WithParameter("showLogName", true) 
+            .WithParameter("dateTimeFormat", @"yyyy-mm-dd hh:mm:ss"); 
+         
+        builder
+            .RegisterType<FilePreProcessor>()
+            .As<IFilePreProcessor>()
+            .SingleInstance();
         
-        Bind<IPackageInstaller>()
-            .To<PackageInstaller>()
-            .InSingletonScope();    
-           
-        Bind<IPackageManager>()
-            .To<PackageManager>()
-            .InSingletonScope();   
+        builder
+            .RegisterType<ScriptHostFactory>()
+            .As<IScriptHostFactory>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<RoslynScriptEngine>()
+            .As<IScriptEngine>();
             
-        Bind<IScriptPackResolver>()
-            .To<ScriptPackResolver>()
-            .InSingletonScope();
+        builder
+            .RegisterType<ScriptExecutor>()
+            .As<IScriptExecutor>();
+        
+        builder
+            .RegisterType<NugetInstallationProvider>()
+            .As<IInstallationProvider>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<PackageAssemblyResolver>()
+            .As<IPackageAssemblyResolver>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<PackageContainer>()
+            .As<IPackageContainer>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<PackageInstaller>()
+            .As<IPackageInstaller>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<PackageManager>()
+            .As<IPackageManager>()
+            .SingleInstance();
+        
+        builder
+            .RegisterType<ScriptPackResolver>()
+            .As<IScriptPackResolver>()
+            .SingleInstance();
+            
+        builder
+            .RegisterType<ExecuteScriptCs>();
     }
 }
