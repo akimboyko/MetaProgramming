@@ -4,6 +4,8 @@
   <NuGetReference>Nuget.Core</NuGetReference>
   <NuGetReference>ScriptCs.Core</NuGetReference>
   <NuGetReference>ScriptCs.Engine.Roslyn</NuGetReference>
+  <Namespace>Autofac</Namespace>
+  <Namespace>Autofac.Core</Namespace>
   <Namespace>Common.Logging</Namespace>
   <Namespace>Common.Logging.Simple</Namespace>
   <Namespace>NuGet</Namespace>
@@ -12,13 +14,12 @@
   <Namespace>ScriptCs.Engine.Roslyn</Namespace>
   <Namespace>ScriptCs.Package</Namespace>
   <Namespace>ScriptCs.Package.InstallationProvider</Namespace>
-  <Namespace>Autofac</Namespace>
-  <Namespace>Autofac.Core</Namespace>
 </Query>
 
 void Main()
 {
-    const string scriptPath = @"D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\sample.csx";
+    const string scriptPath = 
+        @"D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\EmbededScriptCsWithNuGetSupport.csx";
     
     // AutoFac container
     var builder = new ContainerBuilder();
@@ -57,8 +58,9 @@ public class ExecuteScriptCs
     private readonly IScriptExecutor scriptExecutor;
      
     public ExecuteScriptCs(ILog logger, ScriptCs.IFileSystem fileSystem, 
-                            IPackageAssemblyResolver packageAssemblyResolver, IPackageInstaller packageInstaller,
-                            IScriptPackResolver scriptPackResolver, IScriptExecutor scriptExecutor)
+                            IPackageAssemblyResolver packageAssemblyResolver, 
+                            IPackageInstaller packageInstaller, IScriptPackResolver scriptPackResolver, 
+                            IScriptExecutor scriptExecutor)
     {
         this.logger = logger;
         this.fileSystem = fileSystem;
@@ -90,7 +92,8 @@ public class ExecuteScriptCs
             var scriptPacks = scriptPackResolver.GetPacks();
             
             // execute script from file
-            scriptExecutor.Execute(scriptPath, nuGetReferences, scriptPacks);
+            scriptExecutor.Initialize(nuGetReferences, scriptPacks);
+            scriptExecutor.Execute(scriptPath);
         }
         finally 
         {
