@@ -20,8 +20,10 @@ void Main()
 {
     const string scriptPath = @"D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\sample.csx";
     
+    // AutoFac container
     var builder = new ContainerBuilder();
     
+    // register ScripotCs specific module
     builder.RegisterModule(new ScriptModule());
     
     using(var container = builder.Build())
@@ -46,6 +48,7 @@ void Main()
 
 public class ExecuteScriptCs
 {
+    // dependencies
     private readonly ILog logger;
     private readonly ScriptCs.IFileSystem fileSystem;
     private readonly IPackageAssemblyResolver packageAssemblyResolver;
@@ -65,29 +68,38 @@ public class ExecuteScriptCs
         this.scriptExecutor = scriptExecutor;
     }
     
+    // run script from file
     public void Run(string scriptPath)
     {
+        // preserve current directory
         var previousCurrentDirectory = Environment.CurrentDirectory;
         
         try
         {
+            // set directory to where script is
+            // required to find NuGet dependencies
             Environment.CurrentDirectory = Path.GetDirectoryName(scriptPath);
         
+            // prepare NuGet dependencies, download them if required
             var nuGetReferences = PreparePackages(
                                             scriptPath,
                                             fileSystem, packageAssemblyResolver,
                                             packageInstaller, logger.Info);
-                    
+            
+            // get script packs: not fully tested yet        
             var scriptPacks = scriptPackResolver.GetPacks();
             
+            // execute script from file
             scriptExecutor.Execute(scriptPath, nuGetReferences, scriptPacks);
         }
         finally 
         {
+            // restore current directory
             Environment.CurrentDirectory = previousCurrentDirectory;
         }
     }
     
+    // prepare NuGet dependencies, download them if required
     private static IEnumerable<string> PreparePackages(
                             string scriptPath,
                             ScriptCs.IFileSystem fileSystem, IPackageAssemblyResolver packageAssemblyResolver,
@@ -102,11 +114,13 @@ public class ExecuteScriptCs
                             packages,
                             allowPreRelease: true, packageInstalled: outputCallback);
     
+        // current implementeation of RoslynCTP required dependencies to be in 'bin' folder
         if (!fileSystem.DirectoryExists(binDirectory))
         {
             fileSystem.CreateDirectory(binDirectory);
         }
     
+        // copy dependencies one by one from 'packages' to 'bin'
         foreach(var assemblyName 
                     in packageAssemblyResolver.GetAssemblyNames(workingDirectory, outputCallback))
         {
@@ -135,6 +149,7 @@ public class ExecuteScriptCs
     }
 }
 
+// AutoFac configuration
 public class ScriptModule : Autofac.Module
 {
     protected override void Load(ContainerBuilder builder)
