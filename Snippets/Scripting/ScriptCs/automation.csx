@@ -1,5 +1,5 @@
-#r ".\packages\FluentAutomation.Core.2.0.0.2\lib\net40\FluentAutomation.Core.dll"
-#r ".\packages\FluentAutomation.SeleniumWebDriver.2.0.0.2\lib\net40\FluentAutomation.SeleniumWebDriver.dll"
+#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\bin\FluentAutomation.Core.dll"
+#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\bin\FluentAutomation.SeleniumWebDriver.dll"
 
 using System;
 using System.IO;
@@ -11,7 +11,7 @@ Settings.ScreenshotPath = @"d:\temp\";
 Settings.ScreenshotOnFailedExpect = false;
 Settings.ScreenshotOnFailedAction = false;
 Settings.DefaultWaitTimeout = TimeSpan.FromSeconds(1);
-Settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(3);
+Settings.DefaultWaitUntilTimeout = TimeSpan.FromSeconds(5);
 Settings.MinimizeAllWindowsOnTestStart = false;
 
 private static INativeActionSyntaxProvider I = null;
@@ -76,9 +76,11 @@ finally
 {
 	I.Dispose();
 
-	if(File.Exists(@".\bin\IEDriverServer.exe"))
+	const string ieDriverServerExeFile = @".\bin\IEDriverServer.exe";
+
+	if(File.Exists(ieDriverServerExeFile))
 	{
-	    File.Delete(@".\bin\IEDriverServer.exe");
+	    File.Delete(ieDriverServerExeFile);
 	}
 }
 
