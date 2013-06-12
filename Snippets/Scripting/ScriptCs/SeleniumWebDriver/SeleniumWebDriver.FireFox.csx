@@ -1,3 +1,4 @@
+// load all require references
 #r "System.Drawing"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.dll"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.Support.dll"
@@ -10,6 +11,7 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using FluentAssertions;
 
+// create WebDriver instance
 using (var driver = new FirefoxDriver())
 {
 	try
@@ -35,6 +37,7 @@ using (var driver = new FirefoxDriver())
 	}
 	finally
 	{
+		// create screenshot
 		driver
 			.GetScreenshot()
 			.SaveAsFile("./test_firefox.png", System.Drawing.Imaging.ImageFormat.Png);

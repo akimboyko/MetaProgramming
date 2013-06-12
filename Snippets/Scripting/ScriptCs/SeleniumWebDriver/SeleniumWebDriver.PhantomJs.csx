@@ -1,3 +1,4 @@
+// load all require references
 #r "System.Drawing"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.dll"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.Support.dll"
@@ -15,9 +16,12 @@ using FluentAssertions;
 foreach (var driver in Directory.GetFiles(Environment.CurrentDirectory, "*.exe", SearchOption.AllDirectories))
 {
 	var newFileName = Path.Combine(Environment.CurrentDirectory, "bin", Path.GetFileName(driver));
-	if (!File.Exists(newFileName)) File.Copy(driver, newFileName);
+	File.Copy(driver, newFileName);
 }
 
+const string phantomjsExeFile = @".\bin\phantomjs.exe";
+
+// create WebDriver instance
 using (var driver = new PhantomJSDriver())
 {
 	try
@@ -43,17 +47,14 @@ using (var driver = new PhantomJSDriver())
 	}
 	finally
 	{
+		// create screenshot
 		driver
 			.GetScreenshot()
 			.SaveAsFile("./test_phantomjs.png", System.Drawing.Imaging.ImageFormat.Png);
 
 		driver.Quit();
+
+		// cleanup phantomjs.exe binary
+		if (File.Exists(phantomjsExeFile)) File.Delete(phantomjsExeFile);
 	}
-}
-
-const string phantomjsExeFile = @".\bin\phantomjs.exe";
-
-if (File.Exists(phantomjsExeFile))
-{
-	File.Delete(phantomjsExeFile);
 }
