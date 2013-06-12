@@ -110,3 +110,6 @@ UpgradeLog*.XML
 
 #ApprovalTests
 *.received.txt
+
+#Selenium PNGs
+test*.png
