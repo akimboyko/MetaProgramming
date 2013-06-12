@@ -1,5 +1,5 @@
-#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\bin\FluentAutomation.Core.dll"
-#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\bin\FluentAutomation.SeleniumWebDriver.dll"
+#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\FluentAutomation.SeleniumWebDriver\bin\FluentAutomation.Core.dll"
+#r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\FluentAutomation.SeleniumWebDriver\bin\FluentAutomation.SeleniumWebDriver.dll"
 
 using System;
 using System.IO;
@@ -83,4 +83,3 @@ finally
 	    File.Delete(ieDriverServerExeFile);
 	}
 }
-
