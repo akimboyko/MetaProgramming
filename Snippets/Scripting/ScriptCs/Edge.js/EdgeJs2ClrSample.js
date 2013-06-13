@@ -1,7 +1,6 @@
 var edge = require('edge');
 
 var helloCs = edge.func('cs', function() { /*
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	async (dynamic input) => 
@@ -13,7 +12,7 @@ var helloCs = edge.func('cs', function() { /*
 								input.platform.ToString(), 
 								await input.something(null),
 								DateTime.Now),
-			originl = "from C#"
+			origin = "from C#"
 		};
 	}
 */});
