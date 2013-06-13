@@ -13,8 +13,9 @@ public class Startup
 		// we are on V8 thread here
 		var dictionary = (IDictionary<string, object>)input;
 
-		return await Task.Run<object>(async() => {
-
+		// Run CPU-bound background work on CLR thread pool
+		return await Task.Run<object>(async() =>
+		{
 			Console.WriteLine("CLR simulates CPU bound operation");
 			Console.Out.FlushAsync();
 
@@ -24,6 +25,7 @@ public class Startup
 			Console.WriteLine("CLR continues...");
 			Console.Out.FlushAsync();
 
+			// Pass data from C# to node.js
 			return new
 			{
 				message =
