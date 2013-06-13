@@ -1,0 +1,140 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>ScriptCs for Project-less development by @AkimBoyko</title>
+    
+    <meta name="description" content="ScriptCs for Project-less development by Akim Boyko" />
+    <meta name="author" content="Akim Boyko" />
+
+    <link href="css/scriptcs_for_project-less_development.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+
+    <!-- Title -->
+
+    <div id="title" class="step" data-x="-200" data-y="0" data-scale="4">
+        <h1>ScriptCs</h1>
+        <h2>for Project-less development</h2>
+        <div class='right'>
+                <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">MetaProgramming@GitHub</a></p>
+                <p><img style='width:150px; height: auto;' 
+                        src='images\itera_logo.png'
+                        alt='Itera logo' /></p>
+            </div>
+    </div>
+
+    <!-- Intro -->
+
+    <div id="ScriptCsAbout" class="step" data-x="+2000" data-y="0" data-scale="1">
+        <h1>What is it?</h1>
+        <p>ScriptCs makes it easy to write and execute C# with a simple text editor</p>
+        <img src='.\images\scriptcs.png' alt='ScriptCS logo' />
+    </div>
+
+    <div id="ScriptCsAnalogy" class="step" data-x="+2000" data-y="+1000" data-scale="1" align="center">
+        <div id="container">
+            <div id="row">
+                <div id="left">
+                    <img src='.\images\nodejs.png' alt='NodeJs logo' height="50px" />
+                </div>
+                <div id="right">
+                    <img src='.\images\npm.png' alt='NPM logo' height="40px" />
+                </div>
+            </div>
+            <div id="row">
+                <div id="left">
+                    <img src='.\images\scriptcs.png' alt='ScriptCS logo' height="50px" />
+                </div>
+                <div id="right">
+                    <img src='.\images\nuget.png' alt='NuGet logo' height="55px" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="DotNetScripting" class="step" data-x="+2000" data-y="+2000" data-scale="1">
+        <ul>
+            <li><code class='inlineCode'>Microsoft.Scripting</code></li>
+            <li>Dynamic Language Runtime</li>
+            <li>Roslyn CTP</li>
+            <li>ScriptCs</li>
+        </ul>
+    </div>
+
+    <!-- Info -->
+
+    <div id="ScriptCsInstallation" class="step" data-x="+3000" data-y="0" data-scale="1">
+        <img src='.\images\chocolatey.png' alt='Chocolatey logo' />
+        <h1>Install Chocolatey</h1>
+        <div><code><span>C:\&gt;</span> @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" &amp;&amp; SET PATH=%PATH%;%systemdrive%\chocolatey\bin</code></div>
+        <h1>Install ScriptCs</h1>
+        <div><code class='inlineCode'>C:\&gt;&nbsp;cinst ScriptCs</code></div>
+    </div>
+
+    <div id="ScriptCsWritingScript" class="step" data-x="+3000" data-y="+1000" data-scale="1">
+        <h1>Writing a script</h1>
+        <div><code class='inlineCode'>#load "referencedScript.csx"</code></div>
+        <div><code class='inlineCode'>#r "assembly.dll"</code></div>
+    </div>
+
+    <div id="ScriptCsDebuging" class="step" data-x="+3000" data-y="+2000" data-scale="1">
+        <h1>Debuging</h1>
+        <p>Required: Visual Studio 2012 and Roslyn CTP</p>
+        <p><a href='https://github.com/scriptcs/scriptcs/wiki/Debugging-a-script'>read more on github</a></p>
+    </div>
+
+    <div id="ScriptCsREPL" class="step" data-x="+3000" data-y="+3000" data-scale="1">
+        <h1>Read–Eval–Print loop</h1>
+        <p>NuGet packages.config:</p>
+        <div class="code">
+            <pre class="code_block"><span style="color: #0000ff">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+&lt;packages&gt;
+  &lt;package id=<span style="color: #a31515">&quot;Newtonsoft.Json&quot;</span>
+           version=<span style="color: #a31515">&quot;5.0.5&quot;</span>
+           targetFramework=<span style="color: #a31515">&quot;net45&quot;</span> /&gt;
+&lt;/packages&gt;
+</pre></div>
+
+
+        <div><code class='inlineCode'>C:\&gt;&nbsp;scriptcs -install</code></div>
+        <div><code class='inlineCode'>C:\&gt;&nbsp;scriptcs</code></div>
+        <div><code class='inlineCode'>&gt;&nbsp;using Newtonsoft.Json;</code></div>
+        <div><code class='inlineCode'>&gt;&nbsp;JsonConvert.SerializeObject(DateTime.Now);</code></div>
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+
+<script>
+    if ("ontouchstart" in document.documentElement) { 
+        document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+    }
+</script>
+
+<script src="js/impress.js"></script>
+
+<script>
+    impress().init();
+</script>
+
+</body>
+</html>
