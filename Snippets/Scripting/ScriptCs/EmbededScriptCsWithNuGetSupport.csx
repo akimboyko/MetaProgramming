@@ -1,4 +1,4 @@
-// ScriptCs sample with Newtonsoft.Json — just for test
+﻿// ScriptCs sample with Newtonsoft.Json — just for test
 using Newtonsoft.Json;
 
 var message = new { messaeg = "Hello, new JSON world!", timestamp = DateTime.Now };

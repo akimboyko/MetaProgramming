@@ -11,7 +11,7 @@ public class TestController : ApiController
 {
     public string Get()
     {
-        return "Hello world!";
+        return "Hello world from ScriptCs.WebApi!";
     }
 }
 

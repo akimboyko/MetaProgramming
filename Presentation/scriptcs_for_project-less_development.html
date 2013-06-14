@@ -32,9 +32,9 @@
         <h2>for Project-less development</h2>
         <div class='right'>
                 <p><a href='https://twitter.com/AkimBoyko'>@AkimBoyko</a></p>
-                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming">MetaProgramming@GitHub</a></p>
+                <p class='right'><a href="https://github.com/akimboyko/MetaProgramming/tree/master/Snippets/Scripting/ScriptCs">ScriptCs samples@GitHub</a></p>
                 <p><img style='width:150px; height: auto;' 
-                        src='images\itera_logo.png'
+                        src='images/itera_logo.png'
                         alt='Itera logo' /></p>
             </div>
     </div>
@@ -42,8 +42,8 @@
     <!-- Intro -->
 
     <div id="ScriptCsAbout" class="step" data-x="+3000" data-y="0" data-scale="1">
-        <img src='.\images\scriptcs.png' alt='ScriptCS logo' />
         <h1>What is it?</h1>
+        <img src='./images/scriptcs.png' alt='ScriptCS logo' />
         <p>ScriptCs makes it easy to write and execute C# with a simple text editor</p>
     </div>
 
@@ -51,20 +51,20 @@
         <div id="container">
             <div id="row">
                 <div id="left">
-                    <img src='.\images\nodejs.png' alt='NodeJs logo' height="100px" />
+                    <img src='./images/nodejs.png' alt='NodeJs logo' height="100px" />
                 </div>
                 <div id='middle'>&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div id="right">
-                    <img src='.\images\scriptcs.png' alt='ScriptCS logo' height="100px" />
+                    <img src='./images/scriptcs.png' alt='ScriptCS logo' height="100px" />
                 </div>
             </div>
             <div id="row">
                 <div id="left">
-                    <img src='.\images\npm.png' alt='NPM logo' height="90px" />
+                    <img src='./images/npm.png' alt='NPM logo' height="90px" />
                 </div>
                 <div id='middle'>&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <div id="right">
-                    <img src='.\images\nuget.png' alt='NuGet logo' height="110px" />
+                    <img src='./images/nuget.png' alt='NuGet logo' height="110px" />
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
     <!-- Info -->
 
     <div id="ScriptCsInstallation" class="step" data-x="+4000" data-y="0" data-scale="1">
-        <img src='.\images\chocolatey.png' alt='Chocolatey logo' />
+        <img src='./images/chocolatey.png' alt='Chocolatey logo' />
         <h1>Install Chocolatey</h1>
         <div><a href='http://chocolatey.org/'><code><span>C:\&gt;</span> @powershell -NoProfile -ExecutionPolicy unrestricted -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" &amp;&amp; SET PATH=%PATH%;%systemdrive%\chocolatey\bin</code></a></div>
         <h1>Install ScriptCs</h1>
@@ -114,7 +114,6 @@
 &lt;/packages&gt;
 </pre></div>
 
-
         <div><code class='inlineCode'>C:\&gt;&nbsp;scriptcs -install</code></div>
         <div><code class='inlineCode'>C:\&gt;&nbsp;scriptcs</code></div>
         <div><code class='inlineCode'>&gt;&nbsp;using Newtonsoft.Json;</code></div>
@@ -123,8 +122,8 @@
 
     <div id="ScriptCsScriptPacks" class="step" data-x="+4000" data-y="+4000" data-scale="1">
         <h1>Script Packs</h1>
-        <p>Imports namespace, references and objects: var dep = <code class='inlineCode'>Require&lt;T&gt;</code> API.</p>
-        <p>similar to <code class='inlineCode'>var dep = require("dependency")</code> from Node.js</p>
+        <p>Imports namespace, references and objects: var dep = <code class='inlineCode'>Require&lt;T&gt;</code> API</p>
+        <p>Similar to <code class='inlineCode'>var dep = require("dependency")</code> from Node.js</p>
         <ul>
             <li><code class='inlineCode'>ScriptCs.Azure*Services</code></li>
             <li><code class='inlineCode'>ScriptCs.Nancy</code></li>
@@ -166,17 +165,78 @@
         </ul>
     </div>
 
+    <!-- Samples -->
+
+    <div id="Sample01" class="step" data-x="+5000" data-y="0" data-scale="1">
+        <p><strong class="red">Demo #01</strong> ScriptCs and project-less environment and prototyping</p>
+        <ul>
+            <li><a href='../Snippets/Scripting/ScriptCs/ScriptCs.WebApi.Sample.csx'><code class='inlineCode'>scriptcs -install; scriptcs ScriptCs.WebApi.Sample.csx</code></a></li>
+        </ul>
+    </div>
+
+    <div id="Sample02" class="step" data-x="+5000" data-y="+1000" data-scale="1">
+        <p><strong class="red">Demo #02</strong> scripting from C# using <code class='inlineCode'>ScriptCs.Core</code> and NuGet</p>
+        <ul>
+            <li><a href='../Snippets/Scripting/ScriptCs/ScriptCs-ScriptingFromC%23.linq'>ScriptCs-ScriptingFromC#.linq</a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/EmbededScriptCsWithNuGetSupport.csx'>EmbededScriptCsWithNuGetSupport.csx</a></li>
+        </ul>
+    </div>
+
+    <div id="Sample03" class="step" data-x="+5000" data-y="+2000" data-scale="1">
+        <p><strong class="red">Demo #03</strong> Test automation</p>
+        <p><strong>Selenium WebDriver</strong></p>
+        <ul>
+            <li><a href='../Snippets/Scripting/ScriptCs/SeleniumWebDriver/SeleniumWebDriver.FireFox.csx'>WebDriver + FireFox</a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/SeleniumWebDriver/SeleniumWebDriver.PhantomJs.csx'>WebDriver + PhantomJs</a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/SeleniumWebDriver/packages.config'>packages.config</a></li>
+        </ul>
+        <p><strong>FluentAutomation</strong></p>
+        <ul>
+            <li><a href='../Snippets/Scripting/ScriptCs/FluentAutomation.SeleniumWebDriver/FluentAutomation.SeleniumWebDriver.csx'>FluentAutomation + IE</a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/FluentAutomation.SeleniumWebDriver/packages.config'>packages.config</a></li>
+        </ul>
+    </div>
+
+    <div id="Sample04" class="step" data-x="+5000" data-y="+3000" data-scale="1">
+        <p><strong class="red">Demo #04</strong> Node.js with .Net == Edge.js</p>
+        <ul>
+            <li><a href='../Snippets/Scripting/ScriptCs/Edge.js/EdgeJs2ClrSample.js'><code class='inlineCode'>node EdgeJs2ClrSample.js</code></a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/Edge.js/EdgeJs2ProjectlessCsx.js'><code class='inlineCode'>node EdgeJs2ProjectlessCsx.js</code></a></li>
+            <li><a href='../Snippets/Scripting/ScriptCs/Edge.js/ProjectlessCsx.csx'>ProjectlessCsx.csx</a></li>
+            <li><strike>NuGet packages.config</strike></li>
+        </ul>
+    </div>
+
+    <div id="Sample05" class="step" data-x="+5000" data-y="+4000" data-scale="1">
+        <p><strong class="red">Demo #05</strong> ScriptCs and PowerShell</p>
+        <p><a href='https://github.com/beefarino/ScriptCS-PowerShell-Module'><code class='inlineCode'>ScriptCS-PowerShell-Module</code></a></p>
+        <ul>
+            <li><code class='inlineCode'>import-module scriptcs</code></li>
+            <li><code class='inlineCode'>invoke-scriptcs '"Hello PowerShell from ScriptCs!"'</code></li>
+        </ul>
+    </div>
 
 
+    <!-- Notes -->
 
+    <div id="ScriptCsLimitations" class="step" data-x="+6000" data-y="0" data-scale="1">
+        <h1>Corner cases</h1>
+        <ul>
+            <li>No <code class='inlineCode'>dynamic</code> and <code class='inlineCode'>async</code>/<code class='inlineCode'>await</code> keywords</li>
+            <li>Roslyn CTP license and NuGet distribution model</li>
+            <li>Extension method in a script</li>
+            <li>Anonymous classes</li>
+        </ul>
+    </div>
 
-
-
-
-
-
-
-
+    <div id="References" class="step" data-x="+6000" data-y="+1000" data-scale="1">
+        <h1>References</h1>
+        <ul>
+            <li><a href='http://scriptcs.net/'>ScriptCS.net — Write C# scripts in your favorite text editor</a></li>
+            <li><a href='http://www.dotnetrocks.com/default.aspx?showNum=853'>DotNetRocks #853: <em>@GBlock</em> Goes Open Source with ScriptCS and others</a></li>
+            <li><a href='http://herdingcode.com/herding-code-167-glenn-block-on-scriptcs/'>Herding Code #167: <em>@GBlock</em> on ScriptCS</a></li>
+        </ul>
+    </div>
 
 </div>
 
