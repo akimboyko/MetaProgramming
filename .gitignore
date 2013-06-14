@@ -116,3 +116,6 @@ test*.png
 
 # Node.js modules
 node_modules
+
+# Sublime projects/workspaces
+*.sublime-*
