@@ -1,4 +1,3 @@
-// load all require references
 #r "System.Drawing"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.dll"
 #r "D:\work\Courses\MetaProgramming\Snippets\Scripting\ScriptCs\SeleniumWebDriver\bin\WebDriver.Support.dll"
