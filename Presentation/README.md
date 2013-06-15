@@ -1,26 +1,15 @@
 #Presentation Metaprogramming in .NET
-##Microsoft® “Roslyn” FTP 
-[Version online](http://akimboyko.github.io/presentations/metaprogramming_in_dotnet_roslynctp.html#/title)
+##MSSwit'2013: Microsoft® “Roslyn” CTP 
+* [Version online](http://bit.ly/188vhSA)
+* [Video recording](http://bit.ly/10XulNP)
 
-###Content
-* Definition of Metaprogramming
-* C# is multiparadigm language
-* About Roslyn
-* Bootstrapping for compilers
-* Compiler as a Service
-	* Microsoft Roslyn vs. CodeDom by @dcampbell
-	* Scripting
-	* Code generation
-		* Roslyn vs. T4
-		* Convert code written on one language to another
-		* Roslyn vs. MEF
-		* Roslyn vs. DSL
-	* Dynamic objects and λ-expression
-	* Reflection and Inspection
-  * Corner cases
-	  *	Breaking changes with C# compiler recreated with Roslyn
-		* `dynamic` keyword support
-		* `async`/`await` keywords
-		* Implementation issues of current version
-		* Support
-		* Roslyn CTP license
+##ItBrunch: Architectural Validation in .Net
+* [Version online](http://bit.ly/15VqZCF)
+* [Video recording](http://youtu.be/YN2ldqnSXMY)
+
+##Metaprogramming in .NET “Roslyn” CTP and Nemerle for #HotCode
+* [Version online](http://bit.ly/146eD78)
+* [Video recording](http://bit.ly/MPDotNet)
+
+##KievAltNet: ScriptCs for Project-less development
+* [Version online](http://bit.ly/ProjectLess)
