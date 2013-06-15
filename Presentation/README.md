@@ -1,5 +1,5 @@
 #Presentation Metaprogramming in .NET
-##Microsoft® “Roslyn” CTP 
+##Microsoft® “Roslyn” FTP 
 [Version online](http://akimboyko.github.io/presentations/metaprogramming_in_dotnet_roslynctp.html#/title)
 
 ###Content

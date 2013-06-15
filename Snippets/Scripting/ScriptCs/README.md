@@ -24,6 +24,7 @@ ScriptCs and project-less environment and prototyping
 Scripting from C# using ScriptCs.Core
 -------------------------------------
 
+```csharp
     // preserve current directory
     var previousCurrentDirectory = Environment.CurrentDirectory;
     
@@ -51,6 +52,7 @@ Scripting from C# using ScriptCs.Core
         // restore current directory
         Environment.CurrentDirectory = previousCurrentDirectory;
     }
+```
 
 ScriptCs and Selenium/FluentAutomation
 --------------------------------------
@@ -73,3 +75,8 @@ ScriptCs and PowerShell
 * `invoke-scriptcs '"Hello PowerShell!"'`
 
 see [ScriptCS-PowerShell-Module](https://github.com/beefarino/ScriptCS-PowerShell-Module) for details
+
+ScriptCs and Nake
+-----------------------
+
+[Nake is a C# script-based build tool for .NET inspired by Jake/Rake](https://github.com/yevhen/Nake/blob/dev/Nake.csx)

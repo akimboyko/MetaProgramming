@@ -10,7 +10,7 @@ MetaProgramming .Net samples
   * [C# code](Snippets/Scripting/IronPython-Scripting.linq)
   * [.py code](Snippets/Scripting/sample.py)
 
-#Dynamicly generating .Net assembly at runtime
+#Dynamically generating .Net assembly at runtime
 * [Roslyn CTP: build and load assembly in memory](Snippets/Caas/Roslyn-BuildAtRuntime.linq)
 * CodeDOM
   * [build and load assembly in memory](Snippets/Caas/CodeDOM-BuildAtRuntime.linq)
@@ -18,7 +18,7 @@ MetaProgramming .Net samples
 
 #Metaprogramming via runtime code generation
 * [Hardcoded C# rule: ~900ms to run 1000 iterations](Snippets/Performance/C#-HardCodedRule.linq)
-* [Roslyn CTP: scripting and staticly typed results: ~950ms to run 1000 iterations](Snippets/Performance/Roslyn-ScriptingWithStaticlyTypedResult.linq)
+* [Roslyn CTP: scripting and statically typed results: ~950ms to run 1000 iterations](Snippets/Performance/Roslyn-ScriptingWithStaticlyTypedResult.linq)
 * [DLR i.e. Dynamic Language Runtime with ExpressionTrees: ~1200ms to run 1000 iterations](Snippets/Performance/DLR-ExpressionTrees.linq)
 
 #Code-as-Data approach
