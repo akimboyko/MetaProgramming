@@ -271,6 +271,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             <ul>
                 <li>C#/VB.Net source code should be available</li>
                 <li>Support of C# features: <code class="inlineCode">dynamic</code>, <code class="inlineCode">async</code>/<code class="inlineCode">await</code></li>
+                <li>When Roslyn CTP will be released? At least it will not replace existing compiler in VS2013 <strong>:'(</strong></li>
             </ul>
         </div>
 
@@ -290,8 +291,30 @@ ISemanticModel semanticModel = await semanticModelAsync;
                  alt="Introspection assertions using ApprovalTests" />
         </div>
 
-        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+6750" data-z="0" data-rotate="0" data-scale="1">
-            <p>Note: this is not a replacement for code review!</p>
+        <div id="TimeoutTest" class="step" data-x="+5500" data-y="+6750" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Performance/complexity testing</h1>
+            <div class="code">
+                <pre class="code_block">[Test, Timeout(2000)] <span style="color: #008000">// &lt;-- brittle unit tests!!!</span>
+[Description(&quot;Find collinear points among 1000 random distinct points&quot;)]
+<span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span> Timing_FindCollinearPoints1kRandomDistinctPoints_ExpectToFinishIn2Seconds() 
+{
+    <span style="color: #008000">/* Actual test */</span>
+}</pre></div>
+        </div>
+
+        <div id="ComplexityTest" class="step" data-x="+5500" data-y="+7500" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Algorithms timing/complexity testing</h1>
+            <ul>
+                <li>Maximum time allowed per test = N seconds</li>
+                <li>Ratio tests: 64, 128, 256, 1024…</li>
+                <li>Partial mocks and <code class="inlineCode">virtual</code>/<code class="inlineCode">override</code> 
+                    <code class="inlineCode">Equals()</code>, <code class="inlineCode">GetHashCode()</code>, <code class="inlineCode">CompareTo()</code> 
+            </ul>
+        </div>
+
+        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+8250" data-z="0" data-rotate="0" data-scale="1">
+            <p>Note #01: this is not a replacement for code review!</p>
+            <p>Note #02: automate only after 2-3 occurences on Refactoring phase!</p>
         </div>
 
         <!-- PostSharp -->
