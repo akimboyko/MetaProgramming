@@ -312,9 +312,59 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="IntrospectionNote" class="step" data-x="+5500" data-y="+8250" data-z="0" data-rotate="0" data-scale="1">
-            <p>Note #01: this is not a replacement for code review!</p>
-            <p>Note #02: automate only after 2-3 occurences on Refactoring phase!</p>
+        <div id="ComplexityTestSample" class="step" data-x="+5500" data-y="+8250" data-z="0" data-rotate="0" data-scale="1">
+            <h1>Algorithms complexity testing</h1>
+            <div class="code">
+                <pre class="code_block"><pre style="margin: 0; line-height: 125%">[Test, Timeout(2000)]
+[Description(&quot;Compare complexity of two solutions of sizes 64 and 256 to be less then 2.2&quot;)]
+<span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span> Timing_CompareComplexityOfTwoSolution64and256_ExpectToInRange() 
+{
+    <span style="color: #2b91af">var</span> partialMockedProblem64 = mockRepository.PartialMock&lt;AlgorithmImpl&gt;(<span style="color: #008000">/* initialize problem size */</span>);
+    <span style="color: #2b91af">var</span> partialMockedProblem256 = mockRepository.PartialMock&lt;AlgorithmImpl&gt;(<span style="color: #008000">/* initialize problem size */</span>);
+    <span style="color: #008000">/* and so on… */</span>
+    
+    partialMockedProblem64
+        .Expect(m =&gt; m.DoCalculations(<span style="color: #008000">/* arguments */</span>))
+        .CallOriginalMethod(OriginalCallOptions.CreateExpectation)
+        .WhenCalled(invok =&gt; nTimesDoCalculationsCalledProblem64++)
+        .Repeat.AtLeastOnce();
+    <span style="color: #008000">/* and so on… */</span>
+    
+    mockRepository.ReplayAll();
+    
+    <span style="color: #008000">/* Act */</span>
+    
+    <span style="color: #008000">/* Assert */</span>
+    mockRepository.VerifyAll();
+    <span style="color: #2b91af">var</span> ratio = Math.Log(nTimesDoCalculationsCalledProblem64 / nTimesDoCalculationsCalledProblem256);
+    Assert.That(ratio &lt;= 2.2);
+    <span style="color: #008000">/* and so on… */</span>
+}
+ </pre></div>
+        </div>
+
+        <div id="IntrospectionNote01" class="step" data-x="+5500" data-y="+8950" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Note #01: this is not a replacement for code review!</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionNote02" class="step" data-x="+5500" data-y="+9000" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Note #02: when to automate?</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionNote03" class="step" data-x="+5500" data-y="+9050" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Note #03: DIY vs. Tools</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionNote04" class="step" data-x="+5500" data-y="+9100" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Note #04: C# vs. F#</li>
+            </ul>
         </div>
 
         <!-- PostSharp -->
@@ -497,8 +547,8 @@ ISemanticModel semanticModel = await semanticModelAsync;
     }
     </script>
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/jquery.jsPlumb-1.5.2-min.js"></script>
     <script type="text/javascript" src="js/architectural_validation.js"></script>
     <script type="text/javascript" src="js/impress.js"></script>
