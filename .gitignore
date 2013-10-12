@@ -119,3 +119,6 @@ node_modules
 
 # Sublime projects/workspaces
 *.sublime-*
+
+#Video
+video
