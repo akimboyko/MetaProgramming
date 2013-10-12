@@ -56,23 +56,19 @@
                 meets the needs of the customer and other identified stakeholders</p>
         </div>
 
-        <div id="MurphysLawIntro" class="step" data-x="+2500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
-            <p>Anything that can go wrong will go wrong<br/>by <em>Edward Aloysius Murphy</em></p>
-        </div>
-
-        <div id="ParkinsonsLawOfTriviality" class="step" data-x="+2500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ParkinsonsLawOfTriviality" class="step" data-x="+2500" data-y="+750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Parkinson's law of triviality</h1>
             <p>Organizations give disproportionate weight to trivial issues<br/>by <em>Cyril Northcote Parkinson</em></p>
         </div>
 
-        <div id="ParkinsonsLawOfTrivialitySample01" class="step" data-x="+2500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ParkinsonsLawOfTrivialitySample01" class="step" data-x="+2500" data-y="+1500" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>The first is the signing of a <strong>£10 000 000</strong> contract to build a reactor (<em>2 min</em>)</li>
                 <li>the second a proposal to build a <strong>£350</strong> bicycle shed for the clerical staff (<em>45 min, save ~50£</em>)</li>
             </ul>
         </div>
 
-        <div id="ParkinsonsLawOfTrivialitySample02" class="step" data-x="+2500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ParkinsonsLawOfTrivialitySample02" class="step" data-x="+2500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
             <div class="center">
                 <img src='images/FreeBSD-No-Bikeshed.png' width="600px" alt='FreeBSD not bikeshad' />
                 <p>more at <a href='http://bikeshed.com/'>bikeshed.com</a></p>
@@ -171,72 +167,41 @@ ISemanticModel semanticModel = await semanticModelAsync;
          || semanticModel.GetTypeInfo(expressionSyntax).Type.IsReferenceType);</pre></div>
         </div>
 
-        <div id="NullAndOption" class="step" data-x="+5500" data-y="+2150" data-z="0" data-rotate="0" data-scale="1">
-            <h1><code class="inlineCode">Option&lt;T&gt;</code> instead of <code class="inlineCode">Null</code></h1>
-            <div class="code">
-                <pre class="code_block"><span style="color: #0000ff">enum</span> OptionType { Some, None };   
-<span style="color: #0000ff">abstract</span> <span style="color: #0000ff">class</span> <span style="color: #2b91af">Option</span>&lt;T&gt; {
-    <span style="color: #008000">/* … */</span>
-    <span style="color: #0000ff">public</span> OptionType Tag { <span style="color: #0000ff">get</span> { <span style="color: #0000ff">return</span> tag; } }   
-}
-
-<span style="color: #0000ff">class</span> <span style="color: #2b91af">None</span>&lt;T&gt; : Option&lt;T&gt; {                       
-    <span style="color: #0000ff">public</span> None() : <span style="color: #0000ff">base</span>(OptionType.None) { }
-}
-
-<span style="color: #0000ff">class</span> <span style="color: #2b91af">Some</span>&lt;T&gt; : Option&lt;T&gt; {                               
-    <span style="color: #0000ff">public</span> Some(T <span style="color: #0000ff">value</span>) : <span style="color: #0000ff">base</span>(OptionType.Some) {
-          <span style="color: #0000ff">this</span>.<span style="color: #0000ff">value</span> = <span style="color: #0000ff">value</span>;
-    }
-    <span style="color: #0000ff">public</span> T Value { <span style="color: #0000ff">get</span> { <span style="color: #0000ff">return</span> <span style="color: #0000ff">value</span>; } }   
-}
-
-<span style="color: #0000ff">static</span> <span style="color: #0000ff">class</span> <span style="color: #2b91af">Option</span> {                      
-    <span style="color: #0000ff">public</span> <span style="color: #0000ff">static</span> Option&lt;T&gt; None&lt;T&gt;() {       
-        <span style="color: #0000ff">return</span> <span style="color: #0000ff">new</span> None&lt;T&gt;();
-    }
-    <span style="color: #0000ff">public</span> <span style="color: #0000ff">static</span> Option&lt;T&gt; Some&lt;T&gt;(T <span style="color: #0000ff">value</span>) {   
-        <span style="color: #0000ff">return</span> <span style="color: #0000ff">new</span> Some&lt;T&gt;(<span style="color: #0000ff">value</span>);
-    }
-}</pre></div>
-        </div>
-
-
-        <div id="IntrospectionAdvancedSamples01" class="step" data-x="+5500" data-y="+2900" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples01" class="step" data-x="+5500" data-y="+2150" data-z="0" data-rotate="0" data-scale="1">
             <h1>Advanced samples</h1>
         </div>
 
-        <div id="IntrospectionAdvancedSamples02" class="step" data-x="+5500" data-y="+2950" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples02" class="step" data-x="+5500" data-y="+2200" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li><code class="inlineCode">IEnumerable&lt;T&gt;</code> or <code class="inlineCode">IQuerable&lt;T&gt;</code></li>
             </ul>
         </div>
 
-        <div id="IntrospectionAdvancedSamples03" class="step" data-x="+5500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples03" class="step" data-x="+5500" data-y="+2250" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Constructor-over injection or <code class="inlineCode">new</code> in constructor</li>
             </ul>
         </div>
 
-        <div id="IntrospectionAdvancedSamples04" class="step" data-x="+5500" data-y="+3050" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples04" class="step" data-x="+5500" data-y="+2300" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Singletons</li>
             </ul>
         </div>
 
-        <div id="IntrospectionAdvancedSamples05" class="step" data-x="+5500" data-y="+3100" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples05" class="step" data-x="+5500" data-y="+2350" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Verify declarative <code class="inlineCode">[Attribute]</code> composition</li>
             </ul>
         </div>
 
-        <div id="IntrospectionAdvancedSamples06" class="step" data-x="+5500" data-y="+3150" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAdvancedSamples06" class="step" data-x="+5500" data-y="+2400" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li><code class="inlineCode">DateTime.Now</code> and <code class="inlineCode">DateTime.Today</code></li>
             </ul>
         </div>
 
-        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+5500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ReflectionLimitReferencesToAssemblies" class="step" data-x="+5500" data-y="+3000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limit references to assemblies</h1>
             <p>Using <code class="inlineCode">System.Reflection</code></p>
             <div class="code">
@@ -268,7 +233,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 }</pre></div>
         </div>
 
-        <div id="IntrospectionLimitations" class="step" data-x="+5500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionLimitations" class="step" data-x="+5500" data-y="+3750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Limitations</h1>
             <ul>
                 <li>C#/VB.Net source code should be available</li>
@@ -277,7 +242,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="IntrospectionAssertions" class="step" data-x="+5500" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertions" class="step" data-x="+5500" data-y="+4500" data-z="0" data-rotate="0" data-scale="1">
             <h1>Assertions</h1>
             <ul>
                 <li>How to references back to sources?</li>
@@ -285,7 +250,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+5500" data-y="+6000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionAssertionsUsingApprovalTests" class="step" data-x="+5500" data-y="+5250" data-z="0" data-rotate="0" data-scale="1">
             <h1>ApprovalTests</h1>
             <p>Capturing Human Intelligence</p>
             <img style='margin-left: -100px;' 
@@ -293,7 +258,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
                  alt="Introspection assertions using ApprovalTests" />
         </div>
 
-        <div id="TimeoutTest" class="step" data-x="+5500" data-y="+6750" data-z="0" data-rotate="0" data-scale="1">
+        <div id="TimeoutTest" class="step" data-x="+5500" data-y="+6000" data-z="0" data-rotate="0" data-scale="1">
             <h1>Performance/complexity testing</h1>
             <div class="code">
                 <pre class="code_block">[Test, Timeout(2000)] <span style="color: #008000">// &lt;-- brittle unit tests!!!</span>
@@ -304,7 +269,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
 }</pre></div>
         </div>
 
-        <div id="ComplexityTest" class="step" data-x="+5500" data-y="+7500" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ComplexityTest" class="step" data-x="+5500" data-y="+6750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Algorithms timing/complexity testing</h1>
             <ul>
                 <li>Maximum time allowed per test = N seconds</li>
@@ -314,7 +279,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             </ul>
         </div>
 
-        <div id="ComplexityTestSample" class="step" data-x="+5500" data-y="+8250" data-z="0" data-rotate="0" data-scale="1">
+        <div id="ComplexityTestSample" class="step" data-x="+5500" data-y="+7500" data-z="0" data-rotate="0" data-scale="1">
             <h1>Algorithms complexity testing</h1>
             <div class="code">
                 <pre class="code_block"><pre style="margin: 0; line-height: 125%">[Test, Timeout(2000)]
@@ -346,31 +311,31 @@ ISemanticModel semanticModel = await semanticModelAsync;
  </pre></div>
         </div>
 
-        <div id="IntrospectionNote01" class="step" data-x="+5500" data-y="+8950" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote01" class="step" data-x="+5500" data-y="+8200" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Note #01: this is not a replacement for code review!</li>
             </ul>
         </div>
 
-        <div id="IntrospectionNote02" class="step" data-x="+5500" data-y="+9000" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote02" class="step" data-x="+5500" data-y="+8250" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Note #02: when to automate?</li>
             </ul>
         </div>
 
-        <div id="IntrospectionNote03" class="step" data-x="+5500" data-y="+9050" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote03" class="step" data-x="+5500" data-y="+8300" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Note #03: is this a unittest?</li>
             </ul>
         </div>
 
-        <div id="IntrospectionNote04" class="step" data-x="+5500" data-y="+9100" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote04" class="step" data-x="+5500" data-y="+8350" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Note #04: DIY vs. Tools</li>
             </ul>
         </div>
 
-        <div id="IntrospectionNote05" class="step" data-x="+5500" data-y="+9150" data-z="0" data-rotate="0" data-scale="1">
+        <div id="IntrospectionNote05" class="step" data-x="+5500" data-y="+8400" data-z="0" data-rotate="0" data-scale="1">
             <ul>
                 <li>Note #05: C# vs. F#</li>
             </ul>
