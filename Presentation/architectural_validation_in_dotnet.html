@@ -42,8 +42,8 @@
 
         <div id="WordsDefinitionsArchitecture" class="step" data-x="+2500" data-y="-750" data-z="0" data-rotate="0" data-scale="1">
             <h1>Architecture</h1>
-            <p>As a noun architecture can be summarised as being <em>about structure</em>
-                and is <em>about the decomposition</em> of a product into
+            <p>As a noun architecture can be summarised as being <em>about <strong>structure</strong></em>
+                and is <em>about the <strong>decomposition</strong></em> of a product into
                 a collection of components and interactions. 
                 <br/>
                 <a href='https://leanpub.com/software-architecture-for-developers'>
@@ -123,6 +123,8 @@
             <p>First we'll solve the "<u>that works</u>" part of the problem, then we'll solve the "<u>clean code</u>" part</p>
             <strong>Architecture Driven Development</strong>
             <p>Solve "<u>clean code</u>" first, then scramble around trying to integrate into the design the things you learn as you solve the "<u>that works</u>" problem</p>
+            <a href='www.amazon.com/Test-Driven-Development-By-Example/dp/0321146530'>
+                    TDD by examples by <em>@kentbeck</em></a></p>
         </div>
 
         <!-- Reflection and Introspection -->
@@ -316,7 +318,7 @@ ISemanticModel semanticModel = await semanticModelAsync;
             <h1>Algorithms complexity testing</h1>
             <div class="code">
                 <pre class="code_block"><pre style="margin: 0; line-height: 125%">[Test, Timeout(2000)]
-[Description(&quot;Compare complexity of two solutions of sizes 64 and 256 to be less then 2.2&quot;)]
+[Description(&quot;Compare complexity of two solutions of sizes 64 and 256 to be less then 5.4&quot;)]
 <span style="color: #0000ff">public</span> <span style="color: #0000ff">void</span> Timing_CompareComplexityOfTwoSolution64and256_ExpectToInRange() 
 {
     <span style="color: #2b91af">var</span> partialMockedProblem64 = mockRepository.PartialMock&lt;AlgorithmImpl&gt;(<span style="color: #008000">/* initialize problem size */</span>);
@@ -336,8 +338,9 @@ ISemanticModel semanticModel = await semanticModelAsync;
     
     <span style="color: #008000">/* Assert */</span>
     mockRepository.VerifyAll();
-    <span style="color: #2b91af">var</span> ratio = Math.Log(nTimesDoCalculationsCalledProblem64 / nTimesDoCalculationsCalledProblem256);
-    Assert.That(ratio &lt;= 2.2);
+    <span style="color: #2b91af">var</span> cmp64 = nTimesDoCalculationsCalledProblem64 * Math.Log(nTimesDoCalculationsCalledProblem64);
+    <span style="color: #2b91af">var</span> cmp256 = nTimesDoCalculationsCalledProblem256 * Math.Log(nTimesDoCalculationsCalledProblem256);
+    Assert.That(cmp256 / cmp64 &lt; 5.4); <span style="color: #008000">/* ask BA with PhD why? :) */</span>
     <span style="color: #008000">/* and so on… */</span>
 }
  </pre></div>
@@ -357,13 +360,19 @@ ISemanticModel semanticModel = await semanticModelAsync;
 
         <div id="IntrospectionNote03" class="step" data-x="+5500" data-y="+9050" data-z="0" data-rotate="0" data-scale="1">
             <ul>
-                <li>Note #03: DIY vs. Tools</li>
+                <li>Note #03: is this a unittest?</li>
             </ul>
         </div>
 
         <div id="IntrospectionNote04" class="step" data-x="+5500" data-y="+9100" data-z="0" data-rotate="0" data-scale="1">
             <ul>
-                <li>Note #04: C# vs. F#</li>
+                <li>Note #04: DIY vs. Tools</li>
+            </ul>
+        </div>
+
+        <div id="IntrospectionNote05" class="step" data-x="+5500" data-y="+9150" data-z="0" data-rotate="0" data-scale="1">
+            <ul>
+                <li>Note #05: C# vs. F#</li>
             </ul>
         </div>
 
